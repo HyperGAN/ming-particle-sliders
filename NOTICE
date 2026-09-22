@@ -1,0 +1,29 @@
+Code in this repository is under the MIT license in LICENSE.
+Copyright (c) 2026 HyperGAN. The product name is ming-particle-sliders.
+
+This repository does not contain Ming-Image weights, a trained slider,
+or any safetensors blob. The base model stays on Hugging Face:
+
+https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer
+
+That model is released by inclusionAI under the MIT License. Attribute
+inclusionAI when you use the weights or a derivative adapter. The model
+license text is published with the weights:
+
+https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer/blob/main/LICENSE
+
+Copyright (c) 2026 inclusionAI.
+
+Companion inference code for the layer-decompose task is inclusionAI's
+Ming-Image repository, not this product:
+
+https://github.com/inclusionAI/Ming-Image
+
+A slider trained on this base is a derivative of the inclusionAI model.
+Shipping an adapter later does not drop the inclusionAI attribution.
+Name the Hub id inclusionAI/Ming-Image-0.1-Design-Layer and keep this
+notice with the adapter.
+
+The particle game (gmix, RoutedMLP, GradRegularizer, and the
+winning_formulation stamp) is not vendored here. It is imported from
+particle-sliders-core. See FORMULATION.md.

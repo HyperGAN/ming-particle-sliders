@@ -1,0 +1,35 @@
+pretrained_model:
+  name_or_path: inclusionAI/Ming-Image-0.1-Design-Layer
+  task: layer-decompose
+  pipeline_tag: image-text-to-image
+  license: mit
+  attribution: inclusionAI
+  subfolders:
+    - transformer
+    - vae
+    - scheduler
+    - connector
+    - mllm
+    - mlp
+  dtype: bfloat16
+  vram_gib: 80
+prompts_file: configs/ming/prompts-layer.yaml
+network:
+  training_method: lora
+  rank_source: winning_formulation
+architecture: gmix
+formulation: winning_formulation
+sample:
+  steps: 12
+  guidance: 2.0
+  resolution: 1024
+  resolution_fast: 512
+  resolution_note: "Working-resolution bucket 1024 (recommended) or 512 for faster layer decomposition. The output preserves the input image's aspect ratio."
+  dtype: bfloat16
+  num_layers: 6
+  scheduler_shift: 6.0
+  control_prompt: "a bowl of fruit on a table"
+  scales: [0.0, 0.25, 0.5, 1.0]
+train:
+  resolution: 1024
+  hold_weight: 0.1

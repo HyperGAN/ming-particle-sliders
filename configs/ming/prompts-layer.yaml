@@ -1,0 +1,25 @@
+plus_label: Separated RGBA layers
+minus_label: Flattened
+concept_words: "layer, rgba, transparent, separated"
+control_prompt: "a bowl of fruit on a table"
+bare_captions: true
+recommended_range: [0.0, 1.0]
+rows:
+  - target: "a flattened greeting-card design"
+    positive: "decompose this greeting card into six RGBA layers: background, illustration, title, body text, decoration, and shadow"
+    neutral: "a flattened greeting-card design"
+    negative: "a single opaque photograph with no transparent layers"
+    attributes: ["print", "screen"]
+    action: enhance
+    guidance_scale: 2.0
+    resolution: 1024
+    num_layers: 6
+  - target: "a flattened poster layout"
+    positive: "decompose this poster into separate RGBA layers for background, artwork, and type"
+    neutral: "a flattened poster layout"
+    negative: "a blurry photo with baked-in text"
+    attributes: ["print", "screen"]
+    action: enhance
+    guidance_scale: 2.0
+    resolution: 1024
+    num_layers: 3

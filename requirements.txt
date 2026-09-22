@@ -1,0 +1,16 @@
+# CPU checks for ming-particle-sliders. They do not download Hub weights.
+#
+# Shared game: particle-sliders-core (import particle_sliders).
+# Pin is HyperGAN/particle-sliders pull request 132, branch
+# cursor/particle-sliders-shared-core-030c, commit
+# b3a100e5184d70a94f1a7562b71c10b81f009591, until that PR merges to main.
+# Do not pin packages/concept-slider-core or mikkel/sliders-conceptmod.
+particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@b3a100e5184d70a94f1a7562b71c10b81f009591#subdirectory=packages/particle-sliders-core
+PyYAML>=6
+pytest>=8
+
+# particle-sliders-core depends on torch. A --live CUDA run also needs a
+# current diffusers (DiffusionTransformer, FlowMatchEulerDiscreteScheduler,
+# AutoencoderKLQwenImage) plus the companion Ming-Image infer code. Those
+# are not required for --help, --dummy, or pytest, and this scaffold does
+# not download inclusionAI weights either way.
