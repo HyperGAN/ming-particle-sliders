@@ -6,7 +6,7 @@ slider weights, the ComfyUI node, prompt and sampling notes for
 in `ming/` and `scripts/`.
 
 The game those entrypoints train is `winning_formulation()` from the pinned
-[`particle-sliders-core`](https://github.com/HyperGAN/particle-sliders/tree/4340e28bed388d50800c469525b460a108091da0/packages/particle-sliders-core)
+[`particle-sliders-core`](https://github.com/HyperGAN/particle-sliders/tree/a119ca1ecd3d5d6c437065839d22739b04f2f4d8/packages/particle-sliders-core)
 package:
 
 ```python
@@ -21,7 +21,7 @@ core. This repository does not copy `formulation.py`, `reference.py`, or a
 second `GradRegularizer`.
 
 The parameter overlay is whatever `CURRENT_FORMULATION` the pin exports.
-At commit `4340e28bed388d50800c469525b460a108091da0` that overlay is the
+At commit `a119ca1ecd3d5d6c437065839d22739b04f2f4d8` that overlay is the
 provisional `particle-gmix-1600-v2` record (`stamp.formulation_provisional`
 is true). When ParticleGAN pull request 38 crowns a full live-leaderboard
 winner (9 trained toys and all 29 bounds), the core replaces
@@ -45,4 +45,4 @@ Model-surface keys (`g_lr`, `d_lr`, `particle_lr`, `adv_batch`, and the
 other names on `stamp.model_surface_keys`) may be overridden through
 `stamp.require()` once a Ming recipe exists. This scaffold does not publish
 one. Hub ids, the Comfy class name, and the train/infer wiring stay in this
-repo. See [shared-core.md](https://github.com/HyperGAN/particle-sliders/blob/4340e28bed388d50800c469525b460a108091da0/docs/shared-core.md).
+repo. See [shared-core.md](https://github.com/HyperGAN/particle-sliders/blob/a119ca1ecd3d5d6c437065839d22739b04f2f4d8/docs/shared-core.md).
