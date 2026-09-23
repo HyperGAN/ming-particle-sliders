@@ -1,0 +1,6 @@
+# Pin the shared core. particlegan is transitive from this package.
+# Do not add a second ParticleGAN pin and do not vendor gmix or winning_formulation.
+particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@4340e28bed388d50800c469525b460a108091da0#subdirectory=packages/particle-sliders-core
+
+# CPU stamp check. Live Ming weights are not part of this scaffold.
+pytest>=8

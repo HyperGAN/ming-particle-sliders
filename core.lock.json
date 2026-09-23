@@ -1,0 +1,11 @@
+{
+  "package": "particle-sliders-core",
+  "import": "particle_sliders",
+  "version": "0.3.0",
+  "repository": "https://github.com/HyperGAN/particle-sliders",
+  "commit": "4340e28bed388d50800c469525b460a108091da0",
+  "subdirectory": "packages/particle-sliders-core",
+  "entrypoint": "particle_sliders.winning_formulation",
+  "architecture": "gmix",
+  "note": "Game math stays in the pinned package. This file records the pin; it is not a vendor copy."
+}
