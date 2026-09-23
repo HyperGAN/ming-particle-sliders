@@ -1,0 +1,14 @@
+Ming-Image-0.1-Design-Layer is an inclusionAI model. Its model card states
+that the weights are released under the MIT License:
+
+https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer
+
+This repository does not ship those base weights. Download them from
+inclusionAI. Product slider weights for this repo are not published yet.
+The intended Hugging Face id is ntc-ai/ming-particle-sliders; that repository
+does not exist at the time of this scaffold.
+
+Independently authored source in this repository is MIT licensed; see LICENSE.
+That license does not relicense inclusionAI's base weights or any future
+derivative adapter weights. This is an independent HyperGAN / ntc-ai product
+scaffold, not an official inclusionAI release.
