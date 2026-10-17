@@ -5,7 +5,7 @@ Product repository for particle sliders on
 The layout follows [anima-particle-sliders](https://github.com/HyperGAN/anima-particle-sliders)
 and [krea2-particle-sliders](https://github.com/HyperGAN/krea2-particle-sliders):
 this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
-[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/a119ca1ecd3d5d6c437065839d22739b04f2f4d8/packages/particle-sliders-core)
+[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/42a2e371c537180bd189fd4a288b640f9f1c98fc/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
 This is a product scaffold. There is no native Ming slider trainer, adapter
@@ -35,7 +35,7 @@ python -m pip install -r requirements.txt
 `requirements.txt` installs:
 
 ```text
-particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@a119ca1ecd3d5d6c437065839d22739b04f2f4d8#subdirectory=packages/particle-sliders-core
+particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@42a2e371c537180bd189fd4a288b640f9f1c98fc#subdirectory=packages/particle-sliders-core
 ```
 
 `particlegan` comes in transitively from that package. Train, infer, and
@@ -44,6 +44,11 @@ to check metadata. They do not construct or execute a GAN, routed adapter,
 critic, or regularizer.
 The formulation note is [FORMULATION.md](FORMULATION.md). The pin record is
 [core.lock.json](core.lock.json).
+
+This package baseline uses shared core 0.6.0 with released ParticleGAN
+0.9.1. The historical core 0.3.0 scaffold pin is preserved separately in
+the lock record. This updates metadata compatibility; it does not enable
+native Ming execution or retarget any training run or checkpoint.
 
 ## Hub
 

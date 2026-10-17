@@ -25,8 +25,9 @@ Before enabling live Ming execution:
    against frozen teacher responses and conditioning, including sign and
    zero-strength behavior.
 2. Use the reviewed installed shared GAN API and its immutable dependency
-   lineage. The requested released ParticleGAN target is 0.9.1; the shared
-   owner controls its adoption. Never silently upgrade an active run.
+   lineage. This scaffold's new core 0.6.0 / ParticleGAN 0.9.1 baseline
+   qualifies metadata compatibility only. Never silently upgrade an active
+   run or treat that check as native backend qualification.
 3. Prove GAN-only updates, frozen base weights, correct active adapter
    parameters, and sampling of those trained parameters.
 4. Prove product checkpoint save/load and deterministic resume through the
@@ -35,6 +36,7 @@ Before enabling live Ming execution:
    reviewed weights and provenance before setting `HUB_PUBLISHED` true.
 
 HyperGAN develop diagnostics and the optional HNDL 0.8.2 conditional
-readout critic belong to the shared implementation. Ming currently has no
+readout critic are follow-up integration work owned by the shared package;
+they are not part of Ming's adopted metadata path. Ming currently has no
 responses, critic dimensions, or native training path for either to act
 on; adding those imports here would not provide executable reuse.

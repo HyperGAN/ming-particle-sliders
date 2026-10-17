@@ -47,6 +47,7 @@ def test_import_stamp_from_the_installed_package():
     assert origin == Path(installed.locate_file("particle_sliders/formulation.py")).resolve()
     assert "site-packages" in origin.parts
     assert installed.version == CORE_LOCK["version"]
+    assert distribution("particlegan").version == CORE_LOCK["particlegan_version"]
 
 
 def test_hub_placeholder_is_unpublished():
