@@ -8,7 +8,10 @@ this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
 [particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/a119ca1ecd3d5d6c437065839d22739b04f2f4d8/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
-No slider weights are in this scaffold. There is no sample gallery yet.
+This is a product scaffold. There is no native Ming slider trainer, adapter
+runtime, checkpoint format, or sampler here. No slider weights or sample
+gallery are available. A successful dry-run validates shared formulation
+metadata; it does not qualify a Ming GAN implementation.
 
 ## Base model
 
@@ -35,9 +38,10 @@ python -m pip install -r requirements.txt
 particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@a119ca1ecd3d5d6c437065839d22739b04f2f4d8#subdirectory=packages/particle-sliders-core
 ```
 
-`particlegan` comes in transitively from that package. Train and infer call
-`particle_sliders.winning_formulation` and then `stamp.require()`. They do
-not reimplement routed particles, the global-mix critic, or the regularizer.
+`particlegan` comes in transitively from that package. Train, infer, and
+Comfy call `particle_sliders.winning_formulation` and then `stamp.require()`
+to check metadata. They do not construct or execute a GAN, routed adapter,
+critic, or regularizer.
 The formulation note is [FORMULATION.md](FORMULATION.md). The pin record is
 [core.lock.json](core.lock.json).
 
@@ -61,13 +65,23 @@ host checkpoints.
 ```bash
 python scripts/train_ming.py --dry-run
 python scripts/infer_ming.py --dry-run
+python -m pip install '.[test]'
+ming-train --dry-run
+ming-infer --dry-run
 python -m pytest
 ```
 
-`--dry-run` imports the stamp on CPU and prints `architecture_id`,
-`formulation_id`, the base model id, and the unpublished Hub id. Without
+The installed commands and `python -m ming.train` / `python -m ming.infer`
+also work outside a source checkout. `--dry-run` imports the stamp on CPU
+and prints `architecture_id`, `formulation_id`, the base model id, the
+unpublished Hub id, and `execution=scaffold-only`. Without
 `--dry-run` the commands exit before any download or update. Projection
 hooks for the Ming transformer are not wired.
+
+No MSE slider training path exists to replace. Conditioning, signed slider
+application, active parameter selection, sampling, save/load, and resume
+remain unimplemented. See [the capability audit](docs/capability-audit.md)
+for the native implementation gates.
 
 ## ComfyUI
 

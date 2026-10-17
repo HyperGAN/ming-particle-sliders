@@ -22,5 +22,10 @@ BASE_RESOLUTION = 1024
 
 
 def stamp():
-    """Return the pinned gmix winning-formulation stamp."""
-    return winning_formulation()
+    """Validate and return the pinned shared formulation metadata.
+
+    This check does not construct a trainer or qualify a Ming backend.
+    """
+    loaded = winning_formulation()
+    loaded.require(loaded.as_dict())
+    return loaded
