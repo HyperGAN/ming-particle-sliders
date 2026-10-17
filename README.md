@@ -5,7 +5,7 @@ Product repository for particle sliders on
 The layout follows [anima-particle-sliders](https://github.com/HyperGAN/anima-particle-sliders)
 and [krea2-particle-sliders](https://github.com/HyperGAN/krea2-particle-sliders):
 this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
-[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/4be0b5b29d2e2c741431f468d71ba8a7c884b724/packages/particle-sliders-core)
+[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/cdfb80a76b882b4b73861b12f555263bd64ffeb7/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
 This is a product scaffold. There is no native Ming slider trainer, adapter
@@ -35,7 +35,7 @@ python -m pip install -r requirements.txt
 `requirements.txt` installs:
 
 ```text
-particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@4be0b5b29d2e2c741431f468d71ba8a7c884b724#subdirectory=packages/particle-sliders-core
+particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@cdfb80a76b882b4b73861b12f555263bd64ffeb7#subdirectory=packages/particle-sliders-core
 ```
 
 `particlegan` comes in transitively from that package. Train, infer, and
