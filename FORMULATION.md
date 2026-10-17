@@ -1,48 +1,32 @@
-# Formulation
+# Formulation metadata
 
-`ming-particle-sliders` owns the Ming product surfaces: the Hub id for
-slider weights, the ComfyUI node, prompt and sampling notes for
-`inclusionAI/Ming-Image-0.1-Design-Layer`, and the train/infer entrypoints
-in `ming/` and `scripts/`.
-
-The game those entrypoints train is `winning_formulation()` from the pinned
-[`particle-sliders-core`](https://github.com/HyperGAN/particle-sliders/tree/a119ca1ecd3d5d6c437065839d22739b04f2f4d8/packages/particle-sliders-core)
-package:
+`ming-particle-sliders` owns the intended Ming product identifiers, ComfyUI
+registration, and fail-closed train/infer commands. It has no native Ming
+training game or adapter execution. The shared import below is an actual
+metadata check, not evidence of a working GAN backend:
 
 ```python
-from particle_sliders import winning_formulation
+from ming.surfaces import stamp
 
-stamp = winning_formulation()
+metadata = stamp()  # winning_formulation(), then require(metadata.as_dict())
 ```
 
-`stamp.architecture_id` is `gmix` (`gmix_architecture()` / `gmix_recipe()`):
-routed particles and a global-mix critic. That structure stays in the shared
-core. This repository does not copy `formulation.py`, `reference.py`, or a
-second `GradRegularizer`.
+The immutable dependency is recorded in `requirements.txt` and
+`core.lock.json`. Its legacy `winning_formulation()` returns the `gmix`
+architecture and provisional `particle-gmix-1600-v2` formulation. The
+product does not copy shared game math or override those metadata fields.
+Validating a stamp against its own dictionary checks the shared schema; it
+cannot validate absent native training behavior or an absent checkpoint.
 
-The parameter overlay is whatever `CURRENT_FORMULATION` the pin exports.
-At commit `a119ca1ecd3d5d6c437065839d22739b04f2f4d8` that overlay is the
-provisional `particle-gmix-1600-v2` record (`stamp.formulation_provisional`
-is true). When ParticleGAN pull request 38 crowns a full live-leaderboard
-winner (9 trained toys and all 29 bounds), the core replaces
-`CURRENT_FORMULATION` and this product picks it up by bumping the pin in
-`requirements.txt` and `core.lock.json`. Products keep calling
-`winning_formulation()`. Copying the knobs into this repo is a fork:
-`stamp.require()` raises on formulation drift.
+A future Ming trainer must bind a real native forward, a routed trainable
+adapter, frozen teacher responses, and meaningful conditioning to the
+qualified shared GAN API. It must use the reviewed released ParticleGAN
+dependency owned by that shared package. An import or constructor alone
+does not establish this path. The required evidence is in
+[the capability audit](docs/capability-audit.md).
 
-`particlegan` (cap, RpGAN loss, particle VIC) is a transitive dependency of
-`particle-sliders-core`. Do not pin ParticleGAN again here and do not vendor
-its builders. `stamp.regularizer()`, `stamp.losses()`, `stamp.bridge()`, and
-`stamp.critic()` are the product-facing constructors.
-
-Formulation toys and the DSL board stay in
-[HyperGAN/conceptmod](https://github.com/HyperGAN/conceptmod). A new Ming
-experiment lands there; a reusable primitive lands in
-[HyperGAN/particle-sliders](https://github.com/HyperGAN/particle-sliders);
-only the winning recipe comes back here as a config and a docs change.
-
-Model-surface keys (`g_lr`, `d_lr`, `particle_lr`, `adv_batch`, and the
-other names on `stamp.model_surface_keys`) may be overridden through
-`stamp.require()` once a Ming recipe exists. This scaffold does not publish
-one. Hub ids, the Comfy class name, and the train/infer wiring stay in this
-repo. See [shared-core.md](https://github.com/HyperGAN/particle-sliders/blob/a119ca1ecd3d5d6c437065839d22739b04f2f4d8/docs/shared-core.md).
+The shared package owns generic optimizers, GAN losses, sampling contracts,
+and checkpoint/resume mechanics. Product code should supply native model
+glue and provenance, with regressions covering the actual forward and
+parameter changes. Do not vendor a core or ParticleGAN checkout, silently
+retarget old checkpoints, or add a reconstruction-loss training fallback.

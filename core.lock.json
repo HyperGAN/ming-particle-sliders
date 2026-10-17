@@ -1,11 +1,36 @@
 {
   "package": "particle-sliders-core",
   "import": "particle_sliders",
-  "version": "0.3.0",
+  "version": "0.6.0",
   "repository": "https://github.com/HyperGAN/particle-sliders",
-  "commit": "a119ca1ecd3d5d6c437065839d22739b04f2f4d8",
+  "commit": "cdfb80a76b882b4b73861b12f555263bd64ffeb7",
   "subdirectory": "packages/particle-sliders-core",
   "entrypoint": "particle_sliders.winning_formulation",
   "architecture": "gmix",
-  "note": "Game math stays in the pinned package. This file records the pin; it is not a vendor copy."
+  "note": "New isolated package baseline. Game math stays in the shared package; no active run or checkpoint is retargeted.",
+  "particlegan_version": "0.9.1",
+  "shared_wheel_sha256": "4abc83988fdeb6d7478de830e7ee8ec5d9bd99c20d52f89e4ce594d50dfd39a3",
+  "particlegan_wheel_sha256": "b01b7957169cb3de45887e22b4d525fd54071577e1de58089707cf05fe6992ec",
+  "qualification": "Ming metadata and refusal only; no native training/inference qualification",
+  "historical_scaffold": {
+    "version": "0.3.0",
+    "commit": "a119ca1ecd3d5d6c437065839d22739b04f2f4d8",
+    "particlegan_commit": "82b72661c03377f348ccb76de37cd4ca02d45a8d",
+    "entrypoint": "particle_sliders.winning_formulation",
+    "scope": "Historical metadata-only scaffold; not a native training cohort"
+  },
+  "superseded_package_candidates": [
+    {
+      "commit": "42a2e371c537180bd189fd4a288b640f9f1c98fc",
+      "version": "0.6.0",
+      "wheel_sha256": "7418efe0d89782b2fd266c6a8e536539243d06dd42ff5d393e409bf4b0f2c872",
+      "status": "Superseded by shared owner after optimizer-state validation findings; first-candidate receipts retained separately"
+    },
+    {
+      "commit": "4be0b5b29d2e2c741431f468d71ba8a7c884b724",
+      "version": "0.6.0",
+      "wheel_sha256": "2e7621c370e790f65702acf76cfa2f428b393cd3f863245aa26d8a76ff096ada",
+      "status": "Superseded by final shared core after generator-clock/sparse-critic optimizer validation and Iris metadata import repairs; consumer receipts retained separately"
+    }
+  ]
 }

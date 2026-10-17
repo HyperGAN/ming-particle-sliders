@@ -16,8 +16,6 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from ming.infer import main  # noqa: E402
-from particle_sliders import winning_formulation  # noqa: E402
 
 if __name__ == "__main__":
-    winning_formulation()
     raise SystemExit(main())
