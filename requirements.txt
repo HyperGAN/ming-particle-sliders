@@ -1,3 +1,3 @@
 # Pin the shared core. particlegan is transitive from this package.
 # Do not add a second ParticleGAN pin and do not vendor gmix or winning_formulation.
-particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@42a2e371c537180bd189fd4a288b640f9f1c98fc#subdirectory=packages/particle-sliders-core
+particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@4be0b5b29d2e2c741431f468d71ba8a7c884b724#subdirectory=packages/particle-sliders-core

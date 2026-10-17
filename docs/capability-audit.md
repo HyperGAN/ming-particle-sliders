@@ -35,8 +35,8 @@ Before enabling live Ming execution:
 5. Obtain coordinator admission for native/GPU qualification, then publish
    reviewed weights and provenance before setting `HUB_PUBLISHED` true.
 
-HyperGAN develop diagnostics and the optional HNDL 0.8.2 conditional
-readout critic are follow-up integration work owned by the shared package;
-they are not part of Ming's adopted metadata path. Ming currently has no
+Optional HyperGAN develop diagnostics and the HNDL 0.8.2 conditional
+readout critic ship in the shared package; neither is exercised by
+Ming's adopted metadata path. Ming currently has no
 responses, critic dimensions, or native training path for either to act
 on; adding those imports here would not provide executable reuse.

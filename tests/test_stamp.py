@@ -61,6 +61,17 @@ def test_hub_placeholder_is_unpublished():
     assert "winning_formulation()" in formulation
 
 
+def test_installed_core_matches_locked_source_identity():
+    # Multiple candidate wheels share version 0.6.0. Version checks alone
+    # must not qualify a superseded wheel or an editable source checkout.
+    installed = distribution("particle-sliders-core")
+    direct_url = json.loads(installed.read_text("direct_url.json"))
+    if "vcs_info" in direct_url:
+        assert direct_url["vcs_info"]["commit_id"] == CORE_LOCK["commit"]
+    else:
+        assert direct_url["archive_info"]["hashes"]["sha256"] == CORE_LOCK["shared_wheel_sha256"]
+
+
 def test_comfy_node_refuses_unpublished_weights():
     node = MingParticleSlider()
     try:
