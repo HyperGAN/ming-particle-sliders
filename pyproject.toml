@@ -27,4 +27,4 @@ py-modules = ["comfy_ming"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.package-data]
-ming = ["core.lock.json", "native-candidate.lock.json"]
+ming = ["core.lock.json", "identity.json"]

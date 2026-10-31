@@ -1,4 +1,9 @@
-# Source-review corrections, 2026-10-31
+# Historical source-review corrections, 2026-10-31
+
+This records interim head6438d60. Its same-name `+native012` packaging recipe
+was rejected on re-review and is superseded by
+[the isolation follow-up](isolation-review-20261031.md). The physical clean CPU
+receipts for that old head remain historical, not qualification of the new package.
 
 These corrections follow review of head673f136. They do not change the shared
 objective or strength defaults, loosen PG admission, or enable native commands.

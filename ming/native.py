@@ -6,17 +6,18 @@ production sampling/CFG and pretrained/GPU behavior remain unqualified.
 import hashlib
 import inspect
 from pathlib import Path
-import weakref
+from .cohort import CohortError, product_identity, require_cohort
+from .constants import BASE_MODEL_ID
 
-import torch
-
-from particle_sliders.pg09_backends import (
-    FrozenResponseAdapter, PreparedResponse, bind_native_gradient_checkpointing,
-)
-from particle_sliders.pg09_images import image_lora_parameters
-
-from .cohort import require_cohort
-from .surfaces import BASE_MODEL_ID
+try:
+    import torch
+    from particle_sliders.pg09_backends import (
+        FrozenResponseAdapter, PreparedResponse, bind_native_gradient_checkpointing,
+    )
+    from particle_sliders.pg09_images import image_lora_parameters
+except ImportError as exc:
+    missing = getattr(exc, 'name', None) or 'native runtime'
+    raise CohortError(f'Ming native dependency {missing!r} is unavailable; install the selected product with dependencies in its own environment') from exc
 
 UPSTREAM_COMMIT = '3515cd7b1e3049fc517eed7d35020251cd06519a'
 UPSTREAM_SOURCES = {
@@ -58,7 +59,7 @@ class MingResponseAdapter(FrozenResponseAdapter):
     family = 'ming_design_layer_velocity'
     time_coordinates = 'raw scheduler t in [0,1000]; model (1000-t)/1000; negate output'
 
-    def __init__(self, model, native_lora, *, model_identity=None, fixture=False, cohort='public-0.11'):
+    def __init__(self, model, native_lora, *, model_identity=None, fixture=False, cohort=None):
         require_cohort(cohort)
         parameters = list(model.parameters())
         if not parameters or any(p.requires_grad for p in parameters):
@@ -101,45 +102,77 @@ class MingResponseAdapter(FrozenResponseAdapter):
             owner = getattr(original, '__self__', None)
             if id(owner) not in children or getattr(owner.forward, '__self__', None) is not layer:
                 raise ValueError('native LoRA must be attached to this actual staged model')
-        borrowed_by = getattr(model, '_ming_response_binding', None)
-        if borrowed_by is not None and borrowed_by() is not None and not borrowed_by()._closed:
-            raise ValueError('Ming model is already borrowed by an open response binding')
+        modules = list(model.modules())
+        for module in modules:
+            owner = getattr(module, '_ming_response_binding', None)
+            if owner is not None and (not owner._closed or owner._cleanup_failed):
+                raise ValueError('Ming model or inner model is already borrowed by a response binding')
         # Borrowed module modes and public checkpoint callbacks must be restored.
         self._borrowed = [(module, module.training,
                            {key: (key in module.__dict__, module.__dict__.get(key))
                             for key in ('_gradient_checkpointing_func', 'gradient_checkpointing', '_ming_response_binding')})
-                          for module in model.modules()]
+                          for module in modules]
         self.transformer = model
         self.fixture = fixture
-        self.cohort = cohort
+        self.product = product_identity()
+        self.cohort = self.product['profile']
         self._closed = False
-        model._ming_response_binding = weakref.ref(self)
+        self._cleanup_failed = False
         try:
+            for module in modules:
+                module._ming_response_binding = self
             network = image_lora_parameters(model, native_lora)
             super().__init__(network, model_identity=identity)
             bind_native_gradient_checkpointing(inner, network)
-        except BaseException:
-            self.close()
+        except BaseException as original:
+            try:
+                self.close()
+            except BaseException as cleanup:
+                raise BaseExceptionGroup('Ming setup and cleanup both failed', [original, cleanup]) from original
             raise
 
     def close(self):
-        if self._closed:
+        if self._closed and not self._cleanup_failed:
             return
-        for module, training, state in self._borrowed:
-            module.training = training
-            for key, (present, value) in state.items():
-                if present:
-                    setattr(module, key, value)
-                elif key in module.__dict__:
-                    delattr(module, key)
         self._closed = True
+        errors = []
+        for module, training, state in self._borrowed:
+            try:
+                module.training = training
+            except BaseException as exc:
+                exc.add_note('Ming cleanup: restore module training mode')
+                errors.append(exc)
+            for key, (present, value) in state.items():
+                try:
+                    if present:
+                        setattr(module, key, value)
+                    elif key in module.__dict__:
+                        delattr(module, key)
+                except BaseException as exc:
+                    exc.add_note('Ming cleanup: restore ' + key)
+                    errors.append(exc)
+        self._cleanup_failed = bool(errors)
+        if errors:
+            # Keep an ownership lease after partial cleanup, so another wrapper
+            # cannot borrow a model whose checkpoint callback failed to restore.
+            for module, _, _ in self._borrowed:
+                try:
+                    module._ming_response_binding = self
+                except BaseException as exc:
+                    errors.append(exc)
+            raise BaseExceptionGroup('Ming cleanup failed; all restoration actions attempted', errors)
 
     def __enter__(self):
         self._require_open()
         return self
 
     def __exit__(self, *exc):
-        self.close()
+        try:
+            self.close()
+        except BaseException as cleanup:
+            if exc[1] is not None:
+                raise BaseExceptionGroup('Ming body and cleanup both failed', [exc[1], cleanup]) from exc[1]
+            raise
 
     def _require_open(self):
         if self._closed:
@@ -164,8 +197,10 @@ class MingResponseAdapter(FrozenResponseAdapter):
             raise ValueError('Ming latent and timestep must be frozen')
         if not self.multi_frame_output and row.latent.shape[2] != 1:
             raise ValueError('single-frame native capability cannot return multiple target frames')
-        for condition in (row.neutral, row.positive, row.negative):
+        for condition in (row.neutral, row.positive):
             _check_condition(condition, row.latent)
+        if row.negative is not None:
+            _check_condition(row.negative, row.latent)
         return super().prepare(row)
 
     def _velocity(self, condition, latent, timestep):
@@ -200,6 +235,9 @@ class MingResponseAdapter(FrozenResponseAdapter):
     def metadata(self):
         return dict(super().metadata(), protocol='ming-staged-velocity-v1',
                     core_cohort=self.cohort,
+                    product_distribution=self.product['distribution'],
+                    product_version=self.product['version'],
+                    negative_condition='optional None; unused at admitted guidance=1',
                     multi_frame_output=self.multi_frame_output,
                     upstream_commit=UPSTREAM_COMMIT, upstream_sources=UPSTREAM_SOURCES,
                     response_coordinates='native [1,C,F,H,W] latent velocity',

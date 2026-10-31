@@ -1,3 +1,4 @@
 include core.lock.json FORMULATION.md COMFYUI.md NOTICE pytest.ini __init__.py
-recursive-include docs *.md
+recursive-include docs *.md *.json
 recursive-include scripts *.py
+recursive-include profiles *.json

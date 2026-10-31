@@ -33,57 +33,68 @@ staged tensors match a supplied weight revision. CPU `fixture=True` is explicit
 in export/checkpoint provenance and cannot qualify a GPU. The shared
 checkpoint hook is bound on the inner native transformer.
 
-## Exact candidate environment
+## Isolated candidate distribution
 
-The default wheel retains public core 0.11.0/PG 0.9.3 and all original core
-lock identities. The opt-in wheel is a different local version of the same
-product distribution: `0.1.1+native012`. Install it in a separate environment.
-It resolves exact public draft core commit
-`4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231` from
-[core PR148](https://github.com/HyperGAN/particle-sliders/pull/148), official
-PG 0.9.4, HNDL 0.10.0 and HyperGAN develop
-`5f368a3770cf5bdae0448995c9f76e29af8049f7`. PR148's exact head and public
-source were independently verified; it remains an unmerged draft.
-The product's default wheel and historical checkpoints are not repinned.
+The stable wheel remains `ming-particle-sliders==0.1.1`, namespace `ming`, with
+its public core 0.11.0/PG 0.9.3 cohort and stable CLI/Comfy modules. It ships
+only `ming/core.lock.json` and its own identity declaration. Passing a native
+profile to this installed product refuses; it cannot select another lock.
 
-Build and install the candidate with ordinary dependency resolution:
+The native experiment is a different distribution and namespace:
+`ming-particle-sliders-native==0.1.1.dev12`, importing `ming_native`.
+It contains no `ming` files, `comfy_ming` module or console entry points.
+It ships its own `ming_native/core.lock.json` and identity declaration, with
+exact public core4abc VCS/PG/HNDL/HyperGAN dependencies. It cannot satisfy a
+stable `ming-particle-sliders==0.1.1` requirement. Normal environments must
+remain separate because the two exact shared-core versions differ; both
+products explicitly refuse unsafe force-co-installation.
+
+Build and normally resolve the native artifact in a separate environment:
 
 ```bash
 python -m pip install 'build>=1,<2' 'setuptools>=84.2.1'
 python scripts/build_native_candidate.py --output-dir dist-native
-# In a separate environment, with its intended CPU/native Torch staged:
-python -m pip install dist-native/ming_particle_sliders-0.1.1+native012-py3-none-any.whl
+# In a new environment with the intended CPU Torch:
+python -m pip install dist-native/ming_particle_sliders_native-0.1.1.dev12-py3-none-any.whl
 python -m pip check
 ```
 
-The builder only creates a wheel; it does not download, install, train or publish.
-Its metadata selects the exact core VCS commit, PG, HNDL and HyperGAN candidate
-rather than the default core 0.11 dependency. There is no `--no-deps` install
-workaround. The optional `--core-wheel` argument checks the original archived
-qualification wheel against its recorded hash; a core wheel is not needed to
-build from the now-public source ref. Normal VCS rebuilds can have different
-ZIP hashes while matching the exact commit and all locked installed sources.
+Use `from ming_native.native import MingResponseAdapter, build_hndl_game`.
+The default `cohort=None` uses only this distribution's declared native cohort;
+an explicit incompatible profile refuses. The source build input is
+[profiles/native-candidate.lock.json](../profiles/native-candidate.lock.json).
+Core PR148's exact4abc source was verified public; the artifact remains an
+experimental cohort, independent of whether that PR later merges.
+PG version comes from this lock when building dependencies.
 
-`MingResponseAdapter(..., cohort='native-candidate-0.12')` still requires an
-explicit new cohort. Runtime admission checks actual PG Python source closure
-against the hash-verified core release manifest, exact HG/HNDL versions and HG
-VCS origin, declared ordinary/train dependency constraints, HNDL source closure,
-and clean HG build provenance/builder hashes. The default CLI stamp refuses
-candidate adoption; no native CLI or production renderer is enabled.
-The full admission record is
-[native-candidate.lock.json](../ming/native-candidate.lock.json).
+Runtime admission binds installed distribution name/version/namespace, package
+resources, the single lock digest, and declared exact dependencies before
+validating runtime sources. Actual PG Python closure, exact HG/HNDL versions and
+HG VCS origin, ordinary/train constraints including direct Git requirements,
+HNDL closure and clean HG builder provenance are checked. Missing dependencies,
+malformed provenance, unexpected Git URLs and source mismatches raise actionable
+`CohortError` exceptions. No unknown Git dependency is accepted by version alone.
 
-Use the adapter as a context manager or call `close()` after all backward work
-finishes. It restores borrowed per-module checkpoint callbacks/flags and exact
-training modes, including on constructor failure. It leaves the caller's attached
-LoRA in place. Concurrent bindings of the same model are rejected.
+Use a context manager or call `close()` after backward work finishes. Ownership
+leases cover the entire module tree, including inner transformers shared by
+different wrappers. Cleanup attempts every mode/callback/flag/ownership action
+and aggregates failures. Original setup/body exceptions remain visible alongside
+cleanup failures. Failed cleanup blocks re-borrowing and can be retried after
+the caller fixes the failing state restoration.
 
-Official `patchify_and_embed` concatenates targets before reference frames;
-`unpatchify` returns their full count when `multi_frame_output=True`, otherwise
-one frame. The binding requires that explicit capability and checks the exact
-returned frame count before selecting target frames. Frozen input encodings,
-references, latents and critic features cannot require gradients. The base must
-be uniformly FP32 or BF16 and frozen; adapter leaves must be FP32.
+Only unipolar guidance1 is admitted. `negative=None` is supported and unused;
+neutral and positive encodings remain required and frozen. No objective or
+strength default changes. Official target-before-reference ordering and exact
+frame capability/count validation remain unchanged by this packaging fix.
+
+The optional `--core-wheel` builder argument validates the original archived
+qualification wheel; it is not required for normal exact public VCS resolution.
+The builder only creates artifacts, with no install, training or publication.
+
+Candidate tests run with `python scripts/run_candidate_tests.py`. The runner
+copies the exact native/artifact test files byte-for-byte outside the stable
+Comfy root package, then tests the installed `ming_native` API. It introduces
+no `ming` alias and no stable Comfy module into the candidate environment.
 
 `build_hndl_game(adapter, prepared_rows, conditions, total_steps=...)` constructs
 the real shared `HNDLFieldCritic` through HyperGAN's verified common builder,

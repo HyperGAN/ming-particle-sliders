@@ -1,0 +1,9 @@
+{
+  "schema": "ming-product-cohort-v1",
+  "distribution": "ming-particle-sliders",
+  "version": "0.1.1",
+  "namespace": "ming",
+  "profile": "public-0.11",
+  "incompatible_distribution": "ming-particle-sliders-native",
+  "lock_sha256": "782655817fdc3172d0702758af9f30da35d08fcabe74d4fa05f5356c2b566354"
+}

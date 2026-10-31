@@ -1,17 +1,26 @@
 """Tiny CPU contract probes, never pretrained/native quality qualification."""
 from copy import deepcopy
 from dataclasses import replace
-from importlib.metadata import version
+from importlib.metadata import distribution, PackageNotFoundError
+from importlib import import_module
 
 import pytest
 import torch
 from torch import nn
 
-from ming.native import MingResponseAdapter
+try:
+    distribution('ming-particle-sliders-native')
+except PackageNotFoundError:
+    NAMESPACE = 'ming'
+else:
+    NAMESPACE = 'ming_native'
+NATIVE = import_module(NAMESPACE + '.native')
+COHORT = import_module(NAMESPACE + '.cohort')
+MingResponseAdapter = NATIVE.MingResponseAdapter
 from particle_sliders.native_lora import LoRANetwork
 from particle_sliders.pg09_backends import ResponseRow, FlowSchedule, save_adapter, load_adapter
 
-PROFILE = 'native-candidate-0.12' if version('particle-sliders-core') == '0.12.0' else 'public-0.11'
+PROFILE = COHORT.product_identity()['profile']
 
 
 class TinyMing(nn.Module):
@@ -271,7 +280,7 @@ def test_borrowed_checkpoint_callback_and_modes_restore_on_close():
 
 
 def test_checkpoint_binding_failure_restores_borrowed_state(monkeypatch):
-    import ming.native as native
+    native = NATIVE
     model = CheckpointMing().requires_grad_(False)
     lora = LoRANetwork(model, rank=2, alpha=2, target_replace=['CheckpointMing'])
     def fail(root, network):
@@ -313,7 +322,7 @@ def test_unqualified_dtype_and_base_ownership_refuse(damage):
 
 
 def test_bare_cuda_rng_normalization_without_cuda_execution(monkeypatch):
-    from ming.native import _cuda_rng_devices
+    _cuda_rng_devices = NATIVE._cuda_rng_devices
     monkeypatch.setattr(torch.cuda, 'current_device', lambda: 3)
     assert _cuda_rng_devices(torch.device('cuda')) == [3]
     assert _cuda_rng_devices(torch.device('cuda:1')) == [1]
@@ -330,3 +339,107 @@ def test_overlapping_borrow_is_rejected_without_changing_first_hook():
     first.close()
     with MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE) as second:
         second.prepare(row())
+
+
+def test_unipolar_negative_none_is_optional_and_unused():
+    _, _, adapter = fixture()
+    data = row()
+    normal = adapter.prepare(data)
+    without_negative = adapter.prepare(replace(data, negative=None))
+    assert torch.equal(normal.target, without_negative.target)
+    assert torch.equal(normal.neutral, without_negative.neutral)
+    assert torch.equal(adapter.generated(normal), adapter.generated(without_negative))
+    assert 'optional None' in adapter.metadata()['negative_condition']
+    with pytest.raises(ValueError, match='single-timestep'):
+        adapter.prepare(replace(data, negative=None, guidance=2.))
+
+
+class WrapperMing(nn.Module):
+    def __init__(self, inner):
+        super().__init__()
+        self.transformer = inner
+    def forward(self, *args, **kwargs):
+        return self.transformer(*args, **kwargs)
+
+
+def test_different_wrappers_cannot_borrow_the_same_inner_model():
+    inner = CheckpointMing().requires_grad_(False)
+    lora = LoRANetwork(inner, rank=2, alpha=2, target_replace=['CheckpointMing'])
+    first_root, second_root = WrapperMing(inner), WrapperMing(inner)
+    with MingResponseAdapter(first_root, lora, fixture=True, cohort=PROFILE) as first:
+        callback = inner._gradient_checkpointing_func
+        with pytest.raises(ValueError, match='inner model is already borrowed'):
+            MingResponseAdapter(second_root, lora, fixture=True, cohort=PROFILE)
+        assert inner._gradient_checkpointing_func is callback
+        first.prepare(row())
+    with MingResponseAdapter(second_root, lora, fixture=True, cohort=PROFILE) as second:
+        second.prepare(row())
+
+
+class FailingRestoreMing(CheckpointMing):
+    fail_mode = False
+    fail_hook = False
+    original_callback = None
+    def __setattr__(self, name, value):
+        if name == 'training' and value is True and self.fail_mode:
+            raise RuntimeError('mode restoration refused')
+        if name == '_gradient_checkpointing_func' and value is self.original_callback and self.fail_hook:
+            raise RuntimeError('hook restoration refused')
+        super().__setattr__(name, value)
+
+
+def test_cleanup_attempts_every_action_aggregates_failures_and_can_retry():
+    model = FailingRestoreMing().requires_grad_(False)
+    original = object()
+    model.original_callback = original
+    model._gradient_checkpointing_func = original
+    model.gradient_checkpointing = False
+    lora = LoRANetwork(model, rank=2, alpha=2, target_replace=['FailingRestoreMing'])
+    adapter = MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE)
+    model.gradient_checkpointing = True
+    model.fail_mode = model.fail_hook = True
+    with pytest.raises(BaseExceptionGroup, match='all restoration actions attempted') as failure:
+        adapter.close()
+    assert len(failure.value.exceptions) == 2
+    assert model.gradient_checkpointing is False  # action after failing callback still ran
+    assert model.proj.training is True  # another module still restored
+    assert adapter._closed and adapter._cleanup_failed
+    with pytest.raises(ValueError, match='already borrowed'):
+        MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE)
+    model.fail_mode = model.fail_hook = False
+    adapter.close()
+    assert model._gradient_checkpointing_func is original and model.training
+    assert not adapter._cleanup_failed
+    assert '_ming_response_binding' not in model.__dict__
+    assert '_ming_response_binding' not in model.proj.__dict__
+
+
+def test_body_and_cleanup_errors_both_survive():
+    model = FailingRestoreMing().requires_grad_(False)
+    lora = LoRANetwork(model, rank=2, alpha=2, target_replace=['FailingRestoreMing'])
+    adapter = MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE)
+    with pytest.raises(BaseExceptionGroup, match='body and cleanup both failed') as failure:
+        with adapter:
+            model.fail_mode = True
+            raise ValueError('body failure retained')
+    assert isinstance(failure.value.exceptions[0], ValueError)
+    assert 'body failure retained' in str(failure.value.exceptions[0])
+    model.fail_mode = False
+    adapter.close()
+
+
+def test_constructor_and_cleanup_errors_both_survive(monkeypatch):
+    model = FailingRestoreMing().requires_grad_(False)
+    lora = LoRANetwork(model, rank=2, alpha=2, target_replace=['FailingRestoreMing'])
+    def fail(root, network):
+        root.fail_mode = True
+        raise ValueError('original setup failure retained')
+    monkeypatch.setattr(NATIVE, 'bind_native_gradient_checkpointing', fail)
+    with pytest.raises(BaseExceptionGroup, match='setup and cleanup both failed') as failure:
+        MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE)
+    assert isinstance(failure.value.exceptions[0], ValueError)
+    assert 'original setup failure retained' in str(failure.value.exceptions[0])
+    assert model.proj.training is True
+    owner = model._ming_response_binding
+    model.fail_mode = False
+    owner.close()

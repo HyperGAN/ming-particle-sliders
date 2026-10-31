@@ -31,10 +31,11 @@ Pin this commit. Do not pin `mikkel/sliders-conceptmod`, and do not vendor a
 ParticleGAN checkout next to the product.
 
 ```bash
-python -m pip install -r requirements.txt
+python -m pip install .
 ```
 
-`requirements.txt` installs:
+This installs the stable product identity and the exact core dependency recorded
+in `requirements.txt`:
 
 ```text
 particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@3c25f785d14073e6f627c0fa9d2297a041c79913#subdirectory=packages/particle-sliders-core
@@ -71,9 +72,9 @@ host checkpoints.
 ## Train and infer
 
 ```bash
+python -m pip install '.[test]'
 python scripts/train_ming.py --dry-run
 python scripts/infer_ming.py --dry-run
-python -m pip install '.[test]'
 ming-train --dry-run
 ming-infer --dry-run
 python -m pytest
@@ -117,9 +118,10 @@ changing that default dependency. Python 3.11 is now declared explicitly,
 matching the selected core's existing minimum. No workflow publishes a package
 or weights, and no model loader or download runs on import.
 
-The optional candidate wheel can now resolve exact public draft core PR148,
-HyperGAN develop and HNDL normally. It has explicit `+native012` metadata and
-runs in a separate environment; see [native binding](docs/native-binding.md).
-Actual PG/HG/HNDL source and declared dependency admission, checkpoint cleanup,
-and exact frame-count validation are documented in
-[review corrections](docs/review-fixes-20261031.md).
+The native experiment is a separate prerelease distribution,
+`ming-particle-sliders-native==0.1.1.dev12`, importing `ming_native`. It has no
+stable CLI/Comfy entry points and cannot satisfy the stable distribution's
+requirements. Install it only in a separate environment. Each artifact ships
+only its own lock and binds its installed identity to that cohort. See
+[native binding](docs/native-binding.md) and
+[isolation follow-up](docs/isolation-review-20261031.md).

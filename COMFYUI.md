@@ -3,7 +3,11 @@
 This product owns the ComfyUI surface. The node class is `MingParticleSlider`,
 displayed as **Ming Particle Slider**, category `NTC/Ming`. The module is
 `comfy_ming.py`. A ComfyUI custom-node checkout of this repository loads it
-through `__init__.py`.
+through `__init__.py`. Install the stable product in a compatible environment
+first (`python -m pip install .` from the checkout). Source package policy and
+lock resources must match the installed distribution, so reinstall after updating
+the checkout. The separate `ming-particle-sliders-native` distribution has no
+Comfy node and must use its own environment.
 
 The node validates metadata with `particle_sliders.winning_formulation()`
 and `stamp.require()`. It does not construct or execute routed particles,
