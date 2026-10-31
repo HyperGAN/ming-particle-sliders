@@ -60,6 +60,9 @@
   },
   "hypergan_commit": "5f368a3770cf5bdae0448995c9f76e29af8049f7",
   "hndl_version": "0.10.0",
-  "status": "local joint candidate; unpublished; explicit new isolated environment only",
-  "qualification": "tiny CPU software conformance; pretrained/native GPU/multiframe/render unqualified"
+  "status": "public draft PR148; unmerged; explicit new isolated candidate environment only",
+  "qualification": "tiny CPU software conformance; pretrained/native GPU/multiframe/render unqualified",
+  "particlegan_wheel_sha256": "ad21eeaea861cf0582fc39aa96eb3fd8ab8cf21e8e0f0179f0597a9c42eb99b6",
+  "hypergan_version": "2.0.0",
+  "public_pr": "https://github.com/HyperGAN/particle-sliders/pull/148"
 }

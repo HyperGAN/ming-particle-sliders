@@ -6,10 +6,13 @@ production sampling/CFG and pretrained/GPU behavior remain unqualified.
 import hashlib
 import inspect
 from pathlib import Path
+import weakref
 
 import torch
 
-from particle_sliders.pg09_backends import FrozenResponseAdapter, bind_native_gradient_checkpointing
+from particle_sliders.pg09_backends import (
+    FrozenResponseAdapter, PreparedResponse, bind_native_gradient_checkpointing,
+)
 from particle_sliders.pg09_images import image_lora_parameters
 
 from .cohort import require_cohort
@@ -20,6 +23,28 @@ UPSTREAM_SOURCES = {
     'generator': 'a31f006c123febdcfdfeb92b1b55f2716b154a98e3c3e13bd7bf825148e9901e',
     'transformer': 'aefd220223ba80a59ecd9251a1bd512c4633cb68f76b1ce14de83a388c97eec4',
 }
+
+
+def _cuda_rng_devices(device):
+    device = torch.device(device)
+    if device.type != 'cuda':
+        return []
+    return [device.index if device.index is not None else torch.cuda.current_device()]
+
+
+def _check_condition(condition, latent):
+    allowed = {'embeds': 3, 'embeds_2': 3, 'reference_latents': 5}
+    if not isinstance(condition, dict) or set(condition) - allowed.keys() or 'embeds' not in condition:
+        raise ValueError('Ming requires frozen native embeds and optional embeds_2/reference_latents')
+    for key, value in condition.items():
+        if value is None and key != 'embeds':
+            continue
+        if (not isinstance(value, torch.Tensor) or value.ndim != allowed[key] or
+                value.shape[0] != 1 or min(value.shape) < 1 or value.requires_grad or
+                not value.is_floating_point() or not torch.isfinite(value).all()):
+            raise ValueError(key + ' requires a finite frozen single-example native tensor')
+        if key == 'reference_latents' and (value.shape[1] != latent.shape[1] or value.shape[-2:] != latent.shape[-2:]):
+            raise ValueError('reference latent channels and spatial geometry must match target')
 
 
 class MingResponseAdapter(FrozenResponseAdapter):
@@ -35,6 +60,19 @@ class MingResponseAdapter(FrozenResponseAdapter):
 
     def __init__(self, model, native_lora, *, model_identity=None, fixture=False, cohort='public-0.11'):
         require_cohort(cohort)
+        parameters = list(model.parameters())
+        if not parameters or any(p.requires_grad for p in parameters):
+            raise ValueError('Ming base parameters must all be frozen')
+        dtypes = {p.dtype for p in parameters}
+        if len(dtypes) != 1 or next(iter(dtypes)) not in (torch.float32, torch.bfloat16):
+            raise ValueError('Ming base must have one FP32 or BF16 dtype')
+        devices = {p.device for p in (*parameters, *native_lora.parameters())}
+        if len(devices) != 1:
+            raise ValueError('Ming base and adapter must share one explicit staged device')
+        inner = getattr(model, 'transformer', model)
+        self.multi_frame_output = getattr(inner, 'multi_frame_output', None)
+        if type(self.multi_frame_output) is not bool:
+            raise ValueError('explicit native multi_frame_output capability required')
         if type(fixture) is not bool:
             raise ValueError('fixture must be explicit boolean')
         if fixture:
@@ -63,42 +101,85 @@ class MingResponseAdapter(FrozenResponseAdapter):
             owner = getattr(original, '__self__', None)
             if id(owner) not in children or getattr(owner.forward, '__self__', None) is not layer:
                 raise ValueError('native LoRA must be attached to this actual staged model')
-        network = image_lora_parameters(model, native_lora)
+        borrowed_by = getattr(model, '_ming_response_binding', None)
+        if borrowed_by is not None and borrowed_by() is not None and not borrowed_by()._closed:
+            raise ValueError('Ming model is already borrowed by an open response binding')
+        # Borrowed module modes and public checkpoint callbacks must be restored.
+        self._borrowed = [(module, module.training,
+                           {key: (key in module.__dict__, module.__dict__.get(key))
+                            for key in ('_gradient_checkpointing_func', 'gradient_checkpointing', '_ming_response_binding')})
+                          for module in model.modules()]
         self.transformer = model
         self.fixture = fixture
         self.cohort = cohort
-        super().__init__(network, model_identity=identity)
-        # Ming exposes the Diffusers checkpoint hook on the inner transformer.
-        bind_native_gradient_checkpointing(getattr(model, 'transformer', model), network)
+        self._closed = False
+        model._ming_response_binding = weakref.ref(self)
+        try:
+            network = image_lora_parameters(model, native_lora)
+            super().__init__(network, model_identity=identity)
+            bind_native_gradient_checkpointing(inner, network)
+        except BaseException:
+            self.close()
+            raise
+
+    def close(self):
+        if self._closed:
+            return
+        for module, training, state in self._borrowed:
+            module.training = training
+            for key, (present, value) in state.items():
+                if present:
+                    setattr(module, key, value)
+                elif key in module.__dict__:
+                    delattr(module, key)
+        self._closed = True
+
+    def __enter__(self):
+        self._require_open()
+        return self
+
+    def __exit__(self, *exc):
+        self.close()
+
+    def _require_open(self):
+        if self._closed:
+            raise RuntimeError('Ming response binding is closed')
+
+    def velocity(self, condition, latent, timestep, *, scale=1.):
+        self._require_open()
+        return super().velocity(condition, latent, timestep, scale=scale)
 
     def prepare(self, row):
+        self._require_open()
         if row.schedule is not None or row.guidance != 1:
             raise ValueError('Ming binding supports raw single-timestep velocity only; native sampler/CFG pending')
         if row.scale != 1 or row.strength != 1:
             raise ValueError('Ming binding supports unipolar positive targets at +1 only')
-        if row.latent.ndim != 5 or row.latent.shape[0] != 1:
+        if (not isinstance(row.latent, torch.Tensor) or row.latent.ndim != 5 or row.latent.shape[0] != 1 or
+                min(row.latent.shape) < 1 or not row.latent.is_floating_point() or not torch.isfinite(row.latent).all()):
             raise ValueError('Ming requires its genuine [1,C,F,H,W] latent field')
         if row.latent.shape[-1] % 2 or row.latent.shape[-2] % 2:
             raise ValueError('Ming native 2x2 spatial patches require even H and W')
+        if row.latent.requires_grad or (row.timestep is not None and row.timestep.requires_grad):
+            raise ValueError('Ming latent and timestep must be frozen')
+        if not self.multi_frame_output and row.latent.shape[2] != 1:
+            raise ValueError('single-frame native capability cannot return multiple target frames')
+        for condition in (row.neutral, row.positive, row.negative):
+            _check_condition(condition, row.latent)
         return super().prepare(row)
 
     def _velocity(self, condition, latent, timestep):
-        if (not isinstance(condition, dict) or set(condition) - {'embeds', 'embeds_2', 'reference_latents'}
-                or 'embeds' not in condition):
-            raise ValueError('Ming requires frozen native embeds and optional embeds_2/reference_latents')
+        _check_condition(condition, latent)
         if timestep is None or timestep.numel() != 1 or not torch.isfinite(timestep).all() or not 0 <= timestep.item() <= 1000:
             raise ValueError('one finite raw scheduler timestep in [0,1000] required')
         dtype = next(self.transformer.parameters()).dtype
         device = latent.device
-        def tensor(key, ndim):
+        def tensor(key):
             value = condition.get(key)
             if value is None and key != 'embeds':
                 return None
-            if (not isinstance(value, torch.Tensor) or value.ndim != ndim or value.shape[0] != 1 or min(value.shape) < 1
-                    or not value.is_floating_point() or not torch.isfinite(value).all()):
-                raise ValueError(key + ' requires a finite single-example native tensor')
             return value.to(device=device, dtype=dtype)
-        embeds, embeds_2, refs = tensor('embeds', 3), tensor('embeds_2', 3), tensor('reference_latents', 5)
+        embeds, embeds_2, refs = tensor('embeds'), tensor('embeds_2'), tensor('reference_latents')
         if refs is not None and (refs.shape[1] != latent.shape[1] or refs.shape[-2:] != latent.shape[-2:]):
             raise ValueError('reference latent channels and spatial geometry must match target')
         output = self.transformer(
@@ -107,15 +188,19 @@ class MingResponseAdapter(FrozenResponseAdapter):
             encoder_hidden_states_2=None if embeds_2 is None else list(embeds_2.unbind(0)),
             ref_hidden_states=None if refs is None else list(refs.unbind(0)),
         )[0]
+        # Official patchify concatenates [targets, references] along F; unpatchify
+        # returns all those frames when multi_frame_output=True, otherwise one.
+        expected_frames = latent.shape[2] + (0 if refs is None else refs.shape[2]) if self.multi_frame_output else 1
         if (not isinstance(output, (list, tuple)) or len(output) != 1 or
                 output[0].ndim != 4 or output[0].shape[0] != latent.shape[1] or
-                output[0].shape[1] < latent.shape[2] or output[0].shape[-2:] != latent.shape[-2:]):
+                output[0].shape[1] != expected_frames or output[0].shape[-2:] != latent.shape[-2:]):
             raise ValueError('native Ming output must preserve target channels/frames/spatial field')
         return -torch.stack([output[0][:, :latent.shape[2]].float()])
 
     def metadata(self):
         return dict(super().metadata(), protocol='ming-staged-velocity-v1',
                     core_cohort=self.cohort,
+                    multi_frame_output=self.multi_frame_output,
                     upstream_commit=UPSTREAM_COMMIT, upstream_sources=UPSTREAM_SOURCES,
                     response_coordinates='native [1,C,F,H,W] latent velocity',
                     particle_bank='none: shared native LoRA adapter GAN only',
@@ -152,15 +237,27 @@ def build_hndl_game(adapter, prepared_rows, conditions, *, total_steps, seed=7, 
     require_cohort('native-candidate-0.12')
     if adapter.cohort != 'native-candidate-0.12':
         raise ValueError('Ming HyperGAN/HNDL game requires an explicitly new native candidate cohort')
+    adapter._require_open()
     rows = tuple(prepared_rows)
-    if not rows:
-        raise ValueError('frozen Ming response rows required')
+    if len(rows) < 2 or any(not isinstance(r, PreparedResponse) for r in rows):
+        raise ValueError('at least two prepared frozen Ming response rows required')
+    if any(not isinstance(t, torch.Tensor) for r in rows for t in (r.target, r.neutral)):
+        raise ValueError('Ming response rows require frozen tensors')
+    shape = tuple(rows[0].target.shape)
+    if any(tuple(t.shape) != shape or t.dtype != torch.float32 or t.requires_grad or not torch.isfinite(t).all()
+           for r in rows for t in (r.target, r.neutral)):
+        raise ValueError('Ming response rows must share finite frozen geometry')
+    if (not isinstance(conditions, torch.Tensor) or conditions.ndim != 2 or
+            conditions.shape[0] != len(rows) or conditions.shape[1] < 1 or
+            conditions.dtype != torch.float32 or conditions.requires_grad or not torch.isfinite(conditions).all()):
+        raise ValueError('Ming conditions require finite frozen FP32 [row_count, feature_width] tensor')
+    conditions = conditions.detach().clone()
     if type(seed) is not int or not 0 <= seed < 2**63 - 100:
         raise ValueError('invalid seed')
     from particle_sliders.pg09 import ConditionalPG09
     from particle_sliders.field_critic import seed_initialization_rng
     device = next(adapter.network.parameters()).device
-    devices = [device.index] if device.type == 'cuda' else []
+    devices = _cuda_rng_devices(device)
     with torch.random.fork_rng(devices=devices):
         seed_initialization_rng(seed, devices)
         critic = MingHNDLCritic(tuple(rows[0].target.shape), conditions.shape[1], critic_width)

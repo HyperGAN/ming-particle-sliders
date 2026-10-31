@@ -35,23 +35,55 @@ checkpoint hook is bound on the inner native transformer.
 
 ## Exact candidate environment
 
-Default installation retains public core 0.11.0/PG 0.9.3 and original historical
-lock records. The experimental HyperGAN/HNDL game is a new environment:
-core 0.12.0 joint commit `4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231`, official
-PG 0.9.4, HNDL 0.10.0 and exact HyperGAN develop
-`5f368a3770cf5bdae0448995c9f76e29af8049f7`. The core candidate is not public.
-Its tested wheel SHA256 is
-`9afad3afc1f6c653a574074dc14f0da1f1c43975c31ca45c4eac049df0b0b4ad`.
-The complete admission record is
+The default wheel retains public core 0.11.0/PG 0.9.3 and all original core
+lock identities. The opt-in wheel is a different local version of the same
+product distribution: `0.1.1+native012`. Install it in a separate environment.
+It resolves exact public draft core commit
+`4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231` from
+[core PR148](https://github.com/HyperGAN/particle-sliders/pull/148), official
+PG 0.9.4, HNDL 0.10.0 and HyperGAN develop
+`5f368a3770cf5bdae0448995c9f76e29af8049f7`. PR148's exact head and public
+source were independently verified; it remains an unmerged draft.
+The product's default wheel and historical checkpoints are not repinned.
+
+Build and install the candidate with ordinary dependency resolution:
+
+```bash
+python -m pip install 'build>=1,<2' 'setuptools>=84.2.1'
+python scripts/build_native_candidate.py --output-dir dist-native
+# In a separate environment, with its intended CPU/native Torch staged:
+python -m pip install dist-native/ming_particle_sliders-0.1.1+native012-py3-none-any.whl
+python -m pip check
+```
+
+The builder only creates a wheel; it does not download, install, train or publish.
+Its metadata selects the exact core VCS commit, PG, HNDL and HyperGAN candidate
+rather than the default core 0.11 dependency. There is no `--no-deps` install
+workaround. The optional `--core-wheel` argument checks the original archived
+qualification wheel against its recorded hash; a core wheel is not needed to
+build from the now-public source ref. Normal VCS rebuilds can have different
+ZIP hashes while matching the exact commit and all locked installed sources.
+
+`MingResponseAdapter(..., cohort='native-candidate-0.12')` still requires an
+explicit new cohort. Runtime admission checks actual PG Python source closure
+against the hash-verified core release manifest, exact HG/HNDL versions and HG
+VCS origin, declared ordinary/train dependency constraints, HNDL source closure,
+and clean HG build provenance/builder hashes. The default CLI stamp refuses
+candidate adoption; no native CLI or production renderer is enabled.
+The full admission record is
 [native-candidate.lock.json](../ming/native-candidate.lock.json).
 
-For coordinated qualification only, install the exact candidate wheel and its
-`hypergan-hndl` dependencies in a separate virtual environment, then install
-the product wheel with `--no-deps` and select
-`cohort='native-candidate-0.12'` in `MingResponseAdapter`. This manual setup is
-not a normal supported product installer: package metadata still selects
-public core 0.11. The CLI stamp refuses in the candidate environment. A normal
-native installer awaits shared review/publication and a qualified product cohort.
+Use the adapter as a context manager or call `close()` after all backward work
+finishes. It restores borrowed per-module checkpoint callbacks/flags and exact
+training modes, including on constructor failure. It leaves the caller's attached
+LoRA in place. Concurrent bindings of the same model are rejected.
+
+Official `patchify_and_embed` concatenates targets before reference frames;
+`unpatchify` returns their full count when `multi_frame_output=True`, otherwise
+one frame. The binding requires that explicit capability and checks the exact
+returned frame count before selecting target frames. Frozen input encodings,
+references, latents and critic features cannot require gradients. The base must
+be uniformly FP32 or BF16 and frozen; adapter leaves must be FP32.
 
 `build_hndl_game(adapter, prepared_rows, conditions, total_steps=...)` constructs
 the real shared `HNDLFieldCritic` through HyperGAN's verified common builder,

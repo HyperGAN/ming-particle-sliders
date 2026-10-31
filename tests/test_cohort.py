@@ -30,9 +30,22 @@ def test_runtime_refuses_unreviewed_core_before_the_stamp(monkeypatch, tmp_path,
         cohort.require_cohort()
 
 
-def test_profiles_are_explicit_and_candidate_is_unpublished():
+def test_profiles_are_explicit_and_candidate_is_a_public_draft():
     with pytest.raises(ValueError, match='no implicit upgrade'):
         cohort.require_cohort('latest')
     candidate = json.loads(files('ming').joinpath('native-candidate.lock.json').read_text())
     assert candidate['commit'] == '4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231'
-    assert 'unpublished' in candidate['status']
+    assert 'public draft' in candidate['status']
+
+
+def test_pg_same_version_modified_sources_refuse(monkeypatch, tmp_path):
+    actual = distribution('particlegan')
+    fake_root = tmp_path / 'particlegan'
+    fake_root.mkdir()
+    (fake_root / '__init__.py').write_text('# same version, different implementation\n')
+    class ChangedPG:
+        version = actual.version
+        def locate_file(self, name): return fake_root
+    monkeypatch.setattr(cohort, 'distribution', lambda n: ChangedPG() if n == 'particlegan' else distribution(n))
+    with pytest.raises(RuntimeError, match='ParticleGAN source closure'):
+        cohort.require_cohort()

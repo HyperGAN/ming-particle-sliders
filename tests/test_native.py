@@ -15,6 +15,7 @@ PROFILE = 'native-candidate-0.12' if version('particle-sliders-core') == '0.12.0
 
 
 class TinyMing(nn.Module):
+    multi_frame_output = True
     def __init__(self):
         super().__init__()
         self.proj = nn.Linear(2, 2)
@@ -36,6 +37,9 @@ class TinyMing(nn.Module):
                 y = y + encoder_hidden_states_2[i].mean()
             if ref_hidden_states is not None:
                 y = y + ref_hidden_states[i].mean()
+                y = torch.cat([y, ref_hidden_states[i]], dim=1)
+            if not self.multi_frame_output:
+                y = y[:, :1]
             values.append(y)
         return (values,)
 
@@ -190,3 +194,139 @@ def test_native_checkpoint_recomputation_captures_each_forward_scale():
         adapters.append(adapter)
     for plain, checkpointed in zip(adapters[0].network.parameters(), adapters[1].network.parameters()):
         assert torch.equal(plain.grad, checkpointed.grad)
+
+
+def test_multiple_target_and_reference_frames_follow_official_order():
+    model, _, adapter = fixture()
+    data = replace(row(), latent=row().latent.repeat(1, 1, 2, 1, 1))
+    refs = torch.cat([torch.full_like(row().latent, 10.), torch.full_like(row().latent, 20.)], dim=2)
+    for condition in (data.neutral, data.positive, data.negative):
+        condition['reference_latents'] = refs.clone()
+    prepared = adapter.prepare(data)
+    with adapter.network.scaled(0):
+        raw = model(list(data.latent.unbind(0)), torch.tensor([.75]),
+                    list(data.positive['embeds'].unbind(0)), return_dict=False,
+                    ref_hidden_states=list(refs.unbind(0)))[0][0]
+    assert raw.shape[1] == 4  # target0,target1,reference0,reference1
+    assert torch.equal(raw[:, 2:], refs[0])
+    assert torch.equal(prepared.target, -raw[:, :2].unsqueeze(0))
+    assert torch.equal(model.calls[-1][2][0], refs[0])
+
+
+def test_wrong_native_output_frame_count_refuses(monkeypatch):
+    model, _, adapter = fixture()
+    data = row()
+    data.neutral['reference_latents'] = torch.ones(1, 2, 2, 8, 8)
+    original = model.forward
+    def truncated(*a, **kw):
+        values = original(*a, **kw)[0]
+        return ([values[0][:, :-1]],)
+    monkeypatch.setattr(model, 'forward', truncated)
+    with pytest.raises(ValueError, match='preserve target'):
+        adapter.velocity(data.neutral, data.latent, data.timestep)
+
+
+class SingleFrameMing(TinyMing):
+    multi_frame_output = False
+
+
+def test_official_single_frame_capability_with_multiple_references():
+    model, _, adapter = fixture(model_type=SingleFrameMing)
+    data = row()
+    for c in (data.neutral, data.positive, data.negative):
+        c['reference_latents'] = torch.ones(1, 2, 2, 8, 8)
+    assert adapter.prepare(data).target.shape == data.latent.shape
+    model.calls.clear()
+    with pytest.raises(ValueError, match='single-frame native capability'):
+        adapter.prepare(replace(data, latent=data.latent.repeat(1, 1, 2, 1, 1)))
+    assert not model.calls
+
+
+@pytest.mark.parametrize('key', ['embeds', 'embeds_2', 'reference_latents'])
+def test_native_encodings_require_frozen_tensors(key):
+    _, _, adapter = fixture()
+    data = row()
+    shape = (1, 2, 1, 8, 8) if key == 'reference_latents' else (1, 2, 3)
+    data.neutral[key] = torch.ones(shape, requires_grad=True)
+    with pytest.raises(ValueError, match='native tensor'):
+        adapter.prepare(data)
+
+
+def test_borrowed_checkpoint_callback_and_modes_restore_on_close():
+    model = CheckpointMing().requires_grad_(False)
+    original = object()
+    model._gradient_checkpointing_func = original
+    model.train()
+    model.proj.eval()
+    modes = [m.training for m in model.modules()]
+    lora = LoRANetwork(model, rank=2, alpha=2, target_replace=['CheckpointMing'])
+    with MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE) as adapter:
+        assert model._gradient_checkpointing_func is not original
+        adapter.prepare(row())
+    assert model._gradient_checkpointing_func is original
+    assert [m.training for m in model.modules()] == modes
+    adapter.close()  # idempotent; caller-owned LoRA remains attached
+    with pytest.raises(RuntimeError, match='closed'):
+        adapter.prepare(row())
+
+
+def test_checkpoint_binding_failure_restores_borrowed_state(monkeypatch):
+    import ming.native as native
+    model = CheckpointMing().requires_grad_(False)
+    lora = LoRANetwork(model, rank=2, alpha=2, target_replace=['CheckpointMing'])
+    def fail(root, network):
+        root._gradient_checkpointing_func = object()
+        root.gradient_checkpointing = True
+        raise RuntimeError('checkpoint hook rejected')
+    monkeypatch.setattr(native, 'bind_native_gradient_checkpointing', fail)
+    with pytest.raises(RuntimeError, match='checkpoint hook rejected'):
+        MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE)
+    assert '_gradient_checkpointing_func' not in model.__dict__
+    assert 'gradient_checkpointing' not in model.__dict__
+    assert model.training is True
+
+
+def test_bf16_frozen_base_owns_only_fp32_adapter_gradients():
+    model = TinyMing().to(torch.bfloat16).requires_grad_(False)
+    base = deepcopy(model.state_dict())
+    lora = LoRANetwork(model, rank=2, alpha=2, target_replace=['TinyMing'])
+    with MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE) as adapter:
+        prepared = adapter.prepare(row())
+        generated = adapter.generated(prepared)
+        assert generated.dtype == torch.float32
+        generated.sum().backward()
+        assert all(p.dtype == torch.float32 and p.grad is not None for p in adapter.network.parameters())
+        assert all(p.grad is None and not p.requires_grad for p in model.parameters())
+        equal(base, model.state_dict())
+
+
+@pytest.mark.parametrize('damage', ['unfrozen', 'mixed-base', 'adapter-bf16'])
+def test_unqualified_dtype_and_base_ownership_refuse(damage):
+    model = TinyMing().requires_grad_(False)
+    lora = LoRANetwork(model, rank=2, alpha=2, target_replace=['TinyMing'])
+    if damage == 'unfrozen': model.proj.weight.requires_grad_(True)
+    elif damage == 'mixed-base': model.proj.weight.data = model.proj.weight.data.bfloat16()
+    else: lora.to(torch.bfloat16)
+    with pytest.raises(ValueError, match='frozen|one FP32|float32'):
+        MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE)
+    assert model.training is True
+
+
+def test_bare_cuda_rng_normalization_without_cuda_execution(monkeypatch):
+    from ming.native import _cuda_rng_devices
+    monkeypatch.setattr(torch.cuda, 'current_device', lambda: 3)
+    assert _cuda_rng_devices(torch.device('cuda')) == [3]
+    assert _cuda_rng_devices(torch.device('cuda:1')) == [1]
+    assert _cuda_rng_devices(torch.device('cpu')) == []
+
+
+def test_overlapping_borrow_is_rejected_without_changing_first_hook():
+    model, lora, first = fixture(model_type=CheckpointMing)
+    callback = model._gradient_checkpointing_func
+    with pytest.raises(ValueError, match='already borrowed'):
+        MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE)
+    assert model._gradient_checkpointing_func is callback
+    first.prepare(row())
+    first.close()
+    with MingResponseAdapter(model, lora, fixture=True, cohort=PROFILE) as second:
+        second.prepare(row())

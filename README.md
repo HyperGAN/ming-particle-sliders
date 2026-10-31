@@ -110,9 +110,16 @@ The prior core0.6.0 package identity and receipts remain nested in core.lock.jso
 this is a new metadata-only package baseline. The proposed core0.12.0/PG0.9.4
 shared cohort is separate and is not selected by the default installer.
 Native CLI and Comfy operations remain unwired and refuse execution; no
-model download or training was run.
+model weights were downloaded or pretrained model training run.
 
 Version 0.1.1 adds staged native glue and runtime source admission without
 changing that default dependency. Python 3.11 is now declared explicitly,
 matching the selected core's existing minimum. No workflow publishes a package
 or weights, and no model loader or download runs on import.
+
+The optional candidate wheel can now resolve exact public draft core PR148,
+HyperGAN develop and HNDL normally. It has explicit `+native012` metadata and
+runs in a separate environment; see [native binding](docs/native-binding.md).
+Actual PG/HG/HNDL source and declared dependency admission, checkpoint cleanup,
+and exact frame-count validation are documented in
+[review corrections](docs/review-fixes-20261031.md).

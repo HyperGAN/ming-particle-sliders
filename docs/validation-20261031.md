@@ -1,6 +1,11 @@
-# Installed CPU validation, 2026-10-31
+# Initial installed CPU validation, 2026-10-31
 
-The two lanes use separate virtual environments and installed product wheels.
+This historical receipt describes initial review head
+`673f136bf817bddaec0fc15fd19a7a1fc46c4eee`. See
+[review follow-up](review-fixes-20261031.md) for subsequent source and resolver
+corrections and their separate results.
+
+The two initial lanes use separate virtual environments and installed product wheels.
 Python 3.12.15 / Torch 2.14.1+cpu; CUDA disabled and Hugging Face offline.
 Torch and selected ordinary dependencies are reused through a task-local,
 read-only dependency view. This is not a clean full native dependency install.

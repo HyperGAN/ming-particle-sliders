@@ -14,7 +14,7 @@ baseline: `17950bc9d1a8b3f4bcaf144793b695292efee2a7`. Updated 2026-10-31.
 
 The candidate uses joint local core commit
 `4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231`, HyperGAN develop
-`5f368a3770cf5bdae0448995c9f76e29af8049f7`, and HNDL 0.10.0. It is unpublished
+`5f368a3770cf5bdae0448995c9f76e29af8049f7`, and HNDL 0.10.0. It is now the public unmerged draft PR148
 and does not replace the default dependency or qualify a historical checkpoint.
 The packaged [candidate lock](../ming/native-candidate.lock.json) records its
 exact tested wheel and source hashes. Old public and historical identities
@@ -30,8 +30,9 @@ Before enabling native product commands:
 3. Qualify native CFG, scheduler stepping, VAE RGBA decoding and layer ordering.
    The binding rejects trajectories and guidance other than 1; no generic
    Euler renderer substitutes for Ming's production sampler.
-4. Review and publish the exact shared candidate before providing a normal
-   dependency-resolving native installer. Keep core 0.11 and historical
+4. Review and qualify the exact public shared draft before enabling native
+   product execution. A separate experimental candidate wheel now resolves
+   its exact public VCS dependencies normally. Keep core 0.11 and historical
    checkpoint environments isolated; no automatic migration is supported.
 5. Obtain coordinated GPU/pretrained qualification and weight-publication
    authorization before enabling live commands or `HUB_PUBLISHED`.
@@ -39,3 +40,8 @@ Before enabling native product commands:
 No model weights were downloaded, no GPU was present in this executor, and no
 training of a pretrained model, rendering, deployment or publication ran.
 CPU fixtures demonstrate software ownership and transaction contracts only.
+
+Review follow-up: [review-fixes-20261031.md](review-fixes-20261031.md) records
+source closure, frame-count, input ownership, checkpoint cleanup and coherent
+candidate packaging corrections. Public source availability is no longer a
+resolver blocker; reviewed native quality and multiframe game support remain gates.
