@@ -184,3 +184,8 @@ else:
         cwd=tmp_path, capture_output=True, text=True,
     )
     assert checked.returncode == 0, checked.stderr
+
+
+def test_zero_comfy_strength_still_refuses_an_unimplemented_adapter():
+    with pytest.raises(RuntimeError, match='not published'):
+        MingParticleSlider().load(object(), 'missing', 0.)

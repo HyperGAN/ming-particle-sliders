@@ -5,6 +5,8 @@ Game math is not defined here. Call ``stamp()``.
 
 from particle_sliders import winning_formulation
 
+from .cohort import require_cohort
+
 # Upstream base. Not the product weight repo.
 BASE_MODEL_ID = "inclusionAI/Ming-Image-0.1-Design-Layer"
 
@@ -26,6 +28,7 @@ def stamp():
 
     This check does not construct a trainer or qualify a Ming backend.
     """
+    require_cohort()
     loaded = winning_formulation()
     loaded.require(loaded.as_dict())
     return loaded

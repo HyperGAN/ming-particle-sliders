@@ -1,9 +1,9 @@
 # Formulation metadata
 
 `ming-particle-sliders` owns the intended Ming product identifiers, ComfyUI
-registration, and fail-closed train/infer commands. It has no native Ming
-training game or adapter execution. The shared import below is an actual
-metadata check, not evidence of a working GAN backend:
+registration, fail-closed train/infer commands and experimental staged native
+velocity glue. Game mathematics stay shared. The import below is a metadata
+check, independent of the opt-in candidate GAN binding:
 
 ```python
 from ming.surfaces import stamp
@@ -18,12 +18,14 @@ product does not copy shared game math or override those metadata fields.
 Validating a stamp against its own dictionary checks the shared schema; it
 cannot validate absent native training behavior or an absent checkpoint.
 
-A future Ming trainer must bind a real native forward, a routed trainable
-adapter, frozen teacher responses, and meaningful conditioning to the
-qualified shared GAN API. It must use the reviewed released ParticleGAN
-dependency owned by that shared package. An import or constructor alone
-does not establish this path. The required evidence is in
-[the capability audit](docs/capability-audit.md).
+`MingResponseAdapter` binds an already staged native forward, shared native
+LoRA leaves and frozen embeddings/reference latents to the shared response
+contract. `build_hndl_game` uses actual shared `ConditionalPG09` and the
+verified HyperGAN develop/HNDL field critic in a separate explicit core 0.12
+candidate environment. Its objective is the public BISPF preset, with no local
+loss, optimizer, regularizer or particle-bank imitation. This is an adapter GAN;
+its native velocity field is never labeled a rendered image or ordinary Ming
+LoRA. See [native binding scope](docs/native-binding.md).
 
 The shared package owns generic optimizers, GAN losses, sampling contracts,
 and checkpoint/resume mechanics. Product code should supply native model

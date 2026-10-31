@@ -1,42 +1,41 @@
 # Ming capability audit
 
-Audit baseline: HyperGAN/ming-particle-sliders main
-`93cb5bfa9e6585da3dc0a89327fb56dc276e8cc5` (2026-10-17).
+Baseline main: `93cb5bfa9e6585da3dc0a89327fb56dc276e8cc5`. Existing draft
+baseline: `17950bc9d1a8b3f4bcaf144793b695292efee2a7`. Updated 2026-10-31.
 
-| Surface | Executed path | Capability |
+| Surface | Executed path | Qualification |
 |---|---|---|
-| Train script, module, installed `ming-train` | `ming.train.main` → `ming.surfaces.stamp` → shared `winning_formulation` / `require` | Metadata dry-run; live mode exits |
-| Infer script, module, installed `ming-infer` | `ming.infer.main` → same shared metadata check | Metadata dry-run; live mode exits |
-| ComfyUI `MingParticleSlider.load` | Same metadata check; finite range validation; unpublished-weight guard | Always refuses native execution |
+| Train/infer scripts, modules and installed commands | Exact public core 0.11/PG 0.9.3 source admission, shared stamp/require | Metadata dry-run; live commands refuse |
+| ComfyUI node | Same admission/stamp, finite strength range, unpublished-weight guard | Native execution refuses, including strength zero |
+| Experimental `MingResponseAdapter` | Staged native wrapper → native 5D latent velocity; shared LoRA ownership and frozen response preparation | Tiny CPU fixtures; native pretrained behavior unrun |
+| Explicit `build_hndl_game` candidate | Core 0.12/PG 0.9.4 → verified HyperGAN develop/HNDL 0.10 field critic → shared BISPF game/optimizers/checkpoint | Actual installed graphs and tiny CPU game; singleton frame only |
+| Adapter exports | Shared safetensors save/load with exact backend/frozen-model identity | Tiny CPU roundtrip and rejection before mutation |
+| Candidate checkpoints | Shared exact game packets, optimizers and streams | Tiny CPU deterministic continuation; old PG cohort refused without mutation |
 
-No native model forward, adapter/bank, teacher path, optimizer, MSE or GAN
-update, or sampling loop exists in this product. There are no active
-weights to audit. Conditioning, sign semantics, serialization, and resume
-are absent. Base-model sampling constants are descriptive metadata.
+The candidate uses joint local core commit
+`4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231`, HyperGAN develop
+`5f368a3770cf5bdae0448995c9f76e29af8049f7`, and HNDL 0.10.0. It is unpublished
+and does not replace the default dependency or qualify a historical checkpoint.
+The packaged [candidate lock](../ming/native-candidate.lock.json) records its
+exact tested wheel and source hashes. Old public and historical identities
+are preserved.
 
-The product is installable as a wheel; source-free command execution
-verifies only the implemented metadata checks and refusal behavior.
-Shared-package functionality and Ming-native functionality are separate
-qualification gates.
+Before enabling native product commands:
 
-Before enabling live Ming execution:
+1. Qualify the exact pretrained transformer/conditioner weights and source
+   closure, input encoding, reference latents, and actual target layers.
+2. Qualify multiframe/layer output. The shared HNDL field critic accepts a 2D
+   field; this binding only removes a singleton frame axis and rejects multiple
+   frames. It does not flatten or relabel a wide vector.
+3. Qualify native CFG, scheduler stepping, VAE RGBA decoding and layer ordering.
+   The binding rejects trajectories and guidance other than 1; no generic
+   Euler renderer substitutes for Ming's production sampler.
+4. Review and publish the exact shared candidate before providing a normal
+   dependency-resolving native installer. Keep core 0.11 and historical
+   checkpoint environments isolated; no automatic migration is supported.
+5. Obtain coordinated GPU/pretrained qualification and weight-publication
+   authorization before enabling live commands or `HUB_PUBLISHED`.
 
-1. Implement and verify the exact native model/projection/adapter contract
-   against frozen teacher responses and conditioning, including sign and
-   zero-strength behavior.
-2. Use the reviewed installed shared GAN API and its immutable dependency
-   lineage. This scaffold's new core 0.6.0 / ParticleGAN 0.9.1 baseline
-   qualifies metadata compatibility only. Never silently upgrade an active
-   run or treat that check as native backend qualification.
-3. Prove GAN-only updates, frozen base weights, correct active adapter
-   parameters, and sampling of those trained parameters.
-4. Prove product checkpoint save/load and deterministic resume through the
-   shared contract, with mismatched identity and legacy artifacts rejected.
-5. Obtain coordinator admission for native/GPU qualification, then publish
-   reviewed weights and provenance before setting `HUB_PUBLISHED` true.
-
-Optional HyperGAN develop diagnostics and the HNDL 0.8.2 conditional
-readout critic ship in the shared package; neither is exercised by
-Ming's adopted metadata path. Ming currently has no
-responses, critic dimensions, or native training path for either to act
-on; adding those imports here would not provide executable reuse.
+No model weights were downloaded, no GPU was present in this executor, and no
+training of a pretrained model, rendering, deployment or publication ran.
+CPU fixtures demonstrate software ownership and transaction contracts only.

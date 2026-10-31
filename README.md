@@ -8,10 +8,12 @@ this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
 [particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/3c25f785d14073e6f627c0fa9d2297a041c79913/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
-This is a product scaffold. There is no native Ming slider trainer, adapter
-runtime, checkpoint format, or sampler here. No slider weights or sample
-gallery are available. A successful dry-run validates shared formulation
-metadata; it does not qualify a Ming GAN implementation.
+The installed CLI and ComfyUI surfaces remain a product scaffold. An
+experimental [staged velocity binding](docs/native-binding.md) supplies native
+model glue to the real shared response/GAN APIs. Its separate core 0.12
+candidate lane executes an actual HyperGAN develop/HNDL field critic on tiny
+CPU fixtures. Pretrained Ming, multiframe training and production sampling
+remain unqualified. No slider weights or sample gallery are available.
 
 ## Base model
 
@@ -41,7 +43,8 @@ particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@3c2
 `particlegan` comes in transitively from that package. Train, infer, and
 Comfy call `particle_sliders.winning_formulation` and then `stamp.require()`
 to check metadata. They do not construct or execute a GAN, routed adapter,
-critic, or regularizer.
+critic, or regularizer. Every check also verifies the installed core version,
+immutable origin and locked source hashes. The wheel includes its lock records.
 The formulation note is [FORMULATION.md](FORMULATION.md). The pin record is
 [core.lock.json](core.lock.json).
 
@@ -80,13 +83,14 @@ The installed commands and `python -m ming.train` / `python -m ming.infer`
 also work outside a source checkout. `--dry-run` imports the stamp on CPU
 and prints `architecture_id`, `formulation_id`, the base model id, the
 unpublished Hub id, and `execution=scaffold-only`. Without
-`--dry-run` the commands exit before any download or update. Projection
-hooks for the Ming transformer are not wired.
+`--dry-run` the commands exit before any download or update. These commands
+do not attach Ming transformer projection hooks.
 
-No MSE slider training path exists to replace. Conditioning, signed slider
-application, active parameter selection, sampling, save/load, and resume
-remain unimplemented. See [the capability audit](docs/capability-audit.md)
-for the native implementation gates.
+No MSE slider training path exists to replace. The experimental Python binding
+owns the already attached shared native LoRA leaves and frozen numerical
+conditioning. Shared APIs own GAN updates, exports and exact checkpoint restore.
+CLI loading, production conditioning, signed semantic axes, multiframe
+training and rendering remain pending. See [the capability audit](docs/capability-audit.md).
 
 ## ComfyUI
 
@@ -104,5 +108,11 @@ weights.
 The existing draft now selects the public shared core0.11.0 commit above.
 The prior core0.6.0 package identity and receipts remain nested in core.lock.json;
 this is a new metadata-only package baseline. The proposed core0.12.0/PG0.9.4
-shared cohort is separate and is not selected here. Native operations remain
-unimplemented and refuse execution; no model download or training was run.
+shared cohort is separate and is not selected by the default installer.
+Native CLI and Comfy operations remain unwired and refuse execution; no
+model download or training was run.
+
+Version 0.1.1 adds staged native glue and runtime source admission without
+changing that default dependency. Python 3.11 is now declared explicitly,
+matching the selected core's existing minimum. No workflow publishes a package
+or weights, and no model loader or download runs on import.

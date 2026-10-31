@@ -1,18 +1,18 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=84.2.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ming-particle-sliders"
-version = "0.1.0"
-description = "Ming particle-slider product scaffold and shared formulation checks"
+version = "0.1.1"
+description = "Ming scaffold, exact cohort checks and experimental staged velocity binding"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = {file = "LICENSE"}
 dynamic = ["dependencies"]
 
 [project.optional-dependencies]
-test = ["pytest>=8"]
+test = ["pytest>=8", "safetensors>=0.4,<1"]
 
 [project.scripts]
 ming-train = "ming.train:main"
@@ -24,3 +24,6 @@ py-modules = ["comfy_ming"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.package-data]
+ming = ["core.lock.json", "native-candidate.lock.json"]
