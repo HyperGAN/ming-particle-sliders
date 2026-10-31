@@ -106,9 +106,9 @@ weights.
 
 ## 2026-10-31 scaffold compatibility refresh
 
-The existing draft now selects the public shared core0.11.0 commit above.
-The prior core0.6.0 package identity and receipts remain nested in core.lock.json;
-this is a new metadata-only package baseline. The proposed core0.12.0/PG0.9.4
+The existing draft now selects the public shared core 0.11.0 commit above.
+The prior core 0.6.0 package identity and receipts remain nested in core.lock.json;
+this is a new metadata-only package baseline. The proposed core 0.12.0 / PG 0.9.4
 shared cohort is separate and is not selected by the default installer.
 Native CLI and Comfy operations remain unwired and refuse execution; no
 model weights were downloaded or pretrained model training run.
@@ -119,9 +119,15 @@ matching the selected core's existing minimum. No workflow publishes a package
 or weights, and no model loader or download runs on import.
 
 The native experiment is a separate prerelease distribution,
-`ming-particle-sliders-native==0.1.1.dev12`, importing `ming_native`. It has no
+`ming-particle-sliders-native==0.1.1.dev13`, importing `ming_native`. It has no
 stable CLI/Comfy entry points and cannot satisfy the stable distribution's
 requirements. Install it only in a separate environment. Each artifact ships
 only its own lock and binds its installed identity to that cohort. See
 [native binding](docs/native-binding.md) and
 [isolation follow-up](docs/isolation-review-20261031.md).
+
+The active native candidate pins shared core
+`a794e3b4a8813b012f2c4faa3da82b78d4a90214` under a new cohort identity. The stable
+core 0.11 installation and the earlier dev12 preview remain separate. See the
+[modern candidate qualification](docs/modern-core-a794.md) for exact installation,
+recursive source/data verification, old-packet refusal and CPU test scope.

@@ -25,7 +25,7 @@ def wheels(tmp_path_factory):
     output = tmp_path_factory.mktemp('ming-artifacts')
     subprocess.run([sys.executable, '-I', '-m', 'build', '--wheel', '--no-isolation', '--outdir', str(output), str(staging)], check=True, capture_output=True)
     subprocess.run([sys.executable, '-I', str(staging / 'scripts/build_native_candidate.py'), '--output-dir', str(output)], check=True, capture_output=True)
-    return output / 'ming_particle_sliders-0.1.1-py3-none-any.whl', output / 'ming_particle_sliders_native-0.1.1.dev12-py3-none-any.whl'
+    return output / 'ming_particle_sliders-0.1.1-py3-none-any.whl', output / 'ming_particle_sliders_native-0.1.1.dev13-py3-none-any.whl'
 
 
 def metadata(archive):
@@ -41,7 +41,7 @@ def test_built_wheels_have_distinct_identity_namespace_entrypoints_and_one_lock(
         assert metadata(native)['Version'] not in SpecifierSet('==0.1.1')
         assert not any(n.startswith(('ming/', 'comfy_ming')) or n.endswith('entry_points.txt') for n in b)
         assert not any('native-candidate.lock' in n or n.startswith('ming_native/') for n in a)
-        for archive, namespace, profile in ((stable, 'ming', 'public-0.11'), (native, 'ming_native', 'native-candidate-0.12')):
+        for archive, namespace, profile in ((stable, 'ming', 'public-0.11'), (native, 'ming_native', 'native-a794e3b4')):
             assert [n for n in archive.namelist() if n.endswith('.lock.json')] == [namespace + '/core.lock.json']
             identity = json.loads(archive.read(namespace + '/identity.json'))
             assert identity['profile'] == profile

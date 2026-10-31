@@ -5,7 +5,7 @@ from importlib.metadata import version
 import pytest
 import torch
 
-from tests.test_native import fixture, row, equal, NATIVE, COHORT
+from tests.test_native import fixture, row, equal, NATIVE, COHORT, PROFILE
 MingHNDLCritic, build_hndl_game = NATIVE.MingHNDLCritic, NATIVE.build_hndl_game
 
 pytestmark = pytest.mark.skipif(version('particle-sliders-core') != '0.12.0',
@@ -13,7 +13,7 @@ pytestmark = pytest.mark.skipif(version('particle-sliders-core') != '0.12.0',
 
 
 def game():
-    model, lora, adapter = fixture(profile='native-candidate-0.12')
+    model, lora, adapter = fixture(profile=PROFILE)
     rows = [adapter.prepare(row(offset)) for offset in (0., .3)]
     conditions = torch.tensor([[0., .25], [.3, .25]])  # actual fixture embedding/time features
     return model, adapter, build_hndl_game(adapter, rows, conditions,
@@ -64,7 +64,7 @@ def test_candidate_declares_its_own_namespace_and_refuses_public_profile():
     assert COHORT.product_identity()['namespace'] == 'ming_native'
     assert not files('ming_native').joinpath('native-candidate.lock.json').is_file()
     assert not files('ming_native').joinpath('surfaces.py').is_file()
-    with pytest.raises(ValueError, match='declares native-candidate'):
+    with pytest.raises(ValueError, match='declares native-a794'):
         COHORT.require_cohort('public-0.11')
 
 
@@ -92,7 +92,7 @@ def test_candidate_checks_actual_hg_hndl_and_declared_constraints(monkeypatch, d
         def locate_file(self, name): return self.actual.locate_file(name)
     monkeypatch.setattr(cohort, 'distribution', Changed)
     with pytest.raises(RuntimeError, match='HyperGAN|constraint|Git dependency'):
-        cohort.require_cohort('native-candidate-0.12')
+        cohort.require_cohort(PROFILE)
 
 
 def test_candidate_checks_actual_hndl_source_closure(monkeypatch, tmp_path):
@@ -102,13 +102,13 @@ def test_candidate_checks_actual_hndl_source_closure(monkeypatch, tmp_path):
     fake.write_text('# modified same-version HNDL implementation\n')
     monkeypatch.setattr(hndl, '__file__', str(fake))
     with pytest.raises(COHORT.CohortError, match='HNDL source closure'):
-        require_cohort('native-candidate-0.12')
+        require_cohort(PROFILE)
 
 
 @pytest.mark.parametrize('damage', ['list', 'nan', 'rows', 'requires-grad', 'integer', 'rank'])
 def test_invalid_game_conditions_refuse_before_graph_allocation(monkeypatch, damage):
     native = NATIVE
-    _, _, adapter = fixture(profile='native-candidate-0.12')
+    _, _, adapter = fixture(profile=PROFILE)
     rows = [adapter.prepare(row(o)) for o in (0., .3)]
     conditions = torch.ones(2, 2)
     if damage == 'list': conditions = [[1., 1.], [1., 1.]]
@@ -127,12 +127,12 @@ def test_candidate_wheel_metadata_matches_its_runtime():
     from importlib.metadata import distribution
     from packaging.requirements import Requirement
     product = distribution('ming-particle-sliders-native')
-    assert product.version == '0.1.1.dev12'
+    assert product.version == '0.1.1.dev13'
     assert not list(product.entry_points)
     requirements = {r.name: r for r in map(Requirement, product.requires) if r.marker is None}
     assert requirements['particle-sliders-core'].url == (
         'git+https://github.com/HyperGAN/particle-sliders.git@'
-        '4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231#subdirectory=packages/particle-sliders-core')
+        'a794e3b4a8813b012f2c4faa3da82b78d4a90214#subdirectory=packages/particle-sliders-core')
     assert str(requirements['particlegan'].specifier) == '==0.9.4'
     assert str(requirements['hndl'].specifier) == '==0.10.0'
     assert requirements['hypergan'].url.endswith('5f368a3770cf5bdae0448995c9f76e29af8049f7')
@@ -142,7 +142,7 @@ def test_candidate_wheel_metadata_matches_its_runtime():
 def test_invalid_prepared_rows_refuse_before_graph_allocation(monkeypatch, damage):
     from dataclasses import replace
     native = NATIVE
-    _, _, adapter = fixture(profile='native-candidate-0.12')
+    _, _, adapter = fixture(profile=PROFILE)
     rows = [adapter.prepare(row(o)) for o in (0., .3)]
     if damage == 'one-row': rows = rows[:1]
     elif damage == 'target-grad': rows[0] = replace(rows[0], target=rows[0].target.requires_grad_())
@@ -185,3 +185,125 @@ def test_native_identity_cannot_redeclare_another_lock_digest(monkeypatch):
     monkeypatch.setattr(COHORT, '_json', changed)
     with pytest.raises(COHORT.CohortError, match='identity contradicts'):
         COHORT.product_identity()
+
+
+@pytest.mark.parametrize('damage', ['changed-data', 'missing-source', 'unexpected-nested-data'])
+def test_recursive_modern_core_source_data_closure_refuses_tamper(monkeypatch, tmp_path, damage):
+    from importlib.metadata import distribution
+    from pathlib import Path
+    import shutil
+    original = distribution('particle-sliders-core')
+    root = tmp_path / 'core'
+    for name in ('particle_sliders', 'concept_slider_core'):
+        shutil.copytree(original.locate_file(name), root / name)
+    if damage == 'changed-data':
+        (root / 'particle_sliders/LICENSE').write_text('tampered license data\n')
+    elif damage == 'missing-source':
+        (root / 'particle_sliders/peft_scaling.py').unlink()
+    else:
+        extra = root / 'particle_sliders/unexpected/policy.hndl'
+        extra.parent.mkdir()
+        extra.write_text('unqualified nested data\n')
+    class Changed:
+        version = original.version
+        requires = original.requires
+        def read_text(self, name): return original.read_text(name)
+        def locate_file(self, name): return root / name
+    monkeypatch.setattr(COHORT, 'distribution', lambda n: Changed() if n == 'particle-sliders-core' else distribution(n))
+    with pytest.raises(COHORT.CohortError, match='recursive source/data closure'):
+        COHORT.require_cohort()
+
+
+def session(decay):
+    # Shared-session software fixture over the product binding. This is not a
+    # production Ming EMA/sampler API or pretrained/native qualification.
+    from particle_sliders.lifecycle import Binding, SessionConfig
+    from particle_sliders.response import ResponseCapabilities, ResponseSession
+    from particle_sliders.pg09 import PG_VERSION, PG_SOURCE_PROFILE
+    model, adapter, current = game()
+    caps = ResponseCapabilities('adapter_gan', 'image', 'latent_velocity', 'continuous_field',
+                                tuple(current.response_shape), PG_VERSION, PG_SOURCE_PROFILE)
+    config = SessionConfig('ming-staged-cpu-fixture', PROFILE, ema_decay=decay)
+    return model, adapter, ResponseSession(config, caps, Binding(current, adapter.close))
+
+
+@pytest.mark.parametrize('decay', [None, .5])
+def test_modern_shared_session_off_raw_ema_exports_and_resume(decay):
+    _, adapter, current = session(decay)
+    _, _, restored = session(decay)
+    _, _, inference = session(decay)
+    try:
+        current.step()
+        raw = current.export(selection='raw')
+        equal(raw['payload']['adapter']['network'], current.game.network.state_dict())
+        inference.load_inference(raw)
+        assert torch.equal(current.evaluate(0, seed=17), inference.evaluate(0, seed=17))
+        from particle_sliders.lifecycle import UnsupportedOperation
+        with pytest.raises(UnsupportedOperation, match='inference-loaded'):
+            inference.step()
+        if decay is None:
+            assert current.ema.values is None
+            with pytest.raises(ValueError, match='configured EMA'):
+                current.export(selection='ema')
+        else:
+            ema = current.export(selection='ema')
+            equal(ema['payload']['adapter']['network'], current.ema.values)
+            assert any(not torch.equal(value, current.game.network.state_dict()[name])
+                       for name, value in current.ema.values.items())
+            inference.load_inference(ema)
+            raw_state = deepcopy(current.game.network.state_dict())
+            try:
+                current.game.network.load_state_dict(current.ema.values)
+                expected = current.evaluate(0, seed=17)
+            finally:
+                current.game.network.load_state_dict(raw_state)
+            assert torch.equal(expected, inference.evaluate(0, seed=17))
+        checkpoint = current.checkpoint()
+        restored.restore(checkpoint)
+        equal(current.step(), restored.step())
+        equal(current.checkpoint(), restored.checkpoint())
+        before = deepcopy(current.checkpoint())
+        rng = torch.get_rng_state().clone()
+        output = current.evaluate(0, seed=27)
+        assert output.shape == (1, 2, 1, 8, 8) and torch.isfinite(output).all()
+        equal(before, current.checkpoint())
+        assert torch.equal(rng, torch.get_rng_state())
+    finally:
+        current.close()
+        restored.close()
+        inference.close()
+
+
+def test_modern_shared_session_restore_failure_rolls_back_and_retries():
+    from particle_sliders.lifecycle import CheckpointError
+    _, _, current = session(.5)
+    _, _, source = session(.5)
+    try:
+        current.step()
+        source.step()
+        packet = source.checkpoint()
+        before = deepcopy(current.checkpoint())
+        flags = [(m, m.training) for m in current.game.network.modules()]
+        rng = torch.get_rng_state().clone()
+        failed = []
+        def fail_once(module, incompatible):
+            if not failed:
+                failed.append(True)
+                module.training = not module.training
+                torch.rand(3)
+                raise RuntimeError('one-shot live load failure')
+        handle = current.game.network.register_load_state_dict_post_hook(fail_once)
+        try:
+            with pytest.raises(RuntimeError, match='one-shot live load failure'):
+                current.restore(packet)
+        finally:
+            handle.remove()
+        equal(before, current.checkpoint())
+        assert all(m.training == training for m, training in flags)
+        assert torch.equal(rng, torch.get_rng_state())
+        current.restore(packet)
+        equal(current.step(), source.step())
+        equal(current.checkpoint(), source.checkpoint())
+    finally:
+        current.close()
+        source.close()

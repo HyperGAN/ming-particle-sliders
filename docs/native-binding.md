@@ -41,10 +41,10 @@ only `ming/core.lock.json` and its own identity declaration. Passing a native
 profile to this installed product refuses; it cannot select another lock.
 
 The native experiment is a different distribution and namespace:
-`ming-particle-sliders-native==0.1.1.dev12`, importing `ming_native`.
+`ming-particle-sliders-native==0.1.1.dev13`, importing `ming_native`.
 It contains no `ming` files, `comfy_ming` module or console entry points.
 It ships its own `ming_native/core.lock.json` and identity declaration, with
-exact public core4abc VCS/PG/HNDL/HyperGAN dependencies. It cannot satisfy a
+exact approved core, PG, HNDL and HyperGAN dependencies. It cannot satisfy a
 stable `ming-particle-sliders==0.1.1` requirement. Normal environments must
 remain separate because the two exact shared-core versions differ; both
 products explicitly refuse unsafe force-co-installation.
@@ -55,7 +55,7 @@ Build and normally resolve the native artifact in a separate environment:
 python -m pip install 'build>=1,<2' 'setuptools>=84.2.1'
 python scripts/build_native_candidate.py --output-dir dist-native
 # In a new environment with the intended CPU Torch:
-python -m pip install dist-native/ming_particle_sliders_native-0.1.1.dev12-py3-none-any.whl
+python -m pip install dist-native/ming_particle_sliders_native-0.1.1.dev13-py3-none-any.whl
 python -m pip check
 ```
 
@@ -63,8 +63,9 @@ Use `from ming_native.native import MingResponseAdapter, build_hndl_game`.
 The default `cohort=None` uses only this distribution's declared native cohort;
 an explicit incompatible profile refuses. The source build input is
 [profiles/native-candidate.lock.json](../profiles/native-candidate.lock.json).
-Core PR148's exact4abc source was verified public; the artifact remains an
-experimental cohort, independent of whether that PR later merges.
+The exact approved core source is
+`a794e3b4a8813b012f2c4faa3da82b78d4a90214`. It remains a bounded software
+cohort; it does not admit a native model, media pipeline or response width.
 PG version comes from this lock when building dependencies.
 
 Runtime admission binds installed distribution name/version/namespace, package
@@ -82,7 +83,7 @@ and aggregates failures. Original setup/body exceptions remain visible alongside
 cleanup failures. Failed cleanup blocks re-borrowing and can be retried after
 the caller fixes the failing state restoration.
 
-Only unipolar guidance1 is admitted. `negative=None` is supported and unused;
+Only unipolar guidance 1 is admitted. `negative=None` is supported and unused;
 neutral and positive encodings remain required and frozen. No objective or
 strength default changes. Official target-before-reference ordering and exact
 frame capability/count validation remain unchanged by this packaging fix.
@@ -110,3 +111,11 @@ artifacts, with backend/weight identity rejection before changing leaves.
 Shared game packets own optimizer/random-stream resume. Neither is an ordinary
 interoperable Ming LoRA, pretrained checkpoint or renderer. An old PG/source
 packet must resume in its original pinned environment.
+
+The current source/data lock contains every tracked file under both installed
+core package roots, including data and license files. Runtime admission checks
+that complete recursive mapping and rejects changed, missing or unexpected files.
+Candidate-only policy and runtime inputs live under `profiles/`; the stable
+`ming` source is unchanged. The dev12 lock is preserved byte-for-byte under
+`profiles/history/native-dev12-core4abc.lock.json`. Old preview packets are not
+relabeled or migrated. See [the current qualification](modern-core-a794.md).
