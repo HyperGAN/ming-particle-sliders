@@ -1,6 +1,7 @@
 """CPU check that this product imports the pinned winning-formulation stamp."""
 
 import json
+import hashlib
 import subprocess
 import sys
 from importlib.metadata import distribution
@@ -70,6 +71,8 @@ def test_installed_core_matches_locked_source_identity():
         assert direct_url["vcs_info"]["commit_id"] == CORE_LOCK["commit"]
     else:
         assert direct_url["archive_info"]["hashes"]["sha256"] == CORE_LOCK["shared_wheel_sha256"]
+    for name, expected in CORE_LOCK["source_sha256"].items():
+        assert hashlib.sha256(Path(installed.locate_file(name)).read_bytes()).hexdigest() == expected
 
 
 def test_comfy_node_refuses_unpublished_weights():

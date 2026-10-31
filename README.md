@@ -5,7 +5,7 @@ Product repository for particle sliders on
 The layout follows [anima-particle-sliders](https://github.com/HyperGAN/anima-particle-sliders)
 and [krea2-particle-sliders](https://github.com/HyperGAN/krea2-particle-sliders):
 this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
-[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/cdfb80a76b882b4b73861b12f555263bd64ffeb7/packages/particle-sliders-core)
+[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/3c25f785d14073e6f627c0fa9d2297a041c79913/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
 This is a product scaffold. There is no native Ming slider trainer, adapter
@@ -35,7 +35,7 @@ python -m pip install -r requirements.txt
 `requirements.txt` installs:
 
 ```text
-particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@cdfb80a76b882b4b73861b12f555263bd64ffeb7#subdirectory=packages/particle-sliders-core
+particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@3c25f785d14073e6f627c0fa9d2297a041c79913#subdirectory=packages/particle-sliders-core
 ```
 
 `particlegan` comes in transitively from that package. Train, infer, and
@@ -45,8 +45,8 @@ critic, or regularizer.
 The formulation note is [FORMULATION.md](FORMULATION.md). The pin record is
 [core.lock.json](core.lock.json).
 
-This package baseline uses shared core 0.6.0 with released ParticleGAN
-0.9.1. The historical core 0.3.0 scaffold pin is preserved separately in
+This package baseline uses shared core 0.11.0 with released ParticleGAN
+0.9.3. The historical core 0.3.0 scaffold pin is preserved separately in
 the lock record. This updates metadata compatibility; it does not enable
 native Ming execution or retarget any training run or checkpoint.
 
@@ -98,3 +98,11 @@ See [COMFYUI.md](COMFYUI.md).
 Independently authored source in this repository is [MIT](LICENSE). See
 [NOTICE](NOTICE). The MIT license does not relicense the inclusionAI base
 weights.
+
+## 2026-10-31 scaffold compatibility refresh
+
+The existing draft now selects the public shared core0.11.0 commit above.
+The prior core0.6.0 package identity and receipts remain nested in core.lock.json;
+this is a new metadata-only package baseline. The proposed core0.12.0/PG0.9.4
+shared cohort is separate and is not selected here. Native operations remain
+unimplemented and refuse execution; no model download or training was run.
