@@ -266,12 +266,28 @@ class MingHNDLCritic(torch.nn.Module):
         return self.critic(response.squeeze(2), condition)
 
 
-def build_hndl_game(adapter, prepared_rows, conditions, *, total_steps, seed=7, batch_size=2, critic_width=32):
+def learning_rate_overrides(*, lr=None, d_lr_mult=None, prior_lr_mult=None):
+    """Explicit public PG rates; Ming has no trainable particle bank."""
+    import math
+    if prior_lr_mult is not None:
+        raise ValueError('adapter-only Ming has no particle bank; prior_lr_mult is unavailable')
+    result = {}
+    for name, value in dict(lr=lr, d_lr_mult=d_lr_mult).items():
+        if value is not None:
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0:
+                raise ValueError(name + ' must be finite and positive')
+            result[name] = float(value)
+    return result
+
+
+def build_hndl_game(adapter, prepared_rows, conditions, *, total_steps, seed=7, batch_size=2, critic_width=32,
+                    lr=None, d_lr_mult=None, prior_lr_mult=None):
     """Opt-in new cohort only. Shared PG owns every objective, optimizer and step.
 
     No native model is loaded here. Conditions must be supplied by the product
     caller from its actual frozen protocol, never invented from row indices.
     """
+    rates = learning_rate_overrides(lr=lr, d_lr_mult=d_lr_mult, prior_lr_mult=prior_lr_mult)
     require_cohort('native-pg094-ddb41423')
     if adapter.cohort != 'native-pg094-ddb41423':
         raise ValueError('Ming HyperGAN/HNDL game requires an explicitly new native candidate cohort')
@@ -302,4 +318,4 @@ def build_hndl_game(adapter, prepared_rows, conditions, *, total_steps, seed=7, 
         critic.to(device)
         return ConditionalPG09(adapter, rows, critic, conditions=conditions,
                                total_steps=total_steps, seed=seed, batch_size=batch_size,
-                               response_domain='continuous_field')
+                               response_domain='continuous_field', recipe_overrides=rates)
