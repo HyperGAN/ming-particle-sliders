@@ -1,3 +1,6 @@
+> Earlier implementation/qualification notes. Current dependency selection and
+> unchanged native gates are documented in [PG094 current](pg094-current.md).
+
 # Ming capability audit
 
 Baseline main: `93cb5bfa9e6585da3dc0a89327fb56dc276e8cc5`. Existing draft

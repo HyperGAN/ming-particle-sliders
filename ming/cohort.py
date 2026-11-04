@@ -39,10 +39,8 @@ def product_identity():
     try:
         identity = _json(files(__package__).joinpath('identity.json').read_text(), 'product identity')
         expected = {
-            'ming': ('ming-particle-sliders', '0.1.1', 'public-0.11', 'ming-particle-sliders-native',
-                     '782655817fdc3172d0702758af9f30da35d08fcabe74d4fa05f5356c2b566354'),
-            'ming_native': ('ming-particle-sliders-native', '0.1.1.dev12', 'native-candidate-0.12', 'ming-particle-sliders',
-                            '4845c2a1b0d4154e6110cb1b050c67c1910eab8658bfe4ef20d93633fc558c9b'),
+            'ming': ('ming-particle-sliders', '0.2.0', 'public-pg094-ddb41423', 'ming-particle-sliders-native',
+                     '1c2a65511e2349ef5a292253f02886afdd9a456db645e0eb5dc674bb95317f08'),
         }
         namespace = __package__.rsplit('.', 1)[-1]
         if namespace not in expected or tuple(identity.get(k) for k in ('distribution', 'version', 'profile', 'incompatible_distribution', 'lock_sha256')) != expected[namespace]:
@@ -148,7 +146,7 @@ def require_cohort(profile=None):
         expected_core = f'git+{lock["repository"]}.git@{lock["commit"]}#subdirectory={lock["subdirectory"]}'
         if len(core) != 1 or core[0].url != expected_core:
             raise CohortError('Ming installed product dependency contradicts its declared core cohort')
-        if declared == 'native-candidate-0.12':
+        if declared == 'native-pg094-ddb41423':
             runtime = {canonicalize_name(r.name): r for r in requirements if r.marker is None}
             if (str(runtime['particlegan'].specifier) != '==' + lock['particlegan_version'] or
                     str(runtime['hndl'].specifier) != '==' + lock['hndl_version']):
@@ -164,11 +162,17 @@ def require_cohort(profile=None):
                      origin.get('archive_info', {}).get('hashes', {}).get('sha256') == lock['shared_wheel_sha256'])
         if not qualified or origin.get('dir_info', {}).get('editable'):
             raise CohortError('Ming shared core origin differs from its packaged cohort')
-        for name, expected in lock['source_sha256'].items():
-            if hashlib.sha256(installed.locate_file(name).read_bytes()).hexdigest() != expected:
-                raise CohortError('Ming shared core source differs from its packaged cohort: ' + name)
+        actual = {}
+        for package in lock['source_roots']:
+            root = installed.locate_file(package)
+            for path in root.rglob('*'):
+                if path.is_file() and '__pycache__' not in path.parts and path.suffix not in ('.pyc', '.pyo'):
+                    name = package + '/' + str(path.relative_to(root))
+                    actual[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+        if actual != lock['source_sha256']:
+            raise CohortError('Ming shared core recursive source/data closure differs from its packaged cohort')
         _require_pg_sources(installed, lock)
-        if declared == 'native-candidate-0.12':
+        if declared == 'native-pg094-ddb41423':
             _require_native_stack(lock)
         return lock
     except CohortError:

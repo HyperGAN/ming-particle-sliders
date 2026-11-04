@@ -8,7 +8,7 @@ import torch
 from tests.test_native import fixture, row, equal, NATIVE, COHORT, PROFILE
 MingHNDLCritic, build_hndl_game = NATIVE.MingHNDLCritic, NATIVE.build_hndl_game
 
-pytestmark = pytest.mark.skipif(version('particle-sliders-core') != '0.12.0',
+pytestmark = pytest.mark.skipif(COHORT.product_identity()['namespace'] != 'ming_native',
                                 reason='separate exact core0.12/PG0.9.4/HyperGAN/HNDL environment required')
 
 
@@ -64,8 +64,8 @@ def test_candidate_declares_its_own_namespace_and_refuses_public_profile():
     assert COHORT.product_identity()['namespace'] == 'ming_native'
     assert not files('ming_native').joinpath('native-candidate.lock.json').is_file()
     assert not files('ming_native').joinpath('surfaces.py').is_file()
-    with pytest.raises(ValueError, match='declares native-a794'):
-        COHORT.require_cohort('public-0.11')
+    with pytest.raises(ValueError, match='declares native-pg094'):
+        COHORT.require_cohort('public-pg094-ddb41423')
 
 
 def test_multiframe_field_is_refused_without_flattening():
@@ -127,12 +127,12 @@ def test_candidate_wheel_metadata_matches_its_runtime():
     from importlib.metadata import distribution
     from packaging.requirements import Requirement
     product = distribution('ming-particle-sliders-native')
-    assert product.version == '0.1.1.dev13'
+    assert product.version == '0.2.0.dev1'
     assert not list(product.entry_points)
     requirements = {r.name: r for r in map(Requirement, product.requires) if r.marker is None}
     assert requirements['particle-sliders-core'].url == (
         'git+https://github.com/HyperGAN/particle-sliders.git@'
-        'a794e3b4a8813b012f2c4faa3da82b78d4a90214#subdirectory=packages/particle-sliders-core')
+        'ddb41423bcefc1fe76cd94d0f9b367353b3ea137#subdirectory=packages/particle-sliders-core')
     assert str(requirements['particlegan'].specifier) == '==0.9.4'
     assert str(requirements['hndl'].specifier) == '==0.10.0'
     assert requirements['hypergan'].url.endswith('5f368a3770cf5bdae0448995c9f76e29af8049f7')
@@ -307,3 +307,61 @@ def test_modern_shared_session_restore_failure_rolls_back_and_retries():
     finally:
         current.close()
         source.close()
+
+
+def test_current_worker_explicit_fixture_check_periodic_checkpoint_ema_and_resume(monkeypatch, tmp_path):
+    """Compose the real product binding with installed merged worker software.
+
+    This temporary in-process registration is a software fixture, not a shipped
+    Ming native training profile or production loader.
+    """
+    import json
+    import particle_sliders.response as response
+    from particle_sliders.execution import resolve_request, execute_resolved_request
+    from particle_sliders.execution.session_worker import main
+    from particle_sliders.lifecycle import Binding
+    from particle_sliders.response import ResponseBackend, ResponseCapabilities
+    from particle_sliders.pg09 import PG_VERSION, PG_SOURCE_PROFILE
+
+    def validate(options):
+        if options.get('dummy') is not True:
+            raise ValueError('Ming CPU software fixture requires explicit dummy=true')
+        COHORT.require_cohort(PROFILE)
+
+    def prepare(options, **staged):
+        validate(options)
+        _, adapter, current = game()
+        return Binding(current, adapter.close)
+
+    caps = ResponseCapabilities('adapter_gan', 'image', 'latent_velocity', 'continuous_field',
+                                (1, 2, 1, 8, 8), PG_VERSION, PG_SOURCE_PROFILE)
+    backend = ResponseBackend('ming-cpu-software-fixture', caps, prepare, validate)
+    monkeypatch.setattr(response, 'response_backend', lambda name: backend)
+    config = dict(backend=backend.name, cohort='ming-merged-worker-cpu-only',
+                  options=dict(dummy=True, steps=4, ema_decay=.5))
+    profile = dict(schema='particle-slider-profile-v1', name='ming-cpu-software-fixture',
+                   product='ming-particle-sliders-native', config_kind='session', status='fixture',
+                   interface='response', backend=backend.name, runtime=dict(device='cpu'))
+    request = resolve_request(config, base=tmp_path, profile=profile, output=tmp_path / 'planned',
+                              checkpoint_every=1, no_reporting=True)
+    assert request['resolved']['target_steps'] == 4
+    bad = deepcopy(config)
+    bad['options']['dummy'] = False
+    with pytest.raises(ValueError, match='dummy'):
+        execute_resolved_request(resolve_request(bad, base=tmp_path, profile=profile, output=tmp_path / 'bad', no_reporting=True))
+    path = tmp_path / 'config.json'
+    path.write_text(json.dumps(config))
+    first, second = tmp_path / 'first', tmp_path / 'second'
+    common = ['--config', str(path), '--interface', 'response', '--checkpoint-every', '1', '--selection', 'ema']
+    assert main([*common, '--output', str(first), '--check']) == 0
+    assert not first.exists()
+    assert main([*common, '--output', str(first), '--stop-after', '2']) == 0
+    assert (first / 'checkpoints/step-000001/training.pt').is_file()
+    assert (first / 'checkpoints/step-000002/training.pt').is_file()
+    assert main([*common, '--output', str(second), '--resume', str(first / 'checkpoints/step-000002')]) == 0
+    assert json.loads((second / 'result.json').read_text())['completed_steps'] == 4
+    assert (second / 'checkpoints/step-000003/training.pt').is_file()
+    assert (second / 'checkpoints/step-000004/training.pt').is_file()
+    exported = torch.load(second / 'adapter.pt', weights_only=True)
+    assert exported['payload']['selection'] == 'ema'
+    assert torch.cuda.is_initialized() is False

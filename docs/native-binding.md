@@ -1,3 +1,6 @@
+> Earlier implementation/qualification notes. Current dependency selection and
+> unchanged native gates are documented in [PG094 current](pg094-current.md).
+
 # Experimental staged Ming velocity binding
 
 `ming.native` imports the installed shared package. It never loads a model,

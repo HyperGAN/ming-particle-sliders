@@ -11,7 +11,7 @@ from ming import cohort
 
 def test_packaged_public_lock_is_exact_root_lock():
     assert files('ming').joinpath('core.lock.json').read_bytes() == (Path(__file__).resolve().parents[1] / 'core.lock.json').read_bytes()
-    assert cohort.require_cohort()['commit'] == '3c25f785d14073e6f627c0fa9d2297a041c79913'
+    assert cohort.require_cohort()['commit'] == 'ddb41423bcefc1fe76cd94d0f9b367353b3ea137'
 
 
 @pytest.mark.parametrize('damage', ['version', 'origin', 'source'])
@@ -32,7 +32,7 @@ def test_runtime_refuses_unreviewed_core_before_the_stamp(monkeypatch, tmp_path,
 
 def test_stable_declares_one_profile_and_ships_only_its_own_lock():
     assert cohort.product_identity()['distribution'] == 'ming-particle-sliders'
-    assert cohort.product_identity()['profile'] == 'public-0.11'
+    assert cohort.product_identity()['profile'] == 'public-pg094-ddb41423'
     assert not files('ming').joinpath('native-candidate.lock.json').is_file()
     with pytest.raises(ValueError, match='no implicit upgrade'):
         cohort.require_cohort('native-candidate-0.12')

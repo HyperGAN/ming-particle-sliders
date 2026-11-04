@@ -1,3 +1,6 @@
+> Historical dev13/corea794 qualification. Current source uses the separate
+> [PG094/ddb41423 candidate](pg094-current.md). Receipts below are unchanged.
+
 # Active modern candidate at core a794e3b4
 
 The active experimental distribution is `ming-particle-sliders-native==0.1.1.dev13`,

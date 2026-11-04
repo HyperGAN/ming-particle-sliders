@@ -25,7 +25,7 @@ def wheels(tmp_path_factory):
     output = tmp_path_factory.mktemp('ming-artifacts')
     subprocess.run([sys.executable, '-I', '-m', 'build', '--wheel', '--no-isolation', '--outdir', str(output), str(staging)], check=True, capture_output=True)
     subprocess.run([sys.executable, '-I', str(staging / 'scripts/build_native_candidate.py'), '--output-dir', str(output)], check=True, capture_output=True)
-    return output / 'ming_particle_sliders-0.1.1-py3-none-any.whl', output / 'ming_particle_sliders_native-0.1.1.dev13-py3-none-any.whl'
+    return output / 'ming_particle_sliders-0.2.0-py3-none-any.whl', output / 'ming_particle_sliders_native-0.2.0.dev1-py3-none-any.whl'
 
 
 def metadata(archive):
@@ -38,10 +38,10 @@ def test_built_wheels_have_distinct_identity_namespace_entrypoints_and_one_lock(
         assert not a & b
         assert metadata(stable)['Name'] == 'ming-particle-sliders'
         assert metadata(native)['Name'] == 'ming-particle-sliders-native'
-        assert metadata(native)['Version'] not in SpecifierSet('==0.1.1')
+        assert metadata(native)['Version'] not in SpecifierSet('==0.2.0')
         assert not any(n.startswith(('ming/', 'comfy_ming')) or n.endswith('entry_points.txt') for n in b)
         assert not any('native-candidate.lock' in n or n.startswith('ming_native/') for n in a)
-        for archive, namespace, profile in ((stable, 'ming', 'public-0.11'), (native, 'ming_native', 'native-a794e3b4')):
+        for archive, namespace, profile in ((stable, 'ming', 'public-pg094-ddb41423'), (native, 'ming_native', 'native-pg094-ddb41423')):
             assert [n for n in archive.namelist() if n.endswith('.lock.json')] == [namespace + '/core.lock.json']
             identity = json.loads(archive.read(namespace + '/identity.json'))
             assert identity['profile'] == profile
@@ -57,9 +57,9 @@ def test_actual_candidate_wheel_cannot_satisfy_stable_requirement(wheels, tmp_pa
     only_native = tmp_path / 'only-native'
     only_native.mkdir()
     shutil.copy2(wheels[1], only_native)
-    result = subprocess.run([sys.executable, '-I', '-m', 'pip', '--isolated', 'install', '--dry-run', '--ignore-installed', '--no-deps', '--no-index', '--find-links', str(only_native), 'ming-particle-sliders==0.1.1'], capture_output=True, text=True)
+    result = subprocess.run([sys.executable, '-I', '-m', 'pip', '--isolated', 'install', '--dry-run', '--ignore-installed', '--no-deps', '--no-index', '--find-links', str(only_native), 'ming-particle-sliders==0.2.0'], capture_output=True, text=True)
     assert result.returncode != 0
-    assert 'No matching distribution found for ming-particle-sliders==0.1.1' in result.stderr
+    assert 'No matching distribution found for ming-particle-sliders==0.2.0' in result.stderr
 
 
 def test_actual_unsafe_coinstall_is_disjoint_and_both_identities_refuse(wheels, tmp_path):

@@ -5,7 +5,7 @@ Product repository for particle sliders on
 The layout follows [anima-particle-sliders](https://github.com/HyperGAN/anima-particle-sliders)
 and [krea2-particle-sliders](https://github.com/HyperGAN/krea2-particle-sliders):
 this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
-[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/3c25f785d14073e6f627c0fa9d2297a041c79913/packages/particle-sliders-core)
+[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/ddb41423bcefc1fe76cd94d0f9b367353b3ea137/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
 The installed CLI and ComfyUI surfaces remain a product scaffold. An
@@ -38,7 +38,7 @@ This installs the stable product identity and the exact core dependency recorded
 in `requirements.txt`:
 
 ```text
-particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@3c25f785d14073e6f627c0fa9d2297a041c79913#subdirectory=packages/particle-sliders-core
+particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@ddb41423bcefc1fe76cd94d0f9b367353b3ea137#subdirectory=packages/particle-sliders-core
 ```
 
 `particlegan` comes in transitively from that package. Train, infer, and
@@ -49,8 +49,8 @@ immutable origin and locked source hashes. The wheel includes its lock records.
 The formulation note is [FORMULATION.md](FORMULATION.md). The pin record is
 [core.lock.json](core.lock.json).
 
-This package baseline uses shared core 0.11.0 with released ParticleGAN
-0.9.3. The historical core 0.3.0 scaffold pin is preserved separately in
+This package baseline uses shared core 0.12.0 with released ParticleGAN
+0.9.4. The historical core 0.3.0 scaffold pin is preserved separately in
 the lock record. This updates metadata compatibility; it does not enable
 native Ming execution or retarget any training run or checkpoint.
 
@@ -104,30 +104,16 @@ Independently authored source in this repository is [MIT](LICENSE). See
 [NOTICE](NOTICE). The MIT license does not relicense the inclusionAI base
 weights.
 
-## 2026-10-31 scaffold compatibility refresh
+## Current PG 0.9.4 upgrade
 
-The existing draft now selects the public shared core 0.11.0 commit above.
-The prior core 0.6.0 package identity and receipts remain nested in core.lock.json;
-this is a new metadata-only package baseline. The proposed core 0.12.0 / PG 0.9.4
-shared cohort is separate and is not selected by the default installer.
-Native CLI and Comfy operations remain unwired and refuse execution; no
-model weights were downloaded or pretrained model training run.
+Both current distributions now use the canonical merged core at
+`ddb41423bcefc1fe76cd94d0f9b367353b3ea137`: default
+`ming-particle-sliders==0.2.0` and isolated
+`ming-particle-sliders-native==0.2.0.dev1`. The default CLI/Comfy scaffold still
+refuses live execution. The native candidate remains a separate environment
+and namespace with unchanged native qualification gates. See
+[current installation, source closure and historical reproduction](docs/pg094-current.md).
 
-Version 0.1.1 adds staged native glue and runtime source admission without
-changing that default dependency. Python 3.11 is now declared explicitly,
-matching the selected core's existing minimum. No workflow publishes a package
-or weights, and no model loader or download runs on import.
-
-The native experiment is a separate prerelease distribution,
-`ming-particle-sliders-native==0.1.1.dev13`, importing `ming_native`. It has no
-stable CLI/Comfy entry points and cannot satisfy the stable distribution's
-requirements. Install it only in a separate environment. Each artifact ships
-only its own lock and binds its installed identity to that cohort. See
-[native binding](docs/native-binding.md) and
-[isolation follow-up](docs/isolation-review-20261031.md).
-
-The active native candidate pins shared core
-`a794e3b4a8813b012f2c4faa3da82b78d4a90214` under a new cohort identity. The stable
-core 0.11 installation and the earlier dev12 preview remain separate. See the
-[modern candidate qualification](docs/modern-core-a794.md) for exact installation,
-recursive source/data verification, old-packet refusal and CPU test scope.
+The previous public and native lock records and qualification receipts remain
+archived. They do not qualify this new source. Actual-diff Claude review and
+RETURN remain required before landing.
