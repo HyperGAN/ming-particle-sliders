@@ -1,0 +1,88 @@
+{
+  "schema": "ming-ordered-frame-CPU-readiness-v1",
+  "measured_at": "2026-11-04T14:33:22.177012+00:00",
+  "product": "ming-particle-sliders-native==0.2.0.dev2",
+  "core": "ddb41423bcefc1fe76cd94d0f9b367353b3ea137",
+  "ParticleGAN": "official0.9.4",
+  "HNDL": "0.10.0",
+  "HyperGAN": "5f368a3770cf5bdae0448995c9f76e29af8049f7",
+  "feature_policy": {
+    "profile": "ming-ordered-target-frames-v1",
+    "graph_sha256": "5917939e78d6c475b0a8a267421ce649e21de0290a3e5c2de209507920047c54",
+    "mapping": "packed_index=channel*target_frames+frame",
+    "native_response": "[B,C,F,H,W]; all target frames retained by PG and its input penalty",
+    "target_frames": "fixed ordered2..5, identical count/geometry in every row",
+    "qualification": "Software response mechanics only; pretrained layered outputs and rates unqualified",
+    "native_response_shape": [
+      1,
+      2,
+      2,
+      8,
+      8
+    ],
+    "builder": {
+      "profile": "hypergan-hndl-v2",
+      "hndl_version": "0.10.0",
+      "hypergan_commit": "5f368a3770cf5bdae0448995c9f76e29af8049f7",
+      "hypergan_build_provenance_sha256": "fa0aaed8eea39a1cc545bafb96c9a72eb155b52cb79f2d34c44f505aaf4ac179",
+      "runtime_sources_sha256": "69e65e3daf18ac5c99154fd735d0b6fc8e8c95433c5b0618a074cdd203ed6251",
+      "projection_sha256": "b5efac1cfb0c597e5d6e0839af6077ff36dec916901bfa254be78db9f691c086",
+      "critic_sha256": "31f95ccf2178363d7a027597a00694c571c9d69a170151fcbe36e05326ac4707"
+    }
+  },
+  "installed_CPU_checks": 92,
+  "CPU_test_seconds": 13.42,
+  "pip_check": "clean",
+  "native_class_probe": {
+    "upstream": "3515cd7b1e3049fc517eed7d35020251cd06519a",
+    "classes": [
+      "DiffusionTransformer",
+      "ConditionedTransformer"
+    ],
+    "weights": "random tiny CPU fixture with explicitly initialized learned padding; no pretrained payload",
+    "target_frames": 2,
+    "reference_frames": 1,
+    "native_output_frames": 3,
+    "PG_response_shape": [
+      1,
+      2,
+      2,
+      8,
+      8
+    ],
+    "full2_vs_fresh1plus1_state_and_metrics_exact": true,
+    "final_state_sha256": "5037ee8e7db5f6e77c4354f9f88e9a140fb835428892e9212f1d98ea5c98c138",
+    "G_D_changed": true,
+    "frozen_base_exact": true,
+    "caller_CPU_RNG_preserved": true,
+    "worker_sha256": "fd446c44668b0c414bb803dc59354d3c8a007dfa75ddbc052ae4155678e80b1d",
+    "fresh_process_cohort": "Finalguarded installeddev2 artifact, three isolated freshCPU processes"
+  },
+  "runtime": {
+    "Python": "3.12.15",
+    "Torch": "2.9.1+cu128 onCPU",
+    "transformers": "4.57.1",
+    "diffusers": "0.36.0",
+    "safetensors": "0.8.0",
+    "numpy": "2.4.6",
+    "closed_dependency_spine": "Existing exact dependencies exposed read-only, excluding prior Ming product; shadowed setuptools84.0 metadata excluded in favor of actual84.2.1. New product installed in ownsite; actual declared dependencies/source origins validated by cohort and pipcheck. UV dryrun does not discover externalpth dependencies; it was not executed as an upgrade."
+  },
+  "native_lock_sha256": "9e2f39e1aea0d9dc3776a7eea6b9e4960568373182592a1484cf57cc05a30af4",
+  "wheel_sha256": "a108f81efa45422c29e1dbab6cefbfa657d9e041510a15a357b1f18efa56e222",
+  "previous_native_lock_archived_sha256": "cd8e4972e9828f355cb5b07309db3932d5e7879f4e6cb0880efdaa99f27fb8bf",
+  "stable_namespace_and_existing_singleton_runtime_source_changed": false,
+  "CUDA_initialized": false,
+  "pretrained_loaded": false,
+  "native_CFG_layer_decomposition_RGBA_qualified": false,
+  "learning_rate_recommended": false,
+  "limitations": [
+    "CPU fixture software mechanics only",
+    "No GPU/full pretrained model load or response",
+    "No pretrained conditioning/CFG/sampling/RGBA/preservation proof",
+    "No rate search or release/control count changes"
+  ],
+  "ordered_module_sha256": "0b82a38bd2fea10c9bdc4f18b5023699beca5181d7f6ca0ea8c814fc5fdbf1f4",
+  "early_native_multi_frame_output_True_gate": true,
+  "peer_review": "Independent92installedchecks14.98s plus exactF5graph/all5framegradients/finite2ndorder/frame-order sensitivity/RNG and preownership/pregraph falsecapability refusal passed; stablebytes and oldlockarchive exact.",
+  "native_production_frame_order_limitation": "Actual production layerdecomposition usesN+1 targetoutputs, firstoriginal-reconstruction outputdiscarded byCLI. Future pipeline must explicitlybind reconstruction/layer order and references; thissoftwareprofiledoesnotqualify it."
+}

@@ -595,7 +595,7 @@
   "source_closure_schema": "recursive-package-files-v1",
   "core_git_tree": "aad5951df6efbd70d81028e75a5c174ffe0afda7",
   "core_pyproject_sha256": "5d9492e81b69dd2a8b66efbae9fcaf0959a02823b7706396d548bf90086a0922",
-  "native_product_version": "0.2.0.dev1",
+  "native_product_version": "0.2.0.dev2",
   "native_profile": "native-pg094-ddb41423",
   "previous_preview": {
     "product_version": "0.1.1.dev12",

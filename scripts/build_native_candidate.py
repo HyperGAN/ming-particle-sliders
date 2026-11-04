@@ -27,7 +27,8 @@ def main(argv=None):
         staging = Path(directory)
         package = staging / 'ming_native'
         package.mkdir()
-        for source, name in (('profiles/native_runtime.py', 'native.py'), ('profiles/native_cohort.py', 'cohort.py'), ('ming/constants.py', 'constants.py')):
+        for source, name in (('profiles/native_runtime.py', 'native.py'), ('profiles/native_cohort.py', 'cohort.py'),
+                             ('profiles/native_ordered_frames.py', 'ordered_frames.py'), ('ming/constants.py', 'constants.py')):
             shutil.copy2(ROOT / source, package / name)
         (package / '__init__.py').write_text('"""Isolated experimental Ming native API; no stable CLI/Comfy imports."""\n')
         shutil.copy2(lock_path, package / 'core.lock.json')
