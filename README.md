@@ -111,7 +111,7 @@ weights.
 Both current distributions now use the canonical merged core at
 `ddb41423bcefc1fe76cd94d0f9b367353b3ea137`: default
 `ming-particle-sliders==0.2.0` and isolated
-`ming-particle-sliders-native==0.2.0.dev1`. The default CLI/Comfy scaffold still
+`ming-particle-sliders-native==0.2.0.dev2`. The default CLI/Comfy scaffold still
 refuses live execution. The native candidate remains a separate environment
 and namespace with unchanged native qualification gates. See
 [current installation, source closure and historical reproduction](docs/pg094-current.md).

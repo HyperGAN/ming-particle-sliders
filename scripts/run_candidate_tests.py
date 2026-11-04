@@ -14,7 +14,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='ming-native-tests-') as directory:
         target = Path(directory) / 'tests'
         target.mkdir()
-        for name in ('test_native.py', 'test_hndl_candidate.py', 'test_artifacts.py'):
+        for name in ('test_native.py', 'test_hndl_candidate.py', 'test_ordered_frames.py', 'test_artifacts.py'):
             original = ROOT / 'tests' / name
             copied = target / name
             shutil.copy2(original, copied)

@@ -157,7 +157,7 @@ def test_candidate_wheel_metadata_matches_its_runtime():
     from importlib.metadata import distribution
     from packaging.requirements import Requirement
     product = distribution('ming-particle-sliders-native')
-    assert product.version == '0.2.0.dev1'
+    assert product.version == '0.2.0.dev2'
     assert not list(product.entry_points)
     requirements = {r.name: r for r in map(Requirement, product.requires) if r.marker is None}
     assert requirements['particle-sliders-core'].url == (

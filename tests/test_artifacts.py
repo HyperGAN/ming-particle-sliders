@@ -25,7 +25,7 @@ def wheels(tmp_path_factory):
     output = tmp_path_factory.mktemp('ming-artifacts')
     subprocess.run([sys.executable, '-I', '-m', 'build', '--wheel', '--no-isolation', '--outdir', str(output), str(staging)], check=True, capture_output=True)
     subprocess.run([sys.executable, '-I', str(staging / 'scripts/build_native_candidate.py'), '--output-dir', str(output)], check=True, capture_output=True)
-    return output / 'ming_particle_sliders-0.2.0-py3-none-any.whl', output / 'ming_particle_sliders_native-0.2.0.dev1-py3-none-any.whl'
+    return output / 'ming_particle_sliders-0.2.0-py3-none-any.whl', output / 'ming_particle_sliders_native-0.2.0.dev2-py3-none-any.whl'
 
 
 def metadata(archive):

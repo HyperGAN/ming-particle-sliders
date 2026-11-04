@@ -1,7 +1,7 @@
 # Current ParticleGAN 0.9.4 software candidate
 
 The default package `ming-particle-sliders==0.2.0` and the separate experimental
-`ming-particle-sliders-native==0.2.0.dev1` now both use shared core 0.12.0 at
+`ming-particle-sliders-native==0.2.0.dev2` now both use shared core 0.12.0 at
 `ddb41423bcefc1fe76cd94d0f9b367353b3ea137`, including its merged unified training
 and isolated execution APIs. Official ParticleGAN is 0.9.4 (release source
 `330eb94ee748cdcad131b0275d8de75fd5a7f96f`). Each package carries its own distinct
@@ -39,7 +39,7 @@ in a second environment:
 
 ```bash
 python scripts/build_native_candidate.py --output-dir dist-native
-python -m pip install 'dist-native/ming_particle_sliders_native-0.2.0.dev1-py3-none-any.whl[test]'
+python -m pip install 'dist-native/ming_particle_sliders_native-0.2.0.dev2-py3-none-any.whl[test]'
 python -m pip check
 python -I scripts/run_candidate_tests.py
 ```
@@ -82,3 +82,6 @@ it does not ship a production profile or demonstrate the outer executor's proces
 isolation. Existing native tests cover raw/EMA inference-only loading, state/RNG
 neutral observation, transactional restore, cleanup/retry and closure corruption.
 See [the current receipt](evidence/pg094-ddb41423/qualification.json).
+
+
+The isolated dev2 product also adds the explicit [ordered-target-frame critic binding](ordered-frame-binding.md), with a distinct artifact identity and native five-axis PG responses. Its CPU checks do not qualify pretrained layered outputs, CFG, RGBA rendering or an LR value. The singleton-frame binding retains its existing multiframe refusal.
