@@ -1,0 +1,79 @@
+{
+  "schema": "ming-pg094-upgrade-cpu-v1",
+  "recorded_utc": "2026-11-04T06:15:17.478062+00:00",
+  "evidence_kind": "Fresh installed CPU software fixtures only; not pretrained/native/GPU qualification",
+  "source_base_commit": "55f40380de8b02e31e67327eb84e7d41f763c32f",
+  "core_commit": "ddb41423bcefc1fe76cd94d0f9b367353b3ea137",
+  "core_version": "0.12.0",
+  "core_source_data_files": 574,
+  "particlegan_version": "0.9.4",
+  "particlegan_release_source": "330eb94ee748cdcad131b0275d8de75fd5a7f96f",
+  "hypergan_commit": "5f368a3770cf5bdae0448995c9f76e29af8049f7",
+  "hndl_version": "0.10.0",
+  "python": "3.11.17",
+  "torch": "2.9.1+cpu",
+  "borrowed_site_packages": false,
+  "cuda_initialized": false,
+  "stable": {
+    "distribution": "ming-particle-sliders",
+    "version": "0.2.0",
+    "profile": "public-pg094-ddb41423",
+    "tests_passed": 63,
+    "tests_skipped": 31,
+    "skip_reason": "HNDL/native candidate requires its separate namespace and exact stack; stable native gates preserved",
+    "pip_check": "No broken requirements found.",
+    "isolated_import_and_dry_run_cli": true,
+    "lock_sha256": "1c2a65511e2349ef5a292253f02886afdd9a456db645e0eb5dc674bb95317f08"
+  },
+  "native": {
+    "distribution": "ming-particle-sliders-native",
+    "version": "0.2.0.dev1",
+    "profile": "native-pg094-ddb41423",
+    "tests_passed": 68,
+    "tests_skipped": 0,
+    "pip_check": "No broken requirements found.",
+    "test_mode": "Byte-identical tests copied to a temporary directory; python -I against installed wheel, checkout absent from imports",
+    "lock_sha256": "cd8e4972e9828f355cb5b07309db3932d5e7879f4e6cb0880efdaa99f27fb8bf"
+  },
+  "worker_fixture": {
+    "scope": "Installed merged worker invoked with temporary in-process registration over the real product binding; no shipped native profile or production loader",
+    "plan": true,
+    "check": true,
+    "explicit_dummy_false_refused": true,
+    "periodic_checkpoints": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "partial_steps": 2,
+    "resumed_steps": 4,
+    "ema_export": true,
+    "media_rendered": 0
+  },
+  "source_sha256": {
+    "ming/cohort.py": "dab6328d55038f9d7a167e2ddb8d0e3b77e9b6957c6526edda65ee4cc60276a5",
+    "ming/native.py": "7ef613a883077e537992e758061eae5d4575ce5075cacbead29a443bb1b49905",
+    "profiles/native_cohort.py": "034a20d04aab85b7c5459ba2ba31524bbd9bf36f02b95b4551bf82d594717a14",
+    "profiles/native_runtime.py": "7ef613a883077e537992e758061eae5d4575ce5075cacbead29a443bb1b49905",
+    "scripts/lock_native_core.py": "e3c340a52906176e80c7f10fedfe3bc47212444422a8df1167d08115e2a398cd",
+    "scripts/build_native_candidate.py": "f0e360767abb12467d81c54da9502b5b51a888489590ddd4af43231ef6a3be96",
+    "tests/test_native.py": "232d910d48bac687e9e22c9392854b8ac5afe47654f31beda8936985b699fd6a",
+    "tests/test_hndl_candidate.py": "93fb06989177ca158239c0ec8ad4c1d34fbd718a2ce8e65fd36dcf0d50bab117",
+    "tests/test_artifacts.py": "8f95ff073a5053cf4956b02a0936a773e8048ae10393c746fb32b1d60ad43d5c"
+  },
+  "historical_locks_preserved": {
+    "profiles/history/public-0.1.1-core3c25.lock.json": "782655817fdc3172d0702758af9f30da35d08fcabe74d4fa05f5356c2b566354",
+    "profiles/history/native-dev13-corea794.lock.json": "f26d14eca2992462132d1af3f956370217782b2beb4a8ba51347df62a44c77c0",
+    "profiles/history/native-dev12-core4abc.lock.json": "4845c2a1b0d4154e6110cb1b050c67c1910eab8658bfe4ef20d93633fc558c9b"
+  },
+  "not_run": [
+    "pretrained Ming load/training",
+    "GPU model training",
+    "production sampler/CFG/RGBA",
+    "multiframe HNDL",
+    "native quality qualification",
+    "replay of old packet numerical weights; prior literal receipts retained"
+  ],
+  "review_gate": "Source-only draft; Claude actual-diff review and RETURN required before landing; native gates unchanged"
+}

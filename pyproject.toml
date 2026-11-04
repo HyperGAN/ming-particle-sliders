@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=84.2.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ming-particle-sliders"
+version = "0.2.0"
+description = "Ming scaffold, exact cohort checks and experimental staged velocity binding"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "NOTICE"]
+dynamic = ["dependencies"]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "safetensors>=0.4,<1", "build>=1,<2"]
+
+[project.scripts]
+ming-train = "ming.train:main"
+ming-infer = "ming.infer:main"
+
+[tool.setuptools]
+packages = ["ming"]
+py-modules = ["comfy_ming"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.package-data]
+ming = ["core.lock.json", "identity.json"]

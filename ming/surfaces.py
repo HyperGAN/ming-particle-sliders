@@ -3,10 +3,18 @@
 Game math is not defined here. Call ``stamp()``.
 """
 
-from particle_sliders import winning_formulation
+from .cohort import CohortError, require_cohort
+from .constants import BASE_MODEL_ID
 
 # Upstream base. Not the product weight repo.
-BASE_MODEL_ID = "inclusionAI/Ming-Image-0.1-Design-Layer"
+
+
+def winning_formulation():
+    try:
+        from particle_sliders import winning_formulation as shared
+    except ImportError as exc:
+        raise CohortError('Ming shared core is unavailable; install the stable product in its own environment') from exc
+    return shared()
 
 # Placeholder product Hub id. The repository is not published yet.
 HUB_MODEL_ID = "ntc-ai/ming-particle-sliders"
@@ -22,5 +30,11 @@ BASE_RESOLUTION = 1024
 
 
 def stamp():
-    """Return the pinned gmix winning-formulation stamp."""
-    return winning_formulation()
+    """Validate and return the pinned shared formulation metadata.
+
+    This check does not construct a trainer or qualify a Ming backend.
+    """
+    require_cohort()
+    loaded = winning_formulation()
+    loaded.require(loaded.as_dict())
+    return loaded

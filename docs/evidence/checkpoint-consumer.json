@@ -1,0 +1,20 @@
+{
+  "schema": "ming-checkpoint-cross-cohort-evidence-v1",
+  "action": "consume",
+  "evidence_kind": "fresh tiny CPU fixture using actual released engines in separate processes; no historical user/pretrained checkpoint",
+  "product": "ming-particle-sliders-native",
+  "product_version": "0.1.1.dev12",
+  "core_version": "0.12.0",
+  "core_commit": "4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231",
+  "pg_version": "0.9.4",
+  "torch": "2.6.0+cpu",
+  "python": "3.12.15",
+  "fixture_seed": 319,
+  "reproducer_sha256": "3c862f19e66bc9ea0d6d61e1f3de5bdf22c6b6819f106205563ba975bd70c5ea",
+  "fixture_source_sha256": "232d910d48bac687e9e22c9392854b8ac5afe47654f31beda8936985b699fd6a",
+  "packet_sha256": "635db11ac5e77a9c1122d41058bbf0fd73d8732d179e199efdbf06f3b54134e1",
+  "producer_receipt_sha256": "62912f4cfd11a32167a933cd77d2d8fa086fa96d2ee5321e9ed0f62536cb7bdf",
+  "producer_pg_version": "0.9.3",
+  "rejection": "checkpoint PG source/cohort mismatch (PG 0.9.3, profile release-0.9.3); resume with the original pinned particle-sliders-core/ParticleGAN source environment. Use a fresh cohort for this release; automatic checkpoint migration is not supported",
+  "full_game_state_unchanged": true
+}

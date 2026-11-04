@@ -1,0 +1,17 @@
+{
+  "schema": "ming-modern-cross-cohort-v1",
+  "action": "produce-preview",
+  "evidence_kind": "New tiny CPU fixture from separate installed cohorts; not a user or pretrained checkpoint.",
+  "product": "ming-particle-sliders-native",
+  "product_version": "0.1.1.dev12",
+  "profile": "native-candidate-0.12",
+  "core_commit": "4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231",
+  "core_version": "0.12.0",
+  "pg_version": "0.9.4",
+  "torch": "2.6.0+cpu",
+  "reproducer_sha256": "14d4d71d2507170a185ec29d27b509e8d3ee38ef90a5e2b92b8de883b97a2a37",
+  "fixture_source_sha256": "232d910d48bac687e9e22c9392854b8ac5afe47654f31beda8936985b699fd6a",
+  "packet_sha256": "103347ce14ac73eeafd578d643cb0a748e0f2c0a30106a357812bd5419aa5044",
+  "packet_pg_version": "0.9.4",
+  "completed_steps": 1
+}

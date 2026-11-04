@@ -5,10 +5,15 @@ Product repository for particle sliders on
 The layout follows [anima-particle-sliders](https://github.com/HyperGAN/anima-particle-sliders)
 and [krea2-particle-sliders](https://github.com/HyperGAN/krea2-particle-sliders):
 this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
-[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/a119ca1ecd3d5d6c437065839d22739b04f2f4d8/packages/particle-sliders-core)
+[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/ddb41423bcefc1fe76cd94d0f9b367353b3ea137/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
-No slider weights are in this scaffold. There is no sample gallery yet.
+The installed CLI and ComfyUI surfaces remain a product scaffold. An
+experimental [staged velocity binding](docs/native-binding.md) supplies native
+model glue to the real shared response/GAN APIs. Its separate core 0.12
+candidate lane executes an actual HyperGAN develop/HNDL field critic on tiny
+CPU fixtures. Pretrained Ming, multiframe training and production sampling
+remain unqualified. No slider weights or sample gallery are available.
 
 ## Base model
 
@@ -26,20 +31,28 @@ Pin this commit. Do not pin `mikkel/sliders-conceptmod`, and do not vendor a
 ParticleGAN checkout next to the product.
 
 ```bash
-python -m pip install -r requirements.txt
+python -m pip install .
 ```
 
-`requirements.txt` installs:
+This installs the stable product identity and the exact core dependency recorded
+in `requirements.txt`:
 
 ```text
-particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@a119ca1ecd3d5d6c437065839d22739b04f2f4d8#subdirectory=packages/particle-sliders-core
+particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@ddb41423bcefc1fe76cd94d0f9b367353b3ea137#subdirectory=packages/particle-sliders-core
 ```
 
-`particlegan` comes in transitively from that package. Train and infer call
-`particle_sliders.winning_formulation` and then `stamp.require()`. They do
-not reimplement routed particles, the global-mix critic, or the regularizer.
+`particlegan` comes in transitively from that package. Train, infer, and
+Comfy call `particle_sliders.winning_formulation` and then `stamp.require()`
+to check metadata. They do not construct or execute a GAN, routed adapter,
+critic, or regularizer. Every check also verifies the installed core version,
+immutable origin and locked source hashes. The wheel includes its lock records.
 The formulation note is [FORMULATION.md](FORMULATION.md). The pin record is
 [core.lock.json](core.lock.json).
+
+This package baseline uses shared core 0.12.0 with released ParticleGAN
+0.9.4. The historical core 0.3.0 scaffold pin is preserved separately in
+the lock record. This updates metadata compatibility; it does not enable
+native Ming execution or retarget any training run or checkpoint.
 
 ## Hub
 
@@ -59,15 +72,26 @@ host checkpoints.
 ## Train and infer
 
 ```bash
+python -m pip install '.[test]'
 python scripts/train_ming.py --dry-run
 python scripts/infer_ming.py --dry-run
+ming-train --dry-run
+ming-infer --dry-run
 python -m pytest
 ```
 
-`--dry-run` imports the stamp on CPU and prints `architecture_id`,
-`formulation_id`, the base model id, and the unpublished Hub id. Without
-`--dry-run` the commands exit before any download or update. Projection
-hooks for the Ming transformer are not wired.
+The installed commands and `python -m ming.train` / `python -m ming.infer`
+also work outside a source checkout. `--dry-run` imports the stamp on CPU
+and prints `architecture_id`, `formulation_id`, the base model id, the
+unpublished Hub id, and `execution=scaffold-only`. Without
+`--dry-run` the commands exit before any download or update. These commands
+do not attach Ming transformer projection hooks.
+
+No MSE slider training path exists to replace. The experimental Python binding
+owns the already attached shared native LoRA leaves and frozen numerical
+conditioning. Shared APIs own GAN updates, exports and exact checkpoint restore.
+CLI loading, production conditioning, signed semantic axes, multiframe
+training and rendering remain pending. See [the capability audit](docs/capability-audit.md).
 
 ## ComfyUI
 
@@ -79,3 +103,17 @@ See [COMFYUI.md](COMFYUI.md).
 Independently authored source in this repository is [MIT](LICENSE). See
 [NOTICE](NOTICE). The MIT license does not relicense the inclusionAI base
 weights.
+
+## Current PG 0.9.4 upgrade
+
+Both current distributions now use the canonical merged core at
+`ddb41423bcefc1fe76cd94d0f9b367353b3ea137`: default
+`ming-particle-sliders==0.2.0` and isolated
+`ming-particle-sliders-native==0.2.0.dev1`. The default CLI/Comfy scaffold still
+refuses live execution. The native candidate remains a separate environment
+and namespace with unchanged native qualification gates. See
+[current installation, source closure and historical reproduction](docs/pg094-current.md).
+
+The previous public and native lock records and qualification receipts remain
+archived. They do not qualify this new source. Actual-diff Claude review and
+RETURN remain required before landing.

@@ -1,7 +1,7 @@
 """Train entry for Ming sliders.
 
-The update game is ``particle_sliders.winning_formulation``. This module only
-checks the stamp and records which Hub repo would receive weights.
+This module only checks shared formulation metadata and records the intended
+Hub repo. There is no native Ming update game in this scaffold.
 """
 
 from __future__ import annotations
@@ -26,7 +26,6 @@ def build_parser():
 def main(argv=None) -> int:
     args = build_parser().parse_args(argv)
     loaded = stamp()
-    loaded.require(loaded.as_dict())
     if not args.dry_run:
         raise SystemExit(
             "Ming training is not wired. Product weights are not published at "
@@ -39,4 +38,9 @@ def main(argv=None) -> int:
     print(f"base={BASE_MODEL_ID}")
     print(f"hub={HUB_MODEL_ID}")
     print(f"hub_published={HUB_PUBLISHED}")
+    print("execution=scaffold-only")
     return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

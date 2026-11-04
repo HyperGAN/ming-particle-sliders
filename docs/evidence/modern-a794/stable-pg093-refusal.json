@@ -1,0 +1,21 @@
+{
+  "schema": "ming-modern-cross-cohort-v1",
+  "action": "consume",
+  "evidence_kind": "New tiny CPU fixture from separate installed cohorts; not a user or pretrained checkpoint.",
+  "product": "ming-particle-sliders-native",
+  "product_version": "0.1.1.dev13",
+  "profile": "native-a794e3b4",
+  "core_commit": "a794e3b4a8813b012f2c4faa3da82b78d4a90214",
+  "core_version": "0.12.0",
+  "pg_version": "0.9.4",
+  "torch": "2.6.0+cpu",
+  "reproducer_sha256": "14d4d71d2507170a185ec29d27b509e8d3ee38ef90a5e2b92b8de883b97a2a37",
+  "fixture_source_sha256": "232d910d48bac687e9e22c9392854b8ac5afe47654f31beda8936985b699fd6a",
+  "packet_sha256": "635db11ac5e77a9c1122d41058bbf0fd73d8732d179e199efdbf06f3b54134e1",
+  "producer_receipt_sha256": "62912f4cfd11a32167a933cd77d2d8fa086fa96d2ee5321e9ed0f62536cb7bdf",
+  "producer_core_commit": "3c25f785d14073e6f627c0fa9d2297a041c79913",
+  "producer_product_version": "0.1.1",
+  "rejection": "checkpoint PG source/cohort mismatch (PG 0.9.3, profile release-0.9.3); resume with the original pinned particle-sliders-core/ParticleGAN source environment. Use a fresh cohort for this release; automatic checkpoint migration is not supported",
+  "full_game_state_unchanged": true,
+  "packet_relabelled": false
+}

@@ -4,7 +4,16 @@ Execution of the routed adapter stays in ``particle_sliders``. This module
 only names the node and refuses to load unpublished product weights.
 """
 
-from ming.surfaces import COMFY_CATEGORY, COMFY_NODE_CLASS, HUB_MODEL_ID, HUB_PUBLISHED, stamp
+import math
+
+if __package__:
+    from .ming.surfaces import (
+        COMFY_CATEGORY, COMFY_NODE_CLASS, HUB_MODEL_ID, HUB_PUBLISHED, stamp,
+    )
+else:
+    from ming.surfaces import (
+        COMFY_CATEGORY, COMFY_NODE_CLASS, HUB_MODEL_ID, HUB_PUBLISHED, stamp,
+    )
 
 
 class MingParticleSlider:
@@ -25,7 +34,7 @@ class MingParticleSlider:
     def load(self, model, adapter_name, strength):
         loaded = stamp()
         low, high = loaded.spec["recommended_range"]
-        if strength < float(low) or strength > float(high):
+        if not math.isfinite(strength) or strength < float(low) or strength > float(high):
             raise ValueError(
                 f"strength {strength} is outside the stamp recommended range {(low, high)}"
             )

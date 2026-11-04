@@ -1,0 +1,20 @@
+{
+  "schema": "ming-checkpoint-cross-cohort-evidence-v1",
+  "action": "produce",
+  "evidence_kind": "fresh tiny CPU fixture using actual released engines in separate processes; no historical user/pretrained checkpoint",
+  "product": "ming-particle-sliders",
+  "product_version": "0.1.1",
+  "core_version": "0.11.0",
+  "core_commit": "3c25f785d14073e6f627c0fa9d2297a041c79913",
+  "pg_version": "0.9.3",
+  "torch": "2.6.0+cpu",
+  "python": "3.12.15",
+  "fixture_seed": 319,
+  "reproducer_sha256": "3c862f19e66bc9ea0d6d61e1f3de5bdf22c6b6819f106205563ba975bd70c5ea",
+  "fixture_source_sha256": "232d910d48bac687e9e22c9392854b8ac5afe47654f31beda8936985b699fd6a",
+  "packet_sha256": "635db11ac5e77a9c1122d41058bbf0fd73d8732d179e199efdbf06f3b54134e1",
+  "completed_steps": 1,
+  "packet_pg_version": "0.9.3",
+  "packet_pg_source_profile": "release-0.9.3",
+  "packet_pg_sources_sha256": "966027b710f3abb48ece4cfe0261f12fd119fc8e29eb43aa2f8957e406ecdae1"
+}

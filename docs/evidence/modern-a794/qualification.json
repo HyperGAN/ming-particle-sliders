@@ -1,0 +1,44 @@
+{
+  "schema": "ming-modern-a794-qualification-v1",
+  "core_commit": "a794e3b4a8813b012f2c4faa3da82b78d4a90214",
+  "product_version": "0.1.1.dev13",
+  "profile": "native-a794e3b4",
+  "python": "3.12.15",
+  "torch": "2.6.0+cpu",
+  "cuda_build": null,
+  "checkout_on_runtime_import_path": false,
+  "borrowed_site_packages": false,
+  "source_data_files_verified": 51,
+  "all_imported_package_modules_inside_environment": true,
+  "core_origin": {
+    "subdirectory": "packages/particle-sliders-core",
+    "url": "https://github.com/HyperGAN/particle-sliders.git",
+    "vcs_info": {
+      "commit_id": "a794e3b4a8813b012f2c4faa3da82b78d4a90214",
+      "requested_revision": "a794e3b4a8813b012f2c4faa3da82b78d4a90214",
+      "vcs": "git"
+    }
+  },
+  "installed": {
+    "ming-particle-sliders-native": "0.1.1.dev13",
+    "particle-sliders-core": "0.12.0",
+    "particlegan": "0.9.4",
+    "hypergan": "2.0.0",
+    "hndl": "0.10.0"
+  },
+  "tests": 67,
+  "test_result": "67 passed in 6.69s",
+  "pip_check": "No broken requirements found.",
+  "qualification_scope": "CPU product conformance and composed shared-session software fixtures only. This does not admit a native model, native EMA behavior, media output or a response width.",
+  "stable_runtime_and_dependencies_unchanged": true,
+  "old_preview_lock_sha256": "4845c2a1b0d4154e6110cb1b050c67c1910eab8658bfe4ef20d93633fc558c9b",
+  "core_closure_lock_sha256": "f26d14eca2992462132d1af3f956370217782b2beb4a8ba51347df62a44c77c0",
+  "tested_source_sha256": {
+    "profiles/native_cohort.py": "811f6ccafca5a4ff028e455f8578d14219c4e13f9cdf12248487f6bf5d5e103b",
+    "profiles/native_runtime.py": "6279ad8652a53dd7718b37564c01113ebbd8b15f6084dcf1e33e18290dfa9cd5",
+    "scripts/build_native_candidate.py": "f0e360767abb12467d81c54da9502b5b51a888489590ddd4af43231ef6a3be96",
+    "tests/test_native.py": "232d910d48bac687e9e22c9392854b8ac5afe47654f31beda8936985b699fd6a",
+    "tests/test_hndl_candidate.py": "aab3ce191c3f37961fb0b2fd1f3143a7c5b1c50445ceae03d2a591d35f32e7d2",
+    "tests/test_artifacts.py": "dee31d931a41e72cc4d5732d40b3e446d0ed03387d29a944cdb91d5d0a334825"
+  }
+}

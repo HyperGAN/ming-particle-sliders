@@ -1,7 +1,7 @@
 """Infer entry for Ming sliders.
 
 Sampling numbers below are the upstream layer-decomposition defaults.
-Adapter execution uses the shared stamp and is not implemented in this scaffold.
+The shared stamp is metadata. Adapter execution is not implemented here.
 """
 
 from __future__ import annotations
@@ -51,4 +51,9 @@ def main(argv=None) -> int:
     print(f"base_resolution={BASE_RESOLUTION}")
     print(f"hub={HUB_MODEL_ID}")
     print(f"hub_published={HUB_PUBLISHED}")
+    print("execution=scaffold-only")
     return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
