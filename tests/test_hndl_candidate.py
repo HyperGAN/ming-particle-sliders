@@ -20,6 +20,36 @@ def game():
         total_steps=4, critic_width=4)
 
 
+def test_explicit_learning_rates_bind_real_optimizers_and_resume():
+    def configured(lr=.001):
+        _,_,adapter=fixture(profile=PROFILE)
+        rows=[adapter.prepare(row(offset)) for offset in (0.,.3)]
+        conditions=torch.tensor([[0.,.25],[.3,.25]])
+        return build_hndl_game(adapter,rows,conditions,total_steps=4,critic_width=4,
+                               lr=lr,d_lr_mult=2.)
+    current=configured()
+    assert current.prior is None
+    assert current.base_lrs[0] and set(current.base_lrs[0])=={.001}
+    assert current.base_lrs[1] and set(current.base_lrs[1])=={.002}
+    current.step()
+    packet=deepcopy(current.state_dict())
+    restored=configured()
+    restored.load_state_dict(packet)
+    equal(current.step(),restored.step())
+    equal(current.state_dict(),restored.state_dict())
+    with pytest.raises(ValueError,match='original pinned'):
+        configured(.002).load_state_dict(packet)
+
+
+@pytest.mark.parametrize('options', [dict(lr=0),dict(lr=True),dict(lr=float('nan')),
+    dict(d_lr_mult=-1),dict(d_lr_mult=float('inf')),dict(prior_lr_mult=1.)])
+def test_invalid_learning_rates_refuse_before_graph(options,monkeypatch):
+    def forbidden(*args,**kwargs):raise AssertionError('must refuse before graph allocation')
+    monkeypatch.setattr(NATIVE,'MingHNDLCritic',forbidden)
+    with pytest.raises(ValueError,match='positive|particle bank'):
+        NATIVE.build_hndl_game(None,[],None,total_steps=4,**options)
+
+
 def test_real_hypergan_hndl_shared_game_step_restore_and_synthetic_header_corruption(monkeypatch):
     torch.set_num_threads(1)
     initial_rng = torch.get_rng_state().clone()

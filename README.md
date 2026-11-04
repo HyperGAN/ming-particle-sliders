@@ -1,5 +1,7 @@
 # Ming-Image Design-Layer particle sliders
 
+Explicit LR controls and qualification scope: [LEARNING-RATES.md](LEARNING-RATES.md).
+
 Product repository for particle sliders on
 [inclusionAI/Ming-Image-0.1-Design-Layer](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer).
 The layout follows [anima-particle-sliders](https://github.com/HyperGAN/anima-particle-sliders)
