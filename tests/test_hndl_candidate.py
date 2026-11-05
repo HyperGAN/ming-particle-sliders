@@ -59,7 +59,7 @@ def test_real_hypergan_hndl_shared_game_step_restore_and_synthetic_header_corrup
     before = deepcopy(adapter.network.state_dict())
     critic_before = deepcopy(current.critic.state_dict())
     identity = current.critic.critic._identity
-    assert identity['profile'] == 'hypergan-hndl-pg095-v1'
+    assert identity['profile'] == 'hypergan-hndl-v2'
     assert identity['hypergan_commit'] == '5f368a3770cf5bdae0448995c9f76e29af8049f7'
     assert identity['hndl_version'] == '0.10.0'
     def forbidden(*a, **kw):
