@@ -1,4 +1,4 @@
-"""Ordered native response geometry and actual shared PG0.9.4 software checks."""
+"""Ordered native response geometry and actual shared PG0.9.5 software checks."""
 from copy import deepcopy
 from dataclasses import replace
 import pytest

@@ -253,7 +253,7 @@ class MingHNDLCritic(torch.nn.Module):
 
     def __init__(self, shape, condition_width, width=32):
         super().__init__()
-        require_cohort('native-pg094-ddb41423')
+        require_cohort('native-pg095-3dd672a7')
         if len(shape) != 5 or shape[0] != 1 or shape[2] != 1:
             raise ValueError('Ming HNDL critic currently requires one genuine latent frame')
         from particle_sliders.fibo_hndl import HNDLFieldCritic
@@ -272,8 +272,8 @@ def build_hndl_game(adapter, prepared_rows, conditions, *, total_steps, seed=7, 
     No native model is loaded here. Conditions must be supplied by the product
     caller from its actual frozen protocol, never invented from row indices.
     """
-    require_cohort('native-pg094-ddb41423')
-    if adapter.cohort != 'native-pg094-ddb41423':
+    require_cohort('native-pg095-3dd672a7')
+    if adapter.cohort != 'native-pg095-3dd672a7':
         raise ValueError('Ming HyperGAN/HNDL game requires an explicitly new native candidate cohort')
     adapter._require_open()
     rows = tuple(prepared_rows)

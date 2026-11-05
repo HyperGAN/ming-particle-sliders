@@ -1,3 +1,5 @@
+> **Current source: core0.13.0 / published ParticleGAN0.9.5.** This is a fresh cohort; older versioned evidence below remains historical. See [adoption and compatibility](docs/pg095-adoption.md). No native PG0.9.5 result is claimed.
+
 # Ming-Image Design-Layer particle sliders
 
 Explicit LR controls and qualification scope: [LEARNING-RATES.md](LEARNING-RATES.md).
