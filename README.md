@@ -19,6 +19,12 @@ candidate lane executes an actual HyperGAN develop/HNDL field critic on tiny
 CPU fixtures. Pretrained Ming, multiframe training and production sampling
 remain unqualified. No slider weights or sample gallery are available.
 
+New training and evaluation must use raw current weights, as must exports and
+inference. Do not add weight EMA, checkpoint averaging or an EMA comparison.
+The explicit native game binding exports RAW state and exposes no host EMA
+setting or EMA-selection interface.
+Historical source cohorts and qualification records retain their original scope.
+
 ## Base model
 
 `inclusionAI/Ming-Image-0.1-Design-Layer` decomposes a flattened design image
