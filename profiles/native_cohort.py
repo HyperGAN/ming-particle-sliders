@@ -39,8 +39,8 @@ def product_identity():
     try:
         identity = _json(files(__package__).joinpath('identity.json').read_text(), 'product identity')
         expected = {
-            'ming_native': ('ming-particle-sliders-native', '0.2.0.dev2', 'native-pg094-ddb41423', 'ming-particle-sliders',
-                            '9e2f39e1aea0d9dc3776a7eea6b9e4960568373182592a1484cf57cc05a30af4'),
+            'ming_native': ('ming-particle-sliders-native', '0.2.0.dev3', 'native-pg095-3dd672a7', 'ming-particle-sliders',
+                            'ef3b3e2a07ff895398e4f7bc5577868ef0ddbd629b6988b88eba9756dbef9aeb'),
         }
         namespace = __package__.rsplit('.', 1)[-1]
         if namespace not in expected or tuple(identity.get(k) for k in ('distribution', 'version', 'profile', 'incompatible_distribution', 'lock_sha256')) != expected[namespace]:
@@ -146,7 +146,7 @@ def require_cohort(profile=None):
         expected_core = f'git+{lock["repository"]}.git@{lock["commit"]}#subdirectory={lock["subdirectory"]}'
         if len(core) != 1 or core[0].url != expected_core:
             raise CohortError('Ming installed product dependency contradicts its declared core cohort')
-        if declared == 'native-pg094-ddb41423':
+        if declared == 'native-pg095-3dd672a7':
             runtime = {canonicalize_name(r.name): r for r in requirements if r.marker is None}
             if (str(runtime['particlegan'].specifier) != '==' + lock['particlegan_version'] or
                     str(runtime['hndl'].specifier) != '==' + lock['hndl_version']):
@@ -172,7 +172,7 @@ def require_cohort(profile=None):
         if actual != lock['source_sha256']:
             raise CohortError('Ming shared core recursive source/data closure differs from its packaged cohort')
         _require_pg_sources(installed, lock)
-        if declared == 'native-pg094-ddb41423':
+        if declared == 'native-pg095-3dd672a7':
             _require_native_stack(lock)
         return lock
     except CohortError:

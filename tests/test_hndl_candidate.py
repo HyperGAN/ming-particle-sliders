@@ -9,7 +9,7 @@ from tests.test_native import fixture, row, equal, NATIVE, COHORT, PROFILE
 MingHNDLCritic, build_hndl_game = NATIVE.MingHNDLCritic, NATIVE.build_hndl_game
 
 pytestmark = pytest.mark.skipif(COHORT.product_identity()['namespace'] != 'ming_native',
-                                reason='separate exact core0.12/PG0.9.4/HyperGAN/HNDL environment required')
+                                reason='separate exact core0.12/PG0.9.5/HyperGAN/HNDL environment required')
 
 
 def game():
@@ -94,8 +94,8 @@ def test_candidate_declares_its_own_namespace_and_refuses_public_profile():
     assert COHORT.product_identity()['namespace'] == 'ming_native'
     assert not files('ming_native').joinpath('native-candidate.lock.json').is_file()
     assert not files('ming_native').joinpath('surfaces.py').is_file()
-    with pytest.raises(ValueError, match='declares native-pg094'):
-        COHORT.require_cohort('public-pg094-ddb41423')
+    with pytest.raises(ValueError, match='declares native-pg095'):
+        COHORT.require_cohort('public-pg095-3dd672a7')
 
 
 def test_multiframe_field_is_refused_without_flattening():
@@ -157,13 +157,13 @@ def test_candidate_wheel_metadata_matches_its_runtime():
     from importlib.metadata import distribution
     from packaging.requirements import Requirement
     product = distribution('ming-particle-sliders-native')
-    assert product.version == '0.2.0.dev2'
+    assert product.version == '0.2.0.dev3'
     assert not list(product.entry_points)
     requirements = {r.name: r for r in map(Requirement, product.requires) if r.marker is None}
     assert requirements['particle-sliders-core'].url == (
         'git+https://github.com/HyperGAN/particle-sliders.git@'
-        'ddb41423bcefc1fe76cd94d0f9b367353b3ea137#subdirectory=packages/particle-sliders-core')
-    assert str(requirements['particlegan'].specifier) == '==0.9.4'
+        '3dd672a7f9b8c169daef90fd63e4bb42b9ddc423#subdirectory=packages/particle-sliders-core')
+    assert str(requirements['particlegan'].specifier) == '==0.9.5'
     assert str(requirements['hndl'].specifier) == '==0.10.0'
     assert requirements['hypergan'].url.endswith('5f368a3770cf5bdae0448995c9f76e29af8049f7')
 

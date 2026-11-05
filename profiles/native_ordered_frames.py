@@ -70,7 +70,7 @@ class OrderedFrameCritic(torch.nn.Module):
     def __init__(self, shape, condition_width, *, feature_profile, width=32):
         super().__init__()
         _require_profile(feature_profile)
-        require_cohort('native-pg094-ddb41423')
+        require_cohort('native-pg095-3dd672a7')
         if (not isinstance(shape, (tuple, list)) or len(shape) != 5 or shape[0] != 1
                 or any(type(v) is not int or v < 1 for v in (*shape, condition_width, width))
                 or not 2 <= shape[2] <= 5):
@@ -97,14 +97,14 @@ class OrderedFrameCritic(torch.nn.Module):
 def build_hndl_game(adapter, prepared_rows, conditions, *, feature_profile=None,
                     total_steps, seed=7, batch_size=2, critic_width=32,
                     lr=None, d_lr_mult=None, prior_lr_mult=None):
-    """Opt-in native 5D field game with the unchanged official PG0.9.4 recipe."""
+    """Opt-in native 5D field game with the unchanged official PG0.9.5 recipe."""
     rates = learning_rate_overrides(lr=lr, d_lr_mult=d_lr_mult, prior_lr_mult=prior_lr_mult)
     _require_profile(feature_profile)
-    require_cohort('native-pg094-ddb41423')
+    require_cohort('native-pg095-3dd672a7')
     if (not isinstance(adapter, OrderedFrameResponseAdapter)
             or adapter.feature_profile != feature_profile
             or adapter.multi_frame_output is not True
-            or adapter.cohort != 'native-pg094-ddb41423'):
+            or adapter.cohort != 'native-pg095-3dd672a7'):
         raise ValueError('ordered-frame game requires its explicitly bound native adapter')
     adapter._require_open()
     rows = tuple(prepared_rows)

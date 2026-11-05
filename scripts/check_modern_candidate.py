@@ -1,4 +1,4 @@
-"""Trace real old-preview packets and reject them in the current PG094 candidate."""
+"""Trace real old-preview packets and reject them in the current PG095 candidate."""
 import argparse
 from copy import deepcopy
 import hashlib
@@ -9,7 +9,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 OLD = '4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231'
-NEW = 'ddb41423bcefc1fe76cd94d0f9b367353b3ea137'
+NEW = '3dd672a7f9b8c169daef90fd63e4bb42b9ddc423'
 
 
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -47,8 +47,8 @@ def main(argv=None):
             torch.save(packet, args.packet)
             receipt.update(packet_sha256=sha(args.packet), packet_pg_version=packet['config']['pg_version'], completed_steps=packet['completed_steps'])
         else:
-            if lock['commit'] != NEW or identity['version'] != '0.2.0.dev1' or args.producer_receipt is None:
-                raise RuntimeError('consumption requires the current ddb41423 candidate and producer receipt')
+            if lock['commit'] != NEW or identity['version'] != '0.2.0.dev3' or args.producer_receipt is None:
+                raise RuntimeError('consumption requires the current 3dd672a7 candidate and producer receipt')
             producer = json.loads(args.producer_receipt.read_text())
             if producer['core_commit'] not in (OLD, '3c25f785d14073e6f627c0fa9d2297a041c79913'):
                 raise RuntimeError('unrecognized historical producer cohort')
