@@ -1,6 +1,14 @@
-> **Current source: core0.13.0 / published ParticleGAN0.9.5.** This is a fresh cohort; older versioned evidence below remains historical. See [adoption and compatibility](docs/pg095-adoption.md). No native PG0.9.5 result is claimed.
+> **Current source: core0.13.0 / published ParticleGAN0.9.5.** This is a fresh cohort; older versioned evidence below remains historical. See [adoption and compatibility](docs/pg095-adoption.md). No native PG0.9.5 result is claimed for this package's default cohort.
 
 # Ming-Image Design-Layer particle sliders
+
+**Saved finished-output LR decision:** G0.012 and G0.036 tie at RAW32
+(mean ON−OFF 0.04166666666666666 over four cases). No unique rate or default
+change is selected. The G0.001 arm is technical missing at28/32, not zero.
+See [the exact scope, options and instrument caveat](docs/finished-output-learning-rates.md)
+and [portable numbers](docs/finished-output-rate.json). These original-source
+research results do not qualify the package's default native/sampler paths.
+
 
 Explicit LR controls and qualification scope: [LEARNING-RATES.md](LEARNING-RATES.md).
 
