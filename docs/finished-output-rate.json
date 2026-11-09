@@ -1,0 +1,200 @@
+{
+  "schema": "particle-slider-scoped-finished-output-rate-guidance-v1",
+  "as_of": "2026-11-09",
+  "product_id": "ming-particle-sliders",
+  "concept": "Card Layer1 completeness",
+  "selection_metric": "Equal-case arithmetic mean of intended-effect intensity ON minus exact matched OFF in finished images; higher wins.",
+  "comparison_policy": "Retain negative gains, native zeros and exact ties. Technical failures are missing evidence, not zero. No teacher-SSE, preservation, beauty, confidence or completion selector/tiebreak. Reuse completed searches, checkpoints, proofs, outputs and first scores; no additional fresh confirmation or worse-arm completion.",
+  "status": "completed_intended_effect_comparison_two_best_rates_tied",
+  "common_rate_overrides": null,
+  "selected_unique_G": null,
+  "tied_best_G": [
+    0.012,
+    0.036
+  ],
+  "tied_common_rate_overrides": [
+    {
+      "lr": 0.012,
+      "d_lr_mult": 1.5,
+      "ema_decay": null
+    },
+    {
+      "lr": 0.036,
+      "d_lr_mult": 0.5000000000000001,
+      "ema_decay": null
+    }
+  ],
+  "product_option_fragments": [
+    {
+      "lr": 0.012,
+      "d_lr_mult": 1.5
+    },
+    {
+      "lr": 0.036,
+      "d_lr_mult": 0.5000000000000001
+    }
+  ],
+  "actual_rates": {
+    "G": null,
+    "D": 0.018000000000000002,
+    "bank": null
+  },
+  "profile": {
+    "training_updates": 32,
+    "horizon": 128,
+    "batch": 2,
+    "rank": 8,
+    "render_resolution": 512,
+    "render_steps": 12,
+    "CFG": 1
+  },
+  "primary": {
+    "comparison_arms": 3,
+    "planned_arms": 4,
+    "cases_per_arm": 4,
+    "tied_mean_gain": 0.04166666666666666,
+    "candidate_means": [
+      {
+        "control_id": "cell0",
+        "G": 0.0001,
+        "mean_gain": 0.0
+      },
+      {
+        "control_id": "cell2",
+        "G": 0.012,
+        "mean_gain": 0.04166666666666666
+      },
+      {
+        "control_id": "cell3",
+        "G": 0.036,
+        "mean_gain": 0.04166666666666666
+      }
+    ],
+    "per_arm": {
+      "cell0": {
+        "G": 0.0001,
+        "cases": [
+          {
+            "case_id": "card-seed31",
+            "ON": 0.8333333333333334,
+            "OFF": 0.8333333333333334,
+            "gain": 0.0
+          },
+          {
+            "case_id": "card-seed43",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          },
+          {
+            "case_id": "card-seed101",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          },
+          {
+            "case_id": "card-seed103",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          }
+        ],
+        "mean_ON_minus_OFF": 0.0
+      },
+      "cell2": {
+        "G": 0.012,
+        "cases": [
+          {
+            "case_id": "card-seed31",
+            "ON": 1.0,
+            "OFF": 0.8333333333333334,
+            "gain": 0.16666666666666663
+          },
+          {
+            "case_id": "card-seed43",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          },
+          {
+            "case_id": "card-seed101",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          },
+          {
+            "case_id": "card-seed103",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          }
+        ],
+        "mean_ON_minus_OFF": 0.04166666666666666
+      },
+      "cell3": {
+        "G": 0.036,
+        "cases": [
+          {
+            "case_id": "card-seed31",
+            "ON": 1.0,
+            "OFF": 0.8333333333333334,
+            "gain": 0.16666666666666663
+          },
+          {
+            "case_id": "card-seed43",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          },
+          {
+            "case_id": "card-seed101",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          },
+          {
+            "case_id": "card-seed103",
+            "ON": 1.0,
+            "OFF": 1.0,
+            "gain": 0.0
+          }
+        ],
+        "mean_ON_minus_OFF": 0.04166666666666666
+      }
+    }
+  },
+  "technical_exclusion": {
+    "status": "technical-missing",
+    "G": 0.001,
+    "completed_updates_Root_reported": 28,
+    "authenticated_full_restorable_checkpoint_available": false,
+    "RAW32_available": false,
+    "intensity": null,
+    "synthetic_zero": false,
+    "restart_or_prefix_replay_authorized": false,
+    "evidence_attribution": "Root reported interrupted C1 original v3 at28/32, original guardian/worker absent, no full checkpoint or RAW saved; no payload/body inspection by Source author"
+  },
+  "weight_EMA": null,
+  "measurement_kind": "Frozen Qwen3-VL-8B model instrument, not human or statistical validation.",
+  "qualification_evidence_compliance_limitation": "Actual original8B firstresponses satisfy numeric/OCR/direction criteria (full1,absence0). Independent Root review found absence evidence entries3\u20135 negate rubric objects/misorder groups; preserve this evidence-compliance limitation. No full-grounding or general partial-case calibration claim; no rerating/retuning or modified parser/rubric.",
+  "scope": "Exactly3completed native arms/fouroriginalcases/12pairs; cell1 interrupted at28/32 without restorable checkpoint or RAW32, neverzero or ranked. Prior numeric2anchorqualification only, not general grounding/calibration.",
+  "additional_fresh_confirmation_required": false,
+  "package_defaults_changed": false,
+  "selected_checkpoint_availability": "Private retained RAW checkpoints, not included in this repository or newly released by this documentation.",
+  "source_records": [
+    {
+      "role": "primary_result",
+      "name": "result.json",
+      "bytes": 20030,
+      "sha256": "eb60787a54631d9bed6ca26a1229fff4678f04ae5d8b2a722415f07787b4d81f",
+      "availability": "Retained campaign evidence; not bundled as a public artifact download."
+    },
+    {
+      "role": "primary_decision",
+      "name": "root-existing-three-arm-RAW32-effect-decision-v1.json",
+      "bytes": 5511,
+      "sha256": "a34538ee888b7ab8c1b2a5f397cbcf490e50f81adab041dddee72a4793f2d91f",
+      "availability": "Retained campaign evidence; not bundled as a public artifact download."
+    }
+  ]
+}
