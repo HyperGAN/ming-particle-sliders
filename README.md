@@ -135,3 +135,16 @@ and namespace with unchanged native qualification gates. See
 The previous public and native lock records and qualification receipts remain
 archived. They do not qualify this new source. Actual-diff Claude review and
 RETURN remain required before landing.
+
+
+## Separate cached fresh95 opt-in API
+
+The additional `ming_native_fresh95` package provides explicit cached fresh,
+whole-FULL resume and RAW ordered-native response APIs. It is a separate
+installed helper owner beside the exact isolated `ming_native` distribution;
+the default CLI/Comfy scaffold and every existing LR/cohort remain unchanged.
+Four new installed software cases passed locally with one tiny update.
+Pretrained Ming, authentic native cache availability, finished RGBA rendering,
+stable CLI/default use and public packaging remain unqualified.
+See [FRESH95.md](FRESH95.md) for the actual API, exact dependency/ownership
+boundary and fresh-only initialization policy.
