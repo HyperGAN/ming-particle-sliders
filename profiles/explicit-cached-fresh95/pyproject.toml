@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=84.2.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ming-particle-sliders-explicit-fresh95"
+version = "0.1.0"
+description = "Explicit owner-injected cached ordered-native Ming initialization profile"
+requires-python = ">=3.11,<3.15"
+dependencies = ["ming-particle-sliders-native==0.2.0.dev3", "particlegan==0.9.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ming_native_fresh95*"]
