@@ -1,0 +1,607 @@
+{
+  "schema": "slider-memory-source-facts-v1",
+  "date": "2026-11-14",
+  "calculation_only": true,
+  "models_constructed": 0,
+  "framework_imports": 0,
+  "GPU_operations": 0,
+  "model": "inclusionAI/Ming-Image-0.1-Design-Layer",
+  "revision": "ff1b22d2bdd0ae6597c0024a42cac7923b24cf92",
+  "frozen_weights": [
+    {
+      "component": "staged native DiT",
+      "parameters": 6154908736,
+      "bytes": 12309817472
+    },
+    {
+      "component": "index tensor bytes; equals4P",
+      "bytes": 24619634944
+    }
+  ],
+  "parameter_derivation": "From the captured30 main+2 noise-refiner+2 context-refiner architecture, P=34×(4D²+3DI+4D+2h)+32×(256×4D+4D)+input/output/time/caption/pad terms = 6,154,908,736. The captured index total equals4P=24,619,634,944 bytes; equality alone does not prove every stored dtype. Resident bytes here follow the staged bfloat16 dtype enforced by the chosen binding. No MLLM/TE/VAE is loaded by this response binding.",
+  "trainable": {
+    "parameters": 16811680,
+    "FP32_weights_bytes": 67246720,
+    "gradient_bytes": 67246720,
+    "persistent_momentum_or_Adam_tensor_bytes": 0,
+    "optimizer_transient_allowance_bytes": 840515072,
+    "optimizer_transient_formula": "48*A + 32MiB; FP32 protected normals/directions, FP64 promoted normals/displacements and small-matrix SVD/Gram workspace; conservative simultaneous allowance"
+  },
+  "trainable_derivation": "34 attention modules×4 projections×16×(3840+3840) +≤100,000 critic parameters = ≤16,811,680; ordinary LoRA, no particle bank",
+  "metadata": [
+    {
+      "repository": "inclusionAI/Ming-Image-0.1-Design-Layer",
+      "requested_revision": "main",
+      "resolved_revision": "ff1b22d2bdd0ae6597c0024a42cac7923b24cf92",
+      "repository_metadata_sha256": "234aa59f6d2cafbea3fde67d6cb90dccdc3f2d4ba3c50ed4ad97d38e70d3cbc2",
+      "weight_files": [
+        {
+          "path": "connector/model-00001-of-00002.safetensors",
+          "size": 4996670464,
+          "lfs_sha256": "efe1467052e70b4aa9b6fd4bdaead80b6e9c18d7b51fbeba542243c26b456f3d"
+        },
+        {
+          "path": "connector/model-00002-of-00002.safetensors",
+          "size": 1178224960,
+          "lfs_sha256": "239915774bb4d79ef8690b97ee7a631c70852208448f9ffc48962fceffc97d37"
+        },
+        {
+          "path": "mllm/model-00001-of-00007.safetensors",
+          "size": 4998661520,
+          "lfs_sha256": "7cf3d5e41fb13a949e86608409ca1189750aa707c1d15629be96230d676547fb"
+        },
+        {
+          "path": "mllm/model-00002-of-00007.safetensors",
+          "size": 4998900968,
+          "lfs_sha256": "5680a7125f2fe651477965aaa2b6915b86a1c7a29290c352de0aa3b3a024d8af"
+        },
+        {
+          "path": "mllm/model-00003-of-00007.safetensors",
+          "size": 4998900968,
+          "lfs_sha256": "98b2769083e814bdf1fdb70005ac3283319c13a8e0d0e0f9aceb610e3072550c"
+        },
+        {
+          "path": "mllm/model-00004-of-00007.safetensors",
+          "size": 4998902480,
+          "lfs_sha256": "aa782d99765ec843e1ea9760b6f0b274a66a36c761b7de9ee36a1e32485df19d"
+        },
+        {
+          "path": "mllm/model-00005-of-00007.safetensors",
+          "size": 4998903352,
+          "lfs_sha256": "92210b0acbca03b224498f8e1bad0fc17ed1898f38cfc5fead5247cb2bcdc3e3"
+        },
+        {
+          "path": "mllm/model-00006-of-00007.safetensors",
+          "size": 4998903352,
+          "lfs_sha256": "66c4092e8235aabbfc44ff230bce613f7e31a75f0b14fe7a6532e05889d5dd31"
+        },
+        {
+          "path": "mllm/model-00007-of-00007.safetensors",
+          "size": 4011054224,
+          "lfs_sha256": "139c1952cde5680460d02eb1a8ad8d96273f0472afff0460bb39cbbeb43b4692"
+        },
+        {
+          "path": "mlp/model.safetensors",
+          "size": 124837576,
+          "lfs_sha256": "2ec9b54aa1279b2747b9241cc682c2376f4d94b539cd8d07b71da660fd18b8f7"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00001-of-00009.safetensors",
+          "size": 2969386176,
+          "lfs_sha256": "f96621e3e8f640ac978a91c8ac251998ea7e0ebfb9c67ce9166d26f1121f0161"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00002-of-00009.safetensors",
+          "size": 2953554248,
+          "lfs_sha256": "090c2f2d09710fefd23d0ed1bef4ff3a63d945ab3a7c1ae0ab3e7c11c9baf7d1"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00003-of-00009.safetensors",
+          "size": 2953554248,
+          "lfs_sha256": "08b20b84ca1ac87197d942dbf8396593d7d624c99d0bc4bb4951c379ab931e7c"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00004-of-00009.safetensors",
+          "size": 2953554280,
+          "lfs_sha256": "370dd46b4aaf4abcf0c9fd4a7c311dacafc8d2910b1309f093ee529dd21e702f"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00005-of-00009.safetensors",
+          "size": 2894571800,
+          "lfs_sha256": "c6920bb07e55e8ddb4aeced3bd6fe1e0aff6fc04758fe140d22ac2c3826eec62"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00006-of-00009.safetensors",
+          "size": 2894571800,
+          "lfs_sha256": "5f6d4f469d18eb224e467eaf0e566b8a8816d69d64f89e51c6b1f41234d17cf4"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00007-of-00009.safetensors",
+          "size": 2894571800,
+          "lfs_sha256": "cf012dbc6e119859999acb484189ac25aabb849365dd882c86fc626e51914736"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00008-of-00009.safetensors",
+          "size": 2894571800,
+          "lfs_sha256": "ed36c18f7ef6a479f393f32bfbb51d292211a3a7a8369eae5c8c167138ea3e09"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00009-of-00009.safetensors",
+          "size": 1211354616,
+          "lfs_sha256": "91a5e0868f70e063282263ceb8b0b2ac210d1b8f0ca5bf05e2d47fbfa8ce35bc"
+        },
+        {
+          "path": "vae/diffusion_pytorch_model.safetensors",
+          "size": 253817336,
+          "lfs_sha256": "06520463778e64dca1039c7447890065ee220bc408d15412182e5c3e06f304f1"
+        }
+      ],
+      "configs": {
+        "config.json": {
+          "URL": "https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer/resolve/ff1b22d2bdd0ae6597c0024a42cac7923b24cf92/config.json",
+          "bytes": 5557,
+          "sha256": "f797c39adcd1624e5bfc94f60d2a86095dc40978f8cf230fcd11ada877c597ea",
+          "value": {
+            "architectures": [
+              "BailingMM2NativeForConditionalGeneration"
+            ],
+            "audio_config": null,
+            "llm_config": {
+              "_name_or_path": "",
+              "add_cross_attention": false,
+              "architectures": [
+                "BailingMoeV2ForCausalLM"
+              ],
+              "attention_dropout": 0.0,
+              "bad_words_ids": null,
+              "begin_suppress_tokens": null,
+              "bos_token_id": null,
+              "chunk_size_feed_forward": 0,
+              "cross_attention_hidden_size": null,
+              "decoder_start_token_id": null,
+              "diversity_penalty": 0.0,
+              "do_sample": false,
+              "early_stopping": false,
+              "embedding_dropout": 0.0,
+              "encoder_no_repeat_ngram_size": 0,
+              "eos_token_id": 156895,
+              "exponential_decay_length_penalty": null,
+              "finetuning_task": null,
+              "first_k_dense_replace": 1,
+              "forced_bos_token_id": null,
+              "forced_eos_token_id": null,
+              "head_dim": 128,
+              "hidden_act": "silu",
+              "hidden_size": 2048,
+              "id2label": {
+                "0": "LABEL_0",
+                "1": "LABEL_1"
+              },
+              "image_end_token": 157159,
+              "image_patch_token": 157157,
+              "image_start_token": 157158,
+              "video_end_token": 157161,
+              "video_patch_token": 157175,
+              "video_start_token": 157160,
+              "initializer_range": 0.006,
+              "intermediate_size": 5120,
+              "is_decoder": false,
+              "is_encoder_decoder": false,
+              "label2id": {
+                "LABEL_0": 0,
+                "LABEL_1": 1
+              },
+              "length_penalty": 1.0,
+              "max_length": 20,
+              "max_position_embeddings": 32768,
+              "max_window_layers": 28,
+              "min_length": 0,
+              "model_type": "bailing_moe_v2",
+              "moe_intermediate_size": 512,
+              "moe_router_topk_scaling_factor": 2.5,
+              "n_group": 8,
+              "no_repeat_ngram_size": 0,
+              "norm_head": false,
+              "norm_softmax": false,
+              "norm_topk_prob": true,
+              "num_attention_heads": 16,
+              "num_beam_groups": 1,
+              "num_beams": 1,
+              "num_experts": 256,
+              "num_experts_per_tok": 8,
+              "num_hidden_layers": 20,
+              "num_key_value_heads": 4,
+              "num_return_sequences": 1,
+              "num_shared_experts": 1,
+              "output_attentions": false,
+              "output_dropout": 0.0,
+              "output_hidden_states": false,
+              "output_router_logits": false,
+              "output_scores": false,
+              "pad_token_id": 156892,
+              "partial_rotary_factor": 0.5,
+              "prefix": null,
+              "pretraining_tp": 1,
+              "problem_type": null,
+              "pruned_heads": {},
+              "remove_invalid_values": false,
+              "repetition_penalty": 1.0,
+              "return_dict": true,
+              "return_dict_in_generate": false,
+              "rms_norm_eps": 1e-06,
+              "rope_scaling": {
+                "factor": null,
+                "type": "video_rope"
+              },
+              "rope_theta": 600000,
+              "routed_scaling_factor": 2.5,
+              "router_type": "MultiRouter",
+              "sep_token_id": null,
+              "sliding_window": 4096,
+              "spatial_merge_size": 2,
+              "suppress_tokens": null,
+              "task_specific_params": null,
+              "temperature": 1.0,
+              "tf_legacy_loss": false,
+              "tie_encoder_decoder": false,
+              "tie_word_embeddings": false,
+              "tokenizer_class": null,
+              "tokens_per_second": 2,
+              "top_k": 50,
+              "top_p": 1.0,
+              "topk_group": 4,
+              "torch_dtype": "bfloat16",
+              "torchscript": false,
+              "typical_p": 1.0,
+              "use_bfloat16": false,
+              "use_bias": false,
+              "use_cache": true,
+              "use_expert_bias": true,
+              "use_qkv_bias": false,
+              "use_sliding_window": false,
+              "vocab_size": 157184
+            },
+            "mlp_depth": 2,
+            "model_type": "bailingmm_moe_v2_lite",
+            "torch_dtype": "bfloat16",
+            "transformers_version": "4.53.0.dev0",
+            "vision_config": {
+              "_name_or_path": "",
+              "add_cross_attention": false,
+              "architectures": [
+                "Qwen2_5_VisionTransformer"
+              ],
+              "bad_words_ids": null,
+              "begin_suppress_tokens": null,
+              "bos_token_id": null,
+              "chunk_size_feed_forward": 0,
+              "cross_attention_hidden_size": null,
+              "decoder_start_token_id": null,
+              "depth": 32,
+              "diversity_penalty": 0.0,
+              "do_sample": false,
+              "early_stopping": false,
+              "encoder_no_repeat_ngram_size": 0,
+              "eos_token_id": null,
+              "exponential_decay_length_penalty": null,
+              "finetuning_task": null,
+              "forced_bos_token_id": null,
+              "forced_eos_token_id": null,
+              "fullatt_block_indexes": [
+                7,
+                15,
+                23,
+                31
+              ],
+              "hidden_act": "silu",
+              "hidden_size": 1280,
+              "id2label": {
+                "0": "LABEL_0",
+                "1": "LABEL_1"
+              },
+              "in_channels": 3,
+              "in_chans": 3,
+              "intermediate_size": 3456,
+              "is_decoder": false,
+              "is_encoder_decoder": false,
+              "label2id": {
+                "LABEL_0": 0,
+                "LABEL_1": 1
+              },
+              "length_penalty": 1.0,
+              "max_length": 20,
+              "min_length": 0,
+              "model_type": "qwen2_5_vit",
+              "no_repeat_ngram_size": 0,
+              "num_beam_groups": 1,
+              "num_beams": 1,
+              "num_heads": 16,
+              "num_return_sequences": 1,
+              "out_hidden_size": 8192,
+              "output_attentions": false,
+              "output_hidden_states": false,
+              "output_scores": false,
+              "pad_token_id": null,
+              "patch_size": 14,
+              "prefix": null,
+              "problem_type": null,
+              "pruned_heads": {},
+              "remove_invalid_values": false,
+              "repetition_penalty": 1.0,
+              "return_dict": true,
+              "return_dict_in_generate": false,
+              "sep_token_id": null,
+              "spatial_merge_size": 2,
+              "spatial_patch_size": 14,
+              "suppress_tokens": null,
+              "task_specific_params": null,
+              "temperature": 1.0,
+              "temporal_patch_size": 2,
+              "tf_legacy_loss": false,
+              "tie_encoder_decoder": false,
+              "tie_word_embeddings": true,
+              "tokenizer_class": null,
+              "tokens_per_second": 2,
+              "top_k": 50,
+              "top_p": 1.0,
+              "torch_dtype": "bfloat16",
+              "torchscript": false,
+              "typical_p": 1.0,
+              "use_bfloat16": false,
+              "window_size": 112
+            }
+          }
+        },
+        "transformer/config.json": {
+          "URL": "https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer/resolve/ff1b22d2bdd0ae6597c0024a42cac7923b24cf92/transformer/config.json",
+          "bytes": 584,
+          "sha256": "e3851ddff548a845cb94b99b4889070e845ac47787f3b3a0c54b70a374aeba17",
+          "value": {
+            "_class_name": "DiffusionTransformer",
+            "_diffusers_version": "0.36.0",
+            "_name_or_path": "",
+            "all_f_patch_size": [
+              1
+            ],
+            "all_patch_size": [
+              2
+            ],
+            "axes_dims": [
+              32,
+              48,
+              48
+            ],
+            "axes_lens": [
+              20480,
+              512,
+              512
+            ],
+            "cap_feat_dim": 2560,
+            "dim": 3840,
+            "in_channels": 16,
+            "n_heads": 30,
+            "n_kv_heads": 30,
+            "n_layers": 30,
+            "n_refiner_layers": 2,
+            "norm_eps": 1e-05,
+            "qk_norm": true,
+            "rope_theta": 256.0,
+            "siglip_feat_dim": null,
+            "t_scale": 1000.0,
+            "alignment_padding_mode": "learned",
+            "multi_frame_output": true
+          }
+        },
+        "vae/config.json": {
+          "URL": "https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer/resolve/ff1b22d2bdd0ae6597c0024a42cac7923b24cf92/vae/config.json",
+          "bytes": 411,
+          "sha256": "8db67ee46bb5810ed819d698a8acfc95936d157fe68b66c9ed16b2d5ea04413e",
+          "value": {
+            "_class_name": "AutoencoderKLQwenImage",
+            "_diffusers_version": "0.36.0.dev0",
+            "attn_scales": [],
+            "base_dim": 96,
+            "dim_mult": [
+              1,
+              2,
+              4,
+              4
+            ],
+            "dropout": 0.0,
+            "input_channels": 4,
+            "latents_mean": null,
+            "latents_std": null,
+            "scaling_factor": 8.0064,
+            "shift_factor": 0.0,
+            "num_res_blocks": 2,
+            "temperal_downsample": [
+              false,
+              true,
+              true
+            ],
+            "z_dim": 16
+          }
+        }
+      },
+      "indexes": {
+        "transformer/diffusion_pytorch_model.safetensors.index.json": {
+          "URL": "https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer/resolve/ff1b22d2bdd0ae6597c0024a42cac7923b24cf92/transformer/diffusion_pytorch_model.safetensors.index.json",
+          "bytes": 48969,
+          "sha256": "ea67bb11167bb94124d2d3fc357716299c5a79dc57fc5fc4d0f13c240ac243f5",
+          "metadata": {
+            "total_size": 24619634944
+          }
+        }
+      }
+    }
+  ],
+  "source_citations": [
+    "ming/native.py",
+    "ming/constants.py",
+    "docs/native-binding.md"
+  ],
+  "profiles": [
+    {
+      "operation": "Train staged512px no checkpointing",
+      "gpu_count": 1,
+      "calculated_VRAM_per_GPU_GiB": 132,
+      "calculated_host_RAM_GiB": 64,
+      "geometry": "512×512",
+      "batch_graphs": 2,
+      "text_token_bound": 256,
+      "checkpointing": false,
+      "attention": "dense math fallback",
+      "resident_frozen_bytes": 12309817472,
+      "activation_allowance_bytes": 96259276800,
+      "trainable_and_optimizer_peak_bytes": 975008512,
+      "other_GPU_allowance_bytes": 0,
+      "GPU_subtotal_bytes": 109544102784,
+      "host_loading_and_cache_subtotal_bytes": 51386753536,
+      "runtime_headroom": "GPU: 25% subtotal +2GiB; host:25% subtotal +4GiB; final ceil4GiB",
+      "notes": "Actual native continuous velocity;≤32 CPU frozen rows. Conservative dense attention bound. One frame, no reference latents. The externally supplied condition feature width is explicitly bounded to106 and critic width32.",
+      "activation_envelope_inputs": {
+        "D": 3840,
+        "I": 10240,
+        "H": 30,
+        "L": 34,
+        "N": 1280,
+        "B": 2,
+        "scalar_bytes": 4,
+        "checkpointed": false,
+        "dense_fallback": true
+      },
+      "precision": "BF16 staged DiT; FP32 LoRA/critic",
+      "quantization_metadata_bytes": 0,
+      "activation_allowance_model": "Conservative planning envelope; linear transformer terms plus explicit dense fallback, text/KV or decode/pixel allowance as recorded in profile notes. Not measured or a formal peak guarantee."
+    },
+    {
+      "operation": "Sample RAW response512px",
+      "gpu_count": 1,
+      "calculated_VRAM_per_GPU_GiB": 20,
+      "calculated_host_RAM_GiB": 64,
+      "geometry": "512×512",
+      "batch_graphs": 1,
+      "text_token_bound": 256,
+      "checkpointing": false,
+      "attention": "dense math fallback",
+      "resident_frozen_bytes": 12309817472,
+      "activation_allowance_bytes": 1022361600,
+      "trainable_and_optimizer_peak_bytes": 67246720,
+      "other_GPU_allowance_bytes": 0,
+      "GPU_subtotal_bytes": 13399425792,
+      "host_loading_and_cache_subtotal_bytes": 51386753536,
+      "runtime_headroom": "GPU: 25% subtotal +2GiB; host:25% subtotal +4GiB; final ceil4GiB",
+      "notes": "One single-timestep native velocity response, not a finished image sampler.",
+      "activation_envelope_inputs": {
+        "D": 3840,
+        "I": 10240,
+        "H": 30,
+        "L": 34,
+        "N": 1280,
+        "B": 1,
+        "scalar_bytes": 4,
+        "checkpointed": false,
+        "dense_fallback": true
+      },
+      "precision": "BF16 staged DiT; FP32 LoRA/critic",
+      "quantization_metadata_bytes": 0,
+      "activation_allowance_model": "Conservative planning envelope; linear transformer terms plus explicit dense fallback, text/KV or decode/pixel allowance as recorded in profile notes. Not measured or a formal peak guarantee."
+    },
+    {
+      "operation": "External native-pipeline planning only",
+      "gpu_count": 1,
+      "calculated_VRAM_per_GPU_GiB": 80,
+      "calculated_host_RAM_GiB": 136,
+      "geometry": "1024×1024;one frame",
+      "batch_graphs": 1,
+      "text_token_bound": 1024,
+      "checkpointing": false,
+      "attention": "dense math fallback",
+      "resident_frozen_bytes": 52867594672,
+      "activation_allowance_bytes": 12884901888,
+      "trainable_and_optimizer_peak_bytes": 975008512,
+      "other_GPU_allowance_bytes": 0,
+      "GPU_subtotal_bytes": 66727505072,
+      "host_loading_and_cache_subtotal_bytes": 111807834520,
+      "runtime_headroom": "GPU: 25% subtotal +2GiB; host:25% subtotal +4GiB; final ceil4GiB",
+      "notes": "Not a product entrypoint. Includes ALL published MLLM expert weights, connector/MLP and VAE; active8-of256 experts reduces compute, not resident model weights. Limit text/KV to1024 and one image; layer decomposition requires recalculation.",
+      "activation_envelope_inputs": {
+        "D": 3840,
+        "I": 10240,
+        "H": 30,
+        "L": 34,
+        "N": 4352,
+        "B": 1,
+        "scalar_bytes": 4,
+        "checkpointed": false,
+        "dense_fallback": true
+      },
+      "precision": "BF16 staged DiT; FP32 LoRA/critic",
+      "quantization_metadata_bytes": 0,
+      "activation_allowance_model": "Conservative planning envelope; linear transformer terms plus explicit dense fallback, text/KV or decode/pixel allowance as recorded in profile notes. Not measured or a formal peak guarantee."
+    }
+  ],
+  "repository": "ming-particle-sliders",
+  "optimizer_source_facts": [
+    {
+      "version": "0.9.5",
+      "source_file": "recipes.py",
+      "bytes": 104250,
+      "sha256": "4f86c1a5c029916e73c834ebea4aae3bd5502dde8f10628e5a99a23f7e60242c"
+    },
+    {
+      "version": "0.9.5",
+      "source_file": "optim/dualnorm.py",
+      "bytes": 56768,
+      "sha256": "8e57be915dc8be44aaff2ac2f7ad39fbb2a7c610d77340e9f13e895974bf173c"
+    },
+    {
+      "version": "0.9.5",
+      "source_file": "optim/direction_blend.py",
+      "bytes": 4011,
+      "sha256": "84982277f0559e68aceea6d1c5ee60129c1e1972bebf61ca47dfa38b8611a1fb"
+    },
+    {
+      "version": "0.9.5",
+      "source_file": "optim/constraint_geometry.py",
+      "bytes": 9142,
+      "sha256": "e51a90df05857bd986ff097a6d266bd22cefa93a0d545a6fb25d58b42775ce4c"
+    }
+  ],
+  "KV_or_recurrent_state": {
+    "type": "no encoder/KV in staged response API; optional external MLLM KV only",
+    "bytes": 41943040,
+    "formula": "external row:2*20*4*1024*128*2"
+  },
+  "external_constructor_count_source": {
+    "repository": "huggingface/diffusers",
+    "captured_revision_prefix": "43e300",
+    "file": "src/diffusers/models/transformers/transformer_z_image.py",
+    "bytes": 44465,
+    "sha256": "ac552097cb1bbf7a6dd0f9b63718df110603edbe61af4fe2f1b699ceab23eeae",
+    "scope": "symbolic count of shared30+2+2 geometry; index total equals4P, no claim that every serialized dtype is proven by equality"
+  },
+  "cache_limits": {
+    "max_rows": 32,
+    "max_cached_prompts": 32,
+    "field_shape": [
+      1,
+      16,
+      1,
+      64,
+      64
+    ],
+    "FP32_fields_per_row": 3,
+    "prompt_hidden": [
+      1,
+      256,
+      2560
+    ],
+    "prompt_bytes_per_element": 2,
+    "max_condition_feature_width": 106,
+    "max_critic_width": 32,
+    "FP32_row_tensor_bytes": 25165824,
+    "prompt_embedding_bytes": 41943040,
+    "host_cache_formula": "max_rows*3*product(field_shape)*4 +max_cached_prompts*product(prompt_hidden)*prompt_bytes_per_element; native masks/indices included in loader/cache reserve"
+  }
+}
