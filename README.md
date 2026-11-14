@@ -1,3 +1,5 @@
+> **Calculated memory planning:** training **132 GiB VRAM / 64 GiB host RAM** (512×512, B=2, BF16 staged DiT; FP32 LoRA/critic); single RAW response **20 GiB VRAM / 64 GiB host RAM** (512×512). See [MEMORY.md](MEMORY.md) for checkpointed/phase variants, attention fallback and exact limits. These are conservative calculated budgets, not measured peaks.
+
 > **Current source: core0.13.0 / published ParticleGAN0.9.5.** This is a fresh cohort; older versioned evidence below remains historical. See [adoption and compatibility](docs/pg095-adoption.md). No native PG0.9.5 result is claimed for this package's default cohort.
 
 # Ming-Image Design-Layer particle sliders
