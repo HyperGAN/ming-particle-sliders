@@ -1,4 +1,4 @@
-# Current canonical shared core; official ParticleGAN 0.9.5 is transitive.
+# Current canonical shared core; official ParticleGAN 0.10.1 is transitive (via the core upgrade).
 # Historical immutable dependencies are archived under profiles/history/.
 particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@119d7e0559bacdc49847961c1b243ac08daa013c#subdirectory=packages/particle-sliders-core
 packaging>=23,<27
