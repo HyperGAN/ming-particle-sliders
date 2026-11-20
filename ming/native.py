@@ -11,10 +11,10 @@ from .constants import BASE_MODEL_ID
 
 try:
     import torch
-    from particle_sliders.pg09_backends import (
+    from particle_sliders.backends import (
         FrozenResponseAdapter, PreparedResponse, bind_native_gradient_checkpointing,
     )
-    from particle_sliders.pg09_images import image_lora_parameters
+    from .image_bindings import image_lora_parameters
 except ImportError as exc:
     missing = getattr(exc, 'name', None) or 'native runtime'
     raise CohortError(f'Ming native dependency {missing!r} is unavailable; install the selected product with dependencies in its own environment') from exc
@@ -253,10 +253,10 @@ class MingHNDLCritic(torch.nn.Module):
 
     def __init__(self, shape, condition_width, width=32):
         super().__init__()
-        require_cohort('native-pg095-3dd672a7')
+        require_cohort('native-current-engine')
         if len(shape) != 5 or shape[0] != 1 or shape[2] != 1:
             raise ValueError('Ming HNDL critic currently requires one genuine latent frame')
-        from particle_sliders.fibo_hndl import HNDLFieldCritic
+        from .fibo_hndl import HNDLFieldCritic
         self.native_shape = tuple(shape[1:])
         self.critic = HNDLFieldCritic(shape[1], condition_width, shape[-2:], width)
 
@@ -272,8 +272,8 @@ def build_hndl_game(adapter, prepared_rows, conditions, *, total_steps, seed=7, 
     No native model is loaded here. Conditions must be supplied by the product
     caller from its actual frozen protocol, never invented from row indices.
     """
-    require_cohort('native-pg095-3dd672a7')
-    if adapter.cohort != 'native-pg095-3dd672a7':
+    require_cohort('native-current-engine')
+    if adapter.cohort != 'native-current-engine':
         raise ValueError('Ming HyperGAN/HNDL game requires an explicitly new native candidate cohort')
     adapter._require_open()
     rows = tuple(prepared_rows)
@@ -292,7 +292,7 @@ def build_hndl_game(adapter, prepared_rows, conditions, *, total_steps, seed=7, 
     conditions = conditions.detach().clone()
     if type(seed) is not int or not 0 <= seed < 2**63 - 100:
         raise ValueError('invalid seed')
-    from particle_sliders.pg09 import ConditionalPG09
+    from particle_sliders.engine import ConditionalParticleGAN
     from particle_sliders.field_critic import seed_initialization_rng
     device = next(adapter.network.parameters()).device
     devices = _cuda_rng_devices(device)
@@ -300,6 +300,6 @@ def build_hndl_game(adapter, prepared_rows, conditions, *, total_steps, seed=7, 
         seed_initialization_rng(seed, devices)
         critic = MingHNDLCritic(tuple(rows[0].target.shape), conditions.shape[1], critic_width)
         critic.to(device)
-        return ConditionalPG09(adapter, rows, critic, conditions=conditions,
+        return ConditionalParticleGAN(adapter, rows, critic, conditions=conditions,
                                total_steps=total_steps, seed=seed, batch_size=batch_size,
                                response_domain='continuous_field')

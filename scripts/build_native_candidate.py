@@ -30,6 +30,9 @@ def main(argv=None):
         for source, name in (('profiles/native_runtime.py', 'native.py'), ('profiles/native_cohort.py', 'cohort.py'),
                              ('profiles/native_ordered_frames.py', 'ordered_frames.py'), ('ming/constants.py', 'constants.py')):
             shutil.copy2(ROOT / source, package / name)
+        for name in ('image_bindings.py', 'fibo_hndl.py', 'fibo_critic.hndl',
+                     'fibo_projection.hndl', 'fibo_hndl_010_sources.json'):
+            shutil.copy2(ROOT / 'ming' / name, package / name)
         (package / '__init__.py').write_text('"""Isolated experimental Ming native API; no stable CLI/Comfy imports."""\n')
         shutil.copy2(lock_path, package / 'core.lock.json')
         identity = dict(schema='ming-product-cohort-v1', distribution='ming-particle-sliders-native',
@@ -59,7 +62,7 @@ packages = ["ming_native"]
 [tool.setuptools.dynamic]
 dependencies = {{file = ["requirements.txt"]}}
 [tool.setuptools.package-data]
-ming_native = ["core.lock.json", "identity.json"]
+ming_native = ["*.json", "*.hndl"]
 ''')
         (staging / 'requirements.txt').write_text(
             f'particle-sliders-core @ git+{lock["repository"]}.git@{lock["commit"]}#subdirectory={lock["subdirectory"]}\n'

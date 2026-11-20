@@ -6,15 +6,15 @@ def installed_owner():
     """Require a genuine separate installed helper, never a Source overlay."""
     import base64,hashlib
     from importlib import metadata
-    distribution=metadata.distribution('ming-particle-sliders-explicit-fresh95')
-    if (distribution.metadata['Name']!='ming-particle-sliders-explicit-fresh95'
+    distribution=metadata.distribution('ming-particle-sliders-explicit-scoped')
+    if (distribution.metadata['Name']!='ming-particle-sliders-explicit-scoped'
             or distribution.version!='0.1.0'):
-        raise RuntimeError('exact installed Ming fresh95 helper distribution required')
+        raise RuntimeError('exact installed Ming scoped helper distribution required')
     root=Path(__file__).absolute().parent
     names=('__init__.py','api.py','baseline.py','cache.py','ownership.py','policy.py','util.py')
     recorded={str(row):row for row in distribution.files or ()}
     for name in names:
-        relative='ming_native_fresh95/'+name;row=recorded.get(relative)
+        relative='ming_native_scoped/'+name;row=recorded.get(relative)
         target=root/name
         if (row is None or Path(distribution.locate_file(relative)).absolute()!=target
                 or row.hash is None or row.hash.mode!='sha256'):
@@ -29,7 +29,7 @@ def installed_owner():
 def guard():
     installed_owner()
     from ming_native import cohort,native,ordered_frames
-    from particle_sliders import pg09
+    from particle_sliders import engine
     from particlegan import init as pg_init
     from importlib import metadata
     from .baseline import ORIGINAL_SOURCES,CORE_SOURCES
@@ -37,9 +37,9 @@ def guard():
     root=Path(cohort.__file__).absolute().parent
     for name,pin in ORIGINAL_SOURCES.items():
         if source_record(root/name)!=pin:raise RuntimeError('original Ming native Source differs: '+name)
-    core=Path(pg09.__file__).absolute().parent
+    core=Path(engine.__file__).absolute().parent
     for name,pin in CORE_SOURCES.items():
-        if source_record(core/name)!=pin:raise RuntimeError('exact original core013 Source differs: '+name)
+        if source_record(core/name)!=pin:raise RuntimeError('exact original current core Source differs: '+name)
     require=cohort.require_cohort
     if (getattr(require,'__module__',None)!='ming_native.cohort'
             or getattr(require,'__globals__',None)is not vars(cohort)
@@ -47,16 +47,16 @@ def guard():
         raise RuntimeError('original Ming admission functions required; historical current-core bridge refused')
     # All original installed product, core origin/recursive closure, PG, HNDL,
     # HyperGAN and dependency checks execute. No admission monkeypatch/overlay.
-    identity=require('native-pg095-3dd672a7')
-    if metadata.version('particlegan')!='0.9.5' or source_record(pg_init.__file__)['sha256']!=INIT_SHA:
-        raise RuntimeError('exact public PG095 initializer Source required')
+    identity=require('native-current-engine')
+    if metadata.version('particlegan')!='0.11.0' or source_record(pg_init.__file__)['sha256']!=INIT_SHA:
+        raise RuntimeError('exact public ParticleGAN initializer Source required')
     return identity
 
 def sources():
     from ming_native import cohort
-    from particle_sliders import pg09
+    from particle_sliders import engine
     from .baseline import ORIGINAL_SOURCES,CORE_SOURCES
-    root=Path(cohort.__file__).absolute().parent;core=Path(pg09.__file__).absolute().parent
+    root=Path(cohort.__file__).absolute().parent;core=Path(engine.__file__).absolute().parent
     return dict(own={p.name:source_record(p)for p in sorted(Path(__file__).absolute().parent.glob('*.py'))},
         original_native={n:source_record(root/n)for n in ORIGINAL_SOURCES},
         original_core={n:source_record(core/n)for n in CORE_SOURCES})
@@ -76,7 +76,7 @@ class Attachment:
         self.modes=[(m,m.training)for m in model.modules()]
         self.pending_flags=[(p,old,p.requires_grad)for p,old in self.flags];self.pending_modes=[(m,old,m.training)for m,old in self.modes]
         for module in model.modules():
-            if vars(module).get('_ming_explicit_fresh95_owner')is not None:
+            if vars(module).get('_ming_explicit_scoped_owner')is not None:
                 raise ValueError('foreign explicit Ming owner already attached')
             previous=getattr(module,'_ming_response_binding',None)
             if previous is not None and (not previous._closed or previous._cleanup_failed):
@@ -88,8 +88,8 @@ class Attachment:
         if any('forward'in vars(m)for _,m in self.targets):
             raise ValueError('foreign target forward override retained')
         self.original_forwards=[(m,'forward'in vars(m),vars(m).get('forward'),m.forward)for _,m in self.targets]
-        self.pending_owner=[(m,'_ming_explicit_fresh95_owner'in vars(m),vars(m).get('_ming_explicit_fresh95_owner'))for m in model.modules()]
-        for m,_,_ in self.pending_owner:m._ming_explicit_fresh95_owner=self
+        self.pending_owner=[(m,'_ming_explicit_scoped_owner'in vars(m),vars(m).get('_ming_explicit_scoped_owner'))for m in model.modules()]
+        for m,_,_ in self.pending_owner:m._ming_explicit_scoped_owner=self
 
     def attach(self,rank,alpha,device):
         from particle_sliders.native_lora import LoRANetwork
@@ -132,7 +132,7 @@ class Attachment:
         if self.closed or self.closing:raise RuntimeError('Ming owner closed/cleanup pending')
         if self.slider is None or [(n,id(p))for n,p in self.slider.named_parameters()]!=self.named_ids:
             raise RuntimeError('original LoRA Parameter identity differs')
-        if any(vars(m).get('_ming_explicit_fresh95_owner')is not self for m,_,_ in self.pending_owner):
+        if any(vars(m).get('_ming_explicit_scoped_owner')is not self for m,_,_ in self.pending_owner):
             raise RuntimeError('Ming owner marker changed')
         if any(vars(m).get('forward')is not owned for m,_,_,owned in self.pending_forwards):
             raise RuntimeError('Ming native forward ownership changed')
@@ -173,7 +173,7 @@ class Attachment:
         if self.closed:return
         self.closing=True;errors=[]
         # Refuse a foreign marker BEFORE changing any borrowed model state.
-        if any(vars(m).get('_ming_explicit_fresh95_owner')is not self for m,_,_ in self.pending_owner):
+        if any(vars(m).get('_ming_explicit_scoped_owner')is not self for m,_,_ in self.pending_owner):
             raise RuntimeError('foreign Ming ownership marker retained before cleanup')
         if self.native is not None:self.native._closed=True;self.native._cleanup_failed=True
         self.pending_native=self._run(self.pending_native,self._restore_native,errors)
@@ -186,9 +186,9 @@ class Attachment:
         if not any((self.pending_native,self.pending_forwards,self.pending_flags,self.pending_modes)):
             def marker(item):
                 m,present,old=item
-                if vars(m).get('_ming_explicit_fresh95_owner')is not self:raise RuntimeError('foreign Ming ownership marker retained')
-                if present:setattr(m,'_ming_explicit_fresh95_owner',old)
-                else:delattr(m,'_ming_explicit_fresh95_owner')
+                if vars(m).get('_ming_explicit_scoped_owner')is not self:raise RuntimeError('foreign Ming ownership marker retained')
+                if present:setattr(m,'_ming_explicit_scoped_owner',old)
+                else:delattr(m,'_ming_explicit_scoped_owner')
             self.pending_owner=self._run(self.pending_owner,marker,errors)
         if errors:
             if len(errors)==1:raise errors[0]

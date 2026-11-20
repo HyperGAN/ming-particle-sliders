@@ -39,8 +39,8 @@ def product_identity():
     try:
         identity = _json(files(__package__).joinpath('identity.json').read_text(), 'product identity')
         expected = {
-            'ming': ('ming-particle-sliders', '0.2.0', 'public-pg095-3dd672a7', 'ming-particle-sliders-native',
-                     'c925fc91d61c1e32c34686d3e36ba8848213b71d73a5969f45aea7c3b4a35118'),
+            'ming': ('ming-particle-sliders', '0.2.0', 'public-current-engine', 'ming-particle-sliders-native',
+                     '7b7cc3ae5569538977649adbce8915a6b026416630115a93d76542de2cf57349'),
         }
         namespace = __package__.rsplit('.', 1)[-1]
         if namespace not in expected or tuple(identity.get(k) for k in ('distribution', 'version', 'profile', 'incompatible_distribution', 'lock_sha256')) != expected[namespace]:
@@ -80,7 +80,7 @@ def _vcs_identity(installed, repository, commit, subdirectory=None):
 
 
 def _require_pg_sources(installed, lock):
-    name = 'pg' + lock['particlegan_version'].replace('.', '') + '_release.json'
+    name = 'engine_release.json'
     manifest = _json(installed.locate_file('particle_sliders/' + name).read_text(), 'PG release manifest')
     if (manifest['version'] != lock['particlegan_version'] or
             manifest['wheel_sha256'] != lock['particlegan_wheel_sha256']):
@@ -109,7 +109,7 @@ def _validate_requirement(requirement, lock):
         matched = _vcs_identity(installed, repository, commit, subdirectory)
         if key == 'particle-sliders-core' and not matched:
             origin = _json(installed.read_text('direct_url.json'), 'core archive origin')
-            matched = (origin.get('archive_info', {}).get('hashes', {}).get('sha256') == lock['shared_wheel_sha256'] and
+            matched = (bool(lock['shared_wheel_sha256']) and origin.get('archive_info', {}).get('hashes', {}).get('sha256') == lock['shared_wheel_sha256'] and
                        not origin.get('dir_info', {}).get('editable'))
         if requirement.url != expected or not matched:
             raise CohortError('Ming candidate Git dependency differs from the exact cohort: ' + requirement.name)
@@ -122,13 +122,13 @@ def _require_native_stack(lock):
         raise CohortError('Ming requires the exact candidate HyperGAN/HNDL versions')
     if not _vcs_identity(_dist('hypergan'), 'https://github.com/HyperGAN/HyperGAN', lock['hypergan_commit']):
         raise CohortError('Ming requires the exact candidate HyperGAN VCS origin')
-    for name, extras in (('hypergan', ('', 'train')), ('hndl', ('',)), ('particle-sliders-core', ('', 'hypergan-hndl'))):
+    for name, extras in (('hypergan', ('',)), ('hndl', ('',)), ('particle-sliders-core', ('',))):
         for text in _dist(name).requires or ():
             requirement = Requirement(text)
             if requirement.marker and not any(requirement.marker.evaluate({'extra': e}) for e in extras):
                 continue
             _validate_requirement(requirement, lock)
-    from particle_sliders.fibo_hndl import verified_builder
+    from .fibo_hndl import verified_builder
     _, identity = verified_builder()
     if (identity['hypergan_commit'] != lock['hypergan_commit'] or identity['hndl_version'] != lock['hndl_version']):
         raise CohortError('Ming candidate builder contradicts its cohort')
@@ -146,7 +146,7 @@ def require_cohort(profile=None):
         expected_core = f'git+{lock["repository"]}.git@{lock["commit"]}#subdirectory={lock["subdirectory"]}'
         if len(core) != 1 or core[0].url != expected_core:
             raise CohortError('Ming installed product dependency contradicts its declared core cohort')
-        if declared == 'native-pg095-3dd672a7':
+        if declared == 'native-current-engine':
             runtime = {canonicalize_name(r.name): r for r in requirements if r.marker is None}
             if (str(runtime['particlegan'].specifier) != '==' + lock['particlegan_version'] or
                     str(runtime['hndl'].specifier) != '==' + lock['hndl_version']):
@@ -159,7 +159,7 @@ def require_cohort(profile=None):
             raise CohortError('Ming requires its exact packaged core/ParticleGAN cohort')
         origin = _json(installed.read_text('direct_url.json'), 'shared core origin')
         qualified = (_vcs_identity(installed, lock['repository'], lock['commit'], lock['subdirectory']) if 'vcs_info' in origin else
-                     origin.get('archive_info', {}).get('hashes', {}).get('sha256') == lock['shared_wheel_sha256'])
+                     bool(lock['shared_wheel_sha256']) and origin.get('archive_info', {}).get('hashes', {}).get('sha256') == lock['shared_wheel_sha256'])
         if not qualified or origin.get('dir_info', {}).get('editable'):
             raise CohortError('Ming shared core origin differs from its packaged cohort')
         actual = {}
@@ -172,7 +172,7 @@ def require_cohort(profile=None):
         if actual != lock['source_sha256']:
             raise CohortError('Ming shared core recursive source/data closure differs from its packaged cohort')
         _require_pg_sources(installed, lock)
-        if declared == 'native-pg095-3dd672a7':
+        if declared == 'native-current-engine':
             _require_native_stack(lock)
         return lock
     except CohortError:

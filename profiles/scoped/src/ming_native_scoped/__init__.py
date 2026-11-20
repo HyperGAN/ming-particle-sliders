@@ -1,5 +1,5 @@
 """Explicit new cached Ming native profile; no default/cohort migration."""
-PROFILE='ming-native-ordered-explicit-cached-fresh95-v1'
+PROFILE='ming-native-ordered-explicit-cached-scoped-v1'
 
 def open_training(*args,**kwargs):
     from .api import Training

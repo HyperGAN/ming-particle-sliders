@@ -39,7 +39,7 @@ def test_import_stamp_from_the_installed_package():
     loaded = winning_formulation()
     assert loaded is stamp()
     assert loaded.architecture_id == "gmix"
-    assert loaded.formulation_id == "particle-gmix-1600-v2"
+    assert loaded.formulation_id == "particle-gmix-1600-v2-raw"
     assert loaded.formulation_provisional is True
     assert loaded.spec["critic"] == "gmix"
     loaded.require(loaded.as_dict())

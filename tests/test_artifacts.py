@@ -41,7 +41,7 @@ def test_built_wheels_have_distinct_identity_namespace_entrypoints_and_one_lock(
         assert metadata(native)['Version'] not in SpecifierSet('==0.2.0')
         assert not any(n.startswith(('ming/', 'comfy_ming')) or n.endswith('entry_points.txt') for n in b)
         assert not any('native-candidate.lock' in n or n.startswith('ming_native/') for n in a)
-        for archive, namespace, profile in ((stable, 'ming', 'public-pg095-3dd672a7'), (native, 'ming_native', 'native-pg095-3dd672a7')):
+        for archive, namespace, profile in ((stable, 'ming', 'public-current-engine'), (native, 'ming_native', 'native-current-engine')):
             assert [n for n in archive.namelist() if n.endswith('.lock.json')] == [namespace + '/core.lock.json']
             identity = json.loads(archive.read(namespace + '/identity.json'))
             assert identity['profile'] == profile

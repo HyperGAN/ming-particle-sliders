@@ -1,6 +1,6 @@
 > **Calculated memory planning:** training **132 GiB VRAM / 64 GiB host RAM** (512×512, B=2, BF16 staged DiT; FP32 LoRA/critic); single RAW response **20 GiB VRAM / 64 GiB host RAM** (512×512). See [MEMORY.md](MEMORY.md) for checkpointed/phase variants, attention fallback and exact limits. These are conservative calculated budgets, not measured peaks.
 
-> **Current source: core0.13.0 / published ParticleGAN0.9.5.** This is a fresh cohort; older versioned evidence below remains historical. See [adoption and compatibility](docs/pg095-adoption.md). No native PG0.9.5 result is claimed for this package's default cohort.
+> **Current source: core 0.15.1 / ParticleGAN 0.11.0.** This is a fresh cohort; older versioned evidence below remains historical. The [earlier adoption record](docs/pg095-adoption.md) documents previous runtime evidence.
 
 # Ming-Image Design-Layer particle sliders
 
@@ -19,13 +19,12 @@ Product repository for particle sliders on
 The layout follows [anima-particle-sliders](https://github.com/HyperGAN/anima-particle-sliders)
 and [krea2-particle-sliders](https://github.com/HyperGAN/krea2-particle-sliders):
 this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
-[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/ddb41423bcefc1fe76cd94d0f9b367353b3ea137/packages/particle-sliders-core)
+[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/c13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
 The installed CLI and ComfyUI surfaces remain a product scaffold. An
 experimental [staged velocity binding](docs/native-binding.md) supplies native
-model glue to the real shared response/GAN APIs. Its separate core 0.12
-candidate lane executes an actual HyperGAN develop/HNDL field critic on tiny
+model glue to the real shared response/GAN APIs. Its isolated current candidate lane executes an actual HyperGAN develop/HNDL field critic on tiny
 CPU fixtures. Pretrained Ming, multiframe training and production sampling
 remain unqualified. No slider weights or sample gallery are available.
 
@@ -69,8 +68,7 @@ immutable origin and locked source hashes. The wheel includes its lock records.
 The formulation note is [FORMULATION.md](FORMULATION.md). The pin record is
 [core.lock.json](core.lock.json).
 
-This package baseline uses shared core 0.12.0 with released ParticleGAN
-0.9.4. The historical core 0.3.0 scaffold pin is preserved separately in
+This package uses shared core 0.15.1 with ParticleGAN 0.11.0. The historical core 0.3.0 scaffold pin is preserved separately in
 the lock record. This updates metadata compatibility; it does not enable
 native Ming execution or retarget any training run or checkpoint.
 
@@ -124,29 +122,22 @@ Independently authored source in this repository is [MIT](LICENSE). See
 [NOTICE](NOTICE). The MIT license does not relicense the inclusionAI base
 weights.
 
-## Current PG 0.9.4 upgrade
+## Installed cohorts
 
-Both current distributions now use the canonical merged core at
-`ddb41423bcefc1fe76cd94d0f9b367353b3ea137`: default
-`ming-particle-sliders==0.2.0` and isolated
-`ming-particle-sliders-native==0.2.0.dev2`. The default CLI/Comfy scaffold still
-refuses live execution. The native candidate remains a separate environment
-and namespace with unchanged native qualification gates. See
-[current installation, source closure and historical reproduction](docs/pg094-current.md).
+Install the default CLI and ComfyUI scaffold from the project root. Build the
+isolated native candidate with `scripts/build_native_candidate.py` and install
+the resulting wheel in a separate environment. Both packages pin core 0.15.1
+and ParticleGAN 0.11.0. The [prior installation record](docs/pg094-current.md)
+retains the earlier source and checkpoint boundaries.
 
-The previous public and native lock records and qualification receipts remain
-archived. They do not qualify this new source. Actual-diff Claude review and
-RETURN remain required before landing.
+## Scoped cached initialization
 
-
-## Separate cached fresh95 opt-in API
-
-The additional `ming_native_fresh95` package provides explicit cached fresh,
+The additional `ming_native_scoped` package provides explicit cached fresh,
 whole-FULL resume and RAW ordered-native response APIs. It is a separate
 installed helper owner beside the exact isolated `ming_native` distribution;
 the default CLI/Comfy scaffold and every existing LR/cohort remain unchanged.
 Four new installed software cases passed locally with one tiny update.
 Pretrained Ming, authentic native cache availability, finished RGBA rendering,
 stable CLI/default use and public packaging remain unqualified.
-See [FRESH95.md](FRESH95.md) for the actual API, exact dependency/ownership
+See [the scoped API](SCOPED.md) for the actual API, exact dependency/ownership
 boundary and fresh-only initialization policy.

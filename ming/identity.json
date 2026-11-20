@@ -3,7 +3,7 @@
   "distribution": "ming-particle-sliders",
   "version": "0.2.0",
   "namespace": "ming",
-  "profile": "public-pg095-3dd672a7",
+  "profile": "public-current-engine",
   "incompatible_distribution": "ming-particle-sliders-native",
-  "lock_sha256": "c925fc91d61c1e32c34686d3e36ba8848213b71d73a5969f45aea7c3b4a35118"
+  "lock_sha256": "7b7cc3ae5569538977649adbce8915a6b026416630115a93d76542de2cf57349"
 }

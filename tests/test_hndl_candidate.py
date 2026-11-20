@@ -9,7 +9,7 @@ from tests.test_native import fixture, row, equal, NATIVE, COHORT, PROFILE
 MingHNDLCritic, build_hndl_game = NATIVE.MingHNDLCritic, NATIVE.build_hndl_game
 
 pytestmark = pytest.mark.skipif(COHORT.product_identity()['namespace'] != 'ming_native',
-                                reason='separate exact core0.12/PG0.9.5/HyperGAN/HNDL environment required')
+                                reason='separate exact core0.12/PG0.11.0/HyperGAN/HNDL environment required')
 
 
 def game():
@@ -94,8 +94,8 @@ def test_candidate_declares_its_own_namespace_and_refuses_public_profile():
     assert COHORT.product_identity()['namespace'] == 'ming_native'
     assert not files('ming_native').joinpath('native-candidate.lock.json').is_file()
     assert not files('ming_native').joinpath('surfaces.py').is_file()
-    with pytest.raises(ValueError, match='declares native-pg095'):
-        COHORT.require_cohort('public-pg095-3dd672a7')
+    with pytest.raises(ValueError, match='declares native-current-engine'):
+        COHORT.require_cohort('public-current-engine')
 
 
 def test_multiframe_field_is_refused_without_flattening():
@@ -162,8 +162,8 @@ def test_candidate_wheel_metadata_matches_its_runtime():
     requirements = {r.name: r for r in map(Requirement, product.requires) if r.marker is None}
     assert requirements['particle-sliders-core'].url == (
         'git+https://github.com/HyperGAN/particle-sliders.git@'
-        '3dd672a7f9b8c169daef90fd63e4bb42b9ddc423#subdirectory=packages/particle-sliders-core')
-    assert str(requirements['particlegan'].specifier) == '==0.9.5'
+        'c13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78#subdirectory=packages/particle-sliders-core')
+    assert str(requirements['particlegan'].specifier) == '==0.11.0'
     assert str(requirements['hndl'].specifier) == '==0.10.0'
     assert requirements['hypergan'].url.endswith('5f368a3770cf5bdae0448995c9f76e29af8049f7')
 
@@ -249,7 +249,7 @@ def session(decay):
     # production Ming EMA/sampler API or pretrained/native qualification.
     from particle_sliders.lifecycle import Binding, SessionConfig
     from particle_sliders.response import ResponseCapabilities, ResponseSession
-    from particle_sliders.pg09 import PG_VERSION, PG_SOURCE_PROFILE
+    from particle_sliders.engine import PG_VERSION, PG_SOURCE_PROFILE
     model, adapter, current = game()
     caps = ResponseCapabilities('adapter_gan', 'image', 'latent_velocity', 'continuous_field',
                                 tuple(current.response_shape), PG_VERSION, PG_SOURCE_PROFILE)
@@ -257,8 +257,8 @@ def session(decay):
     return model, adapter, ResponseSession(config, caps, Binding(current, adapter.close))
 
 
-@pytest.mark.parametrize('decay', [None, .5])
-def test_modern_shared_session_off_raw_ema_exports_and_resume(decay):
+def test_modern_shared_session_off_raw_exports_and_resume():
+    decay = None
     _, adapter, current = session(decay)
     _, _, restored = session(decay)
     _, _, inference = session(decay)
@@ -271,23 +271,9 @@ def test_modern_shared_session_off_raw_ema_exports_and_resume(decay):
         from particle_sliders.lifecycle import UnsupportedOperation
         with pytest.raises(UnsupportedOperation, match='inference-loaded'):
             inference.step()
-        if decay is None:
-            assert current.ema.values is None
-            with pytest.raises(ValueError, match='configured EMA'):
-                current.export(selection='ema')
-        else:
-            ema = current.export(selection='ema')
-            equal(ema['payload']['adapter']['network'], current.ema.values)
-            assert any(not torch.equal(value, current.game.network.state_dict()[name])
-                       for name, value in current.ema.values.items())
-            inference.load_inference(ema)
-            raw_state = deepcopy(current.game.network.state_dict())
-            try:
-                current.game.network.load_state_dict(current.ema.values)
-                expected = current.evaluate(0, seed=17)
-            finally:
-                current.game.network.load_state_dict(raw_state)
-            assert torch.equal(expected, inference.evaluate(0, seed=17))
+        assert current.ema.values is None
+        with pytest.raises(ValueError, match='raw|RAW'):
+            current.export(selection='ema')
         checkpoint = current.checkpoint()
         restored.restore(checkpoint)
         equal(current.step(), restored.step())
@@ -306,8 +292,8 @@ def test_modern_shared_session_off_raw_ema_exports_and_resume(decay):
 
 def test_modern_shared_session_restore_failure_rolls_back_and_retries():
     from particle_sliders.lifecycle import CheckpointError
-    _, _, current = session(.5)
-    _, _, source = session(.5)
+    _, _, current = session(None)
+    _, _, source = session(None)
     try:
         current.step()
         source.step()
@@ -339,7 +325,7 @@ def test_modern_shared_session_restore_failure_rolls_back_and_retries():
         source.close()
 
 
-def test_current_worker_explicit_fixture_check_periodic_checkpoint_ema_and_resume(monkeypatch, tmp_path):
+def test_current_worker_explicit_fixture_check_periodic_checkpoint_raw_and_resume(monkeypatch, tmp_path):
     """Compose the real product binding with installed merged worker software.
 
     This temporary in-process registration is a software fixture, not a shipped
@@ -351,7 +337,7 @@ def test_current_worker_explicit_fixture_check_periodic_checkpoint_ema_and_resum
     from particle_sliders.execution.session_worker import main
     from particle_sliders.lifecycle import Binding
     from particle_sliders.response import ResponseBackend, ResponseCapabilities
-    from particle_sliders.pg09 import PG_VERSION, PG_SOURCE_PROFILE
+    from particle_sliders.engine import PG_VERSION, PG_SOURCE_PROFILE
 
     def validate(options):
         if options.get('dummy') is not True:
@@ -368,7 +354,7 @@ def test_current_worker_explicit_fixture_check_periodic_checkpoint_ema_and_resum
     backend = ResponseBackend('ming-cpu-software-fixture', caps, prepare, validate)
     monkeypatch.setattr(response, 'response_backend', lambda name: backend)
     config = dict(backend=backend.name, cohort='ming-merged-worker-cpu-only',
-                  options=dict(dummy=True, steps=4, ema_decay=.5))
+                  options=dict(dummy=True, steps=4, ema_decay=None))
     profile = dict(schema='particle-slider-profile-v1', name='ming-cpu-software-fixture',
                    product='ming-particle-sliders-native', config_kind='session', status='fixture',
                    interface='response', backend=backend.name, runtime=dict(device='cpu'))
@@ -382,7 +368,7 @@ def test_current_worker_explicit_fixture_check_periodic_checkpoint_ema_and_resum
     path = tmp_path / 'config.json'
     path.write_text(json.dumps(config))
     first, second = tmp_path / 'first', tmp_path / 'second'
-    common = ['--config', str(path), '--interface', 'response', '--checkpoint-every', '1', '--selection', 'ema']
+    common = ['--config', str(path), '--interface', 'response', '--checkpoint-every', '1', '--selection', 'raw']
     assert main([*common, '--output', str(first), '--check']) == 0
     assert not first.exists()
     assert main([*common, '--output', str(first), '--stop-after', '2']) == 0
@@ -393,5 +379,5 @@ def test_current_worker_explicit_fixture_check_periodic_checkpoint_ema_and_resum
     assert (second / 'checkpoints/step-000003/training.pt').is_file()
     assert (second / 'checkpoints/step-000004/training.pt').is_file()
     exported = torch.load(second / 'adapter.pt', weights_only=True)
-    assert exported['payload']['selection'] == 'ema'
+    assert exported['payload']['selection'] == 'raw'
     assert torch.cuda.is_initialized() is False
