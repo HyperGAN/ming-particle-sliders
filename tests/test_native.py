@@ -18,7 +18,7 @@ NATIVE = import_module(NAMESPACE + '.native')
 COHORT = import_module(NAMESPACE + '.cohort')
 MingResponseAdapter = NATIVE.MingResponseAdapter
 from particle_sliders.native_lora import LoRANetwork
-from particle_sliders.pg09_backends import ResponseRow, FlowSchedule, save_adapter, load_adapter
+from particle_sliders.backends import ResponseRow, FlowSchedule, save_adapter, load_adapter
 
 PROFILE = COHORT.product_identity()['profile']
 

@@ -11,12 +11,12 @@ import math
 import pytest
 import torch
 from torch import nn
-from particle_sliders.pg09_backends import PreparedResponse,ResponseRow,FrozenResponseAdapter
+from particle_sliders.backends import PreparedResponse,ResponseRow,FrozenResponseAdapter
 from ming_native import native as original_native
 from ming_native.constants import BASE_MODEL_ID
-from ming_native_fresh95 import open_training,open_inference,save_prepared_cache,file_pin,Checkpoint
-from ming_native_fresh95 import api,cache,policy,ownership
-from ming_native_fresh95.util import equal
+from ming_native_scoped import open_training,open_inference,save_prepared_cache,file_pin,Checkpoint
+from ming_native_scoped import api,cache,policy,ownership
+from ming_native_scoped.util import equal
 
 class Attention(nn.Module):
     def __init__(self):super().__init__();self.proj=nn.Linear(2,2)
@@ -50,7 +50,7 @@ def staged(tmp_path,monkeypatch):
     def forbidden(*args,**kwargs):raise AssertionError('no preparation/teacher/pretrained renderer in NEW software cases')
     monkeypatch.setattr(FrozenResponseAdapter,'prepare',forbidden)
     monkeypatch.setattr(original_native.MingResponseAdapter,'prepare',forbidden)
-    config=dict(pg_version='0.9.5',rank=2,alpha=2.,seed=7,response_shape=[1,2,2,4,4],
+    config=dict(pg_version='0.11.0',rank=2,alpha=2.,seed=7,response_shape=[1,2,2,4,4],
         batch_size=2,steps=3,lr=.001,d_lr_mult=18.,critic_width=4)
     base=component_factory(dict(operation='fresh',particle_bank=None,new_teacher_or_trajectory_calls=0))
     base_state=deepcopy(base.state_dict());base_path=tmp_path/'synthetic-original-base.pt'
@@ -76,7 +76,7 @@ def staged(tmp_path,monkeypatch):
         conditions=torch.ones(2,1),teacher_origins=origins,cache_id='NEW-Ming-ordered-synthetic-two-rows',
         fixture=True,owner_admission=lambda request:True)
     return dict(config=config,cache=frozen,base_identity=identity,device='cpu',fixture=True,
-        cohort_id='NEW-Ming-cached-fresh95-software-v1',component_factory=component_factory,
+        cohort_id='NEW-Ming-cached-scoped-software-v1',component_factory=component_factory,
         owner_admission=lambda request:True),tmp_path,base_state
 
 def opened(staged,name='fresh'):
@@ -85,7 +85,7 @@ def opened(staged,name='fresh'):
 
 def test_new_original_Parameters_policy_receipt_before_optimizers_zeroUP_critic_KEEP(staged,monkeypatch):
     assert ownership.installed_owner()['seven_module_RECORD_ownership_verified']is True
-    initialize=policy.initialize;game=api.ConditionalPG095;seen=[]
+    initialize=policy.initialize;game=api.ConditionalParticleGAN;seen=[]
     def initialized(slider,critic,*args):
         identities=[id(p)for p in slider.parameters()]+[id(p)for p in critic.parameters()]
         original=deepcopy(critic.state_dict());receipt=initialize(slider,critic,*args)
@@ -97,7 +97,7 @@ def test_new_original_Parameters_policy_receipt_before_optimizers_zeroUP_critic_
         assert seen and backend.metadata()['fresh_initialization']['receipt']==seen[-1]
         assert kwargs['particles']is None and kwargs['response_scale']==1.
         return game(backend,*args,**kwargs)
-    monkeypatch.setattr(policy,'initialize',initialized);monkeypatch.setattr(api,'ConditionalPG095',constructed)
+    monkeypatch.setattr(policy,'initialize',initialized);monkeypatch.setattr(api,'ConditionalParticleGAN',constructed)
     with opened(staged)as owner:
         assert owner.game.completed_steps==0 and owner.game.prior is None
         assert owner.game.state_dict()['config']['backend']['fresh_initialization']['receipt']==seen[0]
@@ -120,7 +120,7 @@ def test_new_a1_QR_moment_deterministic_KEEP_base_and_caller_RNG(staged):
             assert torch.count_nonzero(layer.lora_up.weight)==0
         assert equal(base,model.state_dict())
     assert all(p.requires_grad==flag for p,flag in flags)
-    assert all('_ming_explicit_fresh95_owner'not in vars(m)and'_ming_response_binding'not in vars(m)for m in model.modules())
+    assert all('_ming_explicit_scoped_owner'not in vars(m)and'_ming_response_binding'not in vars(m)for m in model.modules())
     assert all('forward'not in vars(m)for _,m in owner.attachment.targets)
     assert torch.equal(before,torch.get_rng_state())
     with opened(staged,'b')as again:
@@ -140,7 +140,7 @@ def test_new_ONE_update_whole_FULL_optimizers_RNG_and_RAW_native_no_init(staged,
     monkeypatch.setattr(policy,'initialize',forbidden)
     with open_training(directory=root/'resume',mode='resume',resume=full,**options)as resumed:
         assert resumed.inherited_steps==1 and equal(state,resumed.game.state_dict())
-    monkeypatch.setattr(api,'load_cache',forbidden);monkeypatch.setattr(api,'ConditionalPG095',forbidden)
+    monkeypatch.setattr(api,'load_cache',forbidden);monkeypatch.setattr(api,'ConditionalParticleGAN',forbidden)
     with open_inference(raw,component_factory=component_factory,owner_admission=lambda request:True)as inferred:
         assert not hasattr(inferred,'game')and not hasattr(inferred,'critic')
         assert equal(network,inferred.native.network.state_dict())
@@ -189,7 +189,7 @@ def test_new_early_intent_cache_EMA_refusal_and_retryable_foreign_safe_cleanup(s
     monkeypatch.setattr(late.attachment,'_restore_mode',fail_mode_once)
     with pytest.raises(RuntimeError,match='fail-once owned mode'):late.close()
     assert late.closing and not late.closed and len(late.attachment.pending_modes)==1
-    assert late.attachment.pending_owner and all(vars(m).get('_ming_explicit_fresh95_owner')is late.attachment for m,_,_ in late.attachment.pending_owner)
+    assert late.attachment.pending_owner and all(vars(m).get('_ming_explicit_scoped_owner')is late.attachment for m,_,_ in late.attachment.pending_owner)
     with pytest.raises(RuntimeError,match='cleanup'):late.response(None)
     late.close();assert late.closed and not late.attachment.pending_owner
     # A later foreign checkpoint callback is never overwritten by owned cleanup.
@@ -208,11 +208,11 @@ def test_new_early_intent_cache_EMA_refusal_and_retryable_foreign_safe_cleanup(s
 
     marked=opened(staged,'foreign-marker');module=marked.model
     forward=marked.attachment.pending_forwards[0][3];foreign_marker=object()
-    module._ming_explicit_fresh95_owner=foreign_marker
+    module._ming_explicit_scoped_owner=foreign_marker
     with pytest.raises(RuntimeError,match='foreign Ming ownership marker'):marked.close()
-    assert module._ming_explicit_fresh95_owner is foreign_marker
+    assert module._ming_explicit_scoped_owner is foreign_marker
     assert marked.attachment.pending_forwards[0][0].forward is forward
-    module._ming_explicit_fresh95_owner=marked.attachment;marked.close();assert marked.closed
+    module._ming_explicit_scoped_owner=marked.attachment;marked.close();assert marked.closed
     flagged=opened(staged,'foreign-flag');parameter=flagged.attachment.flags[0][0]
     parameter.requires_grad_(True)
     with pytest.raises(RuntimeError,match='foreign Ming requires-grad'):flagged.close()

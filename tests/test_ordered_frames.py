@@ -1,11 +1,11 @@
-"""Ordered native response geometry and actual shared PG0.9.5 software checks."""
+"""Ordered native response geometry and actual shared PG0.11.0 software checks."""
 from copy import deepcopy
 from dataclasses import replace
 import pytest
 import torch
 from tests.test_native import TinyMing, fixture, row, equal
 from particle_sliders.native_lora import LoRANetwork
-from particle_sliders.pg09_backends import save_adapter, load_adapter
+from particle_sliders.backends import save_adapter, load_adapter
 
 ordered = pytest.importorskip('ming_native.ordered_frames', reason='isolated native ordered-frame product required')
 

@@ -12,7 +12,7 @@ import tomllib
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMIT = '3dd672a7f9b8c169daef90fd63e4bb42b9ddc423'
+COMMIT = 'c13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78'
 PREFIX = 'packages/particle-sliders-core/'
 
 
@@ -31,8 +31,11 @@ def main(argv=None):
     with ZipFile(args.core_wheel) as archive:
         packaged = {name: hashlib.sha256(archive.read(name)).hexdigest() for name in archive.namelist()
                     if name.startswith(('particle_sliders/', 'concept_slider_core/')) and not name.endswith('/')}
-    if packaged != closure:
-        raise SystemExit('built core wheel differs from the recursive Git source/data closure')
+    if not packaged or any(closure.get(name) != digest for name, digest in packaged.items()):
+        raise SystemExit('built core wheel contains sources outside the verified Git tree')
+    expected = set(json.loads((ROOT / 'profiles/native-candidate.lock.json').read_text())['source_sha256'])
+    if set(packaged) != expected:
+        raise SystemExit('built core wheel inventory changed; review its packaging first')
     pyproject = git('show', COMMIT + ':' + PREFIX + 'pyproject.toml')
     metadata = tomllib.loads(pyproject.decode())['project']
     path = ROOT / 'profiles/native-candidate.lock.json'
@@ -41,7 +44,7 @@ def main(argv=None):
         raise SystemExit('core PG dependency differs; do not infer a new cohort')
     lock.update(commit=COMMIT, version=metadata['version'],
                 shared_wheel_sha256=hashlib.sha256(args.core_wheel.read_bytes()).hexdigest(),
-                source_sha256=dict(sorted(closure.items())),
+                source_sha256=dict(sorted(packaged.items())),
                 source_roots=['concept_slider_core', 'particle_sliders'],
                 source_closure_schema='recursive-package-files-v1',
                 core_git_tree=git('rev-parse', COMMIT + '^{tree}').decode().strip(),

@@ -29,7 +29,7 @@ def main(argv=None):
     torch.default_generator.manual_seed(319)
     sys.path.insert(0, str(ROOT / 'tests'))
     from test_native import fixture, row, equal, COHORT, NATIVE
-    from particle_sliders.pg09 import ConditionalPG09
+    from particle_sliders.engine import ConditionalParticleGAN
     from particle_sliders.field_critic import FieldCritic
     identity = COHORT.product_identity()
     lock = COHORT.require_cohort()
@@ -47,7 +47,7 @@ def main(argv=None):
         if args.action == 'produce':
             if identity['profile'] != 'public-0.11' or receipt['pg_version'] != '0.9.3':
                 raise RuntimeError('produce requires the actual public core0.11/PG0.9.3 environment')
-            game = ConditionalPG09(adapter, rows, FieldCritic(2, 2, width=4), conditions=conditions,
+            game = ConditionalParticleGAN(adapter, rows, FieldCritic(2, 2, width=4), conditions=conditions,
                                    total_steps=4, response_domain='continuous_field')
             game.step()
             packet = game.state_dict()

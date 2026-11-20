@@ -4,21 +4,21 @@ import hashlib,math
 from pathlib import Path
 import torch
 from particle_sliders.field_critic import seed_initialization_rng
-from particle_sliders.pg095 import ConditionalPG095
+from particle_sliders.engine import ConditionalParticleGAN
 from ming_native.native import learning_rate_overrides
 from ming_native.ordered_frames import OrderedFrameCritic,FEATURE_PROFILE
 from . import PROFILE,ownership,policy
 from .cache import load_cache,to_device,validate_base
 from .util import canonical,equal,new_directory,read_packet,save_packet,write_json
 
-FULL_SCHEMA='Ming-native-ordered-explicit-cached-fresh95-v1-FULL'
-RAW_SCHEMA='Ming-native-ordered-explicit-cached-fresh95-v1-RAW'
-ORIGINAL_PROFILE='native-pg095-3dd672a7'
+FULL_SCHEMA='Ming-native-ordered-explicit-cached-scoped-v1-FULL'
+RAW_SCHEMA='Ming-native-ordered-explicit-cached-scoped-v1-RAW'
+ORIGINAL_PROFILE='native-current-engine'
 
 def configuration(value):
     if not isinstance(value,dict):raise ValueError('explicit original ordered-native configuration required')
     required={'pg_version','rank','alpha','seed','response_shape','batch_size','steps','lr','d_lr_mult','critic_width'}
-    if set(value)!=required or value['pg_version']!='0.9.5':raise ValueError('exact native PG095 adapter-only recipe required')
+    if set(value)!=required or value['pg_version']!='0.11.0':raise ValueError('exact native ParticleGAN adapter-only recipe required')
     for key,low,high in(('rank',1,128),('seed',0,2**63-101),('batch_size',2,512),('steps',1,10000),('critic_width',1,4096)):
         if type(value[key])is not int or not low<=value[key]<=high:raise ValueError('invalid recipe: '+key)
     if type(value['alpha'])not in(int,float)or not math.isfinite(value['alpha'])or value['alpha']<=0:
@@ -59,7 +59,7 @@ class NativeOwner(ownership.Owner):
     def response(self,row,*,strength=1.,seed=7):
         """Original ordered native velocity only; not a finished RGBA generator."""
         from particle_sliders.lifecycle import _network_observation
-        from particle_sliders.pg09_backends import ResponseRow
+        from particle_sliders.backends import ResponseRow
         self.require_open()
         if type(seed)is not int or not 0<=seed<2**63-100 or type(strength)not in(int,float)or not math.isfinite(strength):
             raise ValueError('explicit finite response scale/seed required')
@@ -127,7 +127,7 @@ class Training(NativeOwner):
             self.backend=ReceiptBackend(self.native,self.initialization,self.sources,self.cache_identity)
             # The real original shared engine owns optimizers/math/RNG. Receipt
             # already participates in its immutable signature before optimizers.
-            self.game=ConditionalPG095(self.backend,prepared,self.critic,conditions=conditions,particles=None,
+            self.game=ConditionalParticleGAN(self.backend,prepared,self.critic,conditions=conditions,particles=None,
                 total_steps=config['steps'],seed=config['seed'],batch_size=config['batch_size'],
                 response_domain='continuous_field',response_scale=1.,sampling='balanced',preset='bispf_optimized',
                 recipe_overrides=learning_rate_overrides(lr=config['lr'],d_lr_mult=config['d_lr_mult'],prior_lr_mult=None))

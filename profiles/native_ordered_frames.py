@@ -70,12 +70,12 @@ class OrderedFrameCritic(torch.nn.Module):
     def __init__(self, shape, condition_width, *, feature_profile, width=32):
         super().__init__()
         _require_profile(feature_profile)
-        require_cohort('native-pg095-3dd672a7')
+        require_cohort('native-current-engine')
         if (not isinstance(shape, (tuple, list)) or len(shape) != 5 or shape[0] != 1
                 or any(type(v) is not int or v < 1 for v in (*shape, condition_width, width))
                 or not 2 <= shape[2] <= 5):
             raise ValueError('native [1,C,F,H,W] with2..5 ordered target frames and positive integer widths required')
-        from particle_sliders.fibo_hndl import verified_builder
+        from .fibo_hndl import verified_builder
         builder, identity = verified_builder()
         self.native_shape = tuple(shape[1:])
         self.condition_width = condition_width
@@ -97,14 +97,14 @@ class OrderedFrameCritic(torch.nn.Module):
 def build_hndl_game(adapter, prepared_rows, conditions, *, feature_profile=None,
                     total_steps, seed=7, batch_size=2, critic_width=32,
                     lr=None, d_lr_mult=None, prior_lr_mult=None):
-    """Opt-in native 5D field game with the unchanged official PG0.9.5 recipe."""
+    """Opt-in native 5D field game with the unchanged official PG0.11.0 recipe."""
     rates = learning_rate_overrides(lr=lr, d_lr_mult=d_lr_mult, prior_lr_mult=prior_lr_mult)
     _require_profile(feature_profile)
-    require_cohort('native-pg095-3dd672a7')
+    require_cohort('native-current-engine')
     if (not isinstance(adapter, OrderedFrameResponseAdapter)
             or adapter.feature_profile != feature_profile
             or adapter.multi_frame_output is not True
-            or adapter.cohort != 'native-pg095-3dd672a7'):
+            or adapter.cohort != 'native-current-engine'):
         raise ValueError('ordered-frame game requires its explicitly bound native adapter')
     adapter._require_open()
     rows = tuple(prepared_rows)
@@ -123,13 +123,13 @@ def build_hndl_game(adapter, prepared_rows, conditions, *, feature_profile=None,
         raise ValueError('Ming conditions require finite frozen FP32 [row_count, feature_width] tensor')
     if type(seed) is not int or not 0 <= seed < 2**63 - 100:
         raise ValueError('invalid seed')
-    from particle_sliders.pg09 import ConditionalPG09
+    from particle_sliders.engine import ConditionalParticleGAN
     from particle_sliders.field_critic import seed_initialization_rng
     device = next(adapter.network.parameters()).device
     devices = _cuda_rng_devices(device)
     with torch.random.fork_rng(devices=devices):
         seed_initialization_rng(seed, devices)
         critic = OrderedFrameCritic(shape, conditions.shape[1], feature_profile=feature_profile, width=critic_width).to(device)
-        return ConditionalPG09(adapter, rows, critic, conditions=conditions.detach().clone(),
+        return ConditionalParticleGAN(adapter, rows, critic, conditions=conditions.detach().clone(),
             total_steps=total_steps, seed=seed, batch_size=batch_size,
             response_domain='continuous_field', recipe_overrides=rates)

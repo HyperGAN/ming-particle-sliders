@@ -3,14 +3,14 @@ from dataclasses import fields
 import math
 from pathlib import Path
 import torch
-from particle_sliders.pg09_backends import PreparedResponse,ResponseRow
+from particle_sliders.backends import PreparedResponse,ResponseRow
 from ming_native.constants import BASE_MODEL_ID
 from ming_native.native import UPSTREAM_COMMIT,_check_condition
 from ming_native.ordered_frames import FEATURE_PROFILE
 from . import PROFILE,ownership
 from .util import canonical,read_packet,save_packet,source_record,tree
 
-SCHEMA='Ming-completed-ordered-native-prepared-cache-fresh95-v1'
+SCHEMA='Ming-completed-ordered-native-prepared-cache-scoped-v1'
 
 def file_record(row):
     if (not isinstance(row,dict)or set(row)!={'path','bytes','sha256'}
