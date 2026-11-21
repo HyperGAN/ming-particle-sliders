@@ -143,4 +143,7 @@ comparison. One gain applies to each native denoiser call, including the
 batched guidance branches. The output retains the pipeline's ordered frames
 and the returned trace records native timesteps and actual strengths.
 Pretrained scheduled effects are pending. This API requires a caller-owned
-pipeline with native model admission and conditioning.
+pipeline with native model admission and conditioning. The stable and native
+Ming distributions use separate environments. In an existing native runtime,
+load the standalone `ming/scheduled_render.py` from this checkout with
+`runpy.run_path` and use its `render` function with the existing native owner.
