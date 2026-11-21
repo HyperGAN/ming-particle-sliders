@@ -12,7 +12,7 @@ and [portable numbers](docs/finished-output-rate.json). These original-source
 research results do not qualify the package's default native/sampler paths.
 
 
-Explicit LR controls and qualification scope: [LEARNING-RATES.md](LEARNING-RATES.md).
+See the [learning-rate controls](LEARNING-RATES.md) and [archived CPU qualification](https://github.com/HyperGAN/ming-particle-sliders/blob/b7fcee2d35848570f3e92777020685995bcf6ccb/docs/evidence/cpu-qualification.json).
 
 Product repository for particle sliders on
 [inclusionAI/Ming-Image-0.1-Design-Layer](https://huggingface.co/inclusionAI/Ming-Image-0.1-Design-Layer).
