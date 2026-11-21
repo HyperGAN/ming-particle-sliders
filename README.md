@@ -159,3 +159,65 @@ zero on each seed. All 16 Layer 1 images passed integrity, and three of
 the four neutral images reached the scorer's ceiling. Constant remains
 the best tested choice alongside the tied schedules.
 [Per-case evidence](evidence/crisp-layer1-raw256-scheduled-strength.json)
+
+### Activation gating on the ordered two-frame sampler
+
+Use `LatentGatePlan` with the same attached RAW adapter and native sampler to
+test CFP, CLABS, or a matched random control. Import it from
+`ming.scheduled_render`, or take both `LatentGatePlan` and `render` from the
+same `runpy.run_path` result in the isolated native runtime. Supply a built
+wheel from core [`b1f780d`](https://github.com/HyperGAN/particle-sliders/commit/b1f780decc516808cfd3019d5e5b674457161f86).
+Ming verifies and loads the standalone shared gate module from that wheel.
+The wheel need not be installed over the checkpoint's original core.
+
+```python
+from ming.scheduled_render import LatentGatePlan, render
+
+gate = LatentGatePlan(
+    core_wheel=verified_core_wheel,
+    method="cfp",
+    parameter=calibrated_threshold,
+    direction=fitted_ordered_direction,
+    calibration_sha256=calibration_record_sha256,
+)
+output, trace = render(
+    pipeline, scale_adapter=raw_adapter.scaled, gate_plan=gate,
+    strength=calibrated_nominal_strength, num_frames_per_prompt=2,
+    num_inference_steps=native_step_count, **native_inputs,
+)
+```
+
+The readout takes the FP32 spatial mean of the live pre-edit latent in
+`[channel, frame]` order. In the cached-reference consumer, frame zero is the
+original reconstruction and frame one is the requested layer. A CFP or CLABS
+direction is a unit tensor of shape `[channels, 2]` fitted for this readout.
+The conditional latent produces one decision per positive-width Euler
+interval. That decision scales the attached RAW edit for both ordered frames
+and the same batched guidance branches as a fixed schedule. The native final
+zero-width call still runs at scale zero and advances no gate state. The
+trace records it separately from eligible steps and includes projections,
+probabilities, effective strengths, realized firing rate and the sum of
+absolute strengths weighted by the native sigma spans. Replay on the same
+pipeline by dividing `trace["effective_strengths"]` by the nominal strength
+and supplying the resulting `step_gains`.
+
+For CLABS, supply the calibrated bias as `parameter`, an integer RNG `seed`,
+and the fitted `mean`, `std`, `epsilon`, `setpoint`, `proportional_gain`,
+`integral_gain` and `beta` in `clabs`. For `method="random"`, use the matched
+target firing rate as `parameter` with an explicit seed and no direction.
+Fit on matched attribute and neutral pre-edit trajectories with identical
+reference, frame order, initial noise, solver and geometry. Calibrate the
+threshold or bias in active RAW rollouts on separate cases using the shared
+calibration protocol. A calibration rollout can return the shared
+`GateUsage` with this trace's `fired` and `eligible` counts. Compare finished
+held-out Layer 1 results against matched OFF, constant and random arms at their
+realized budgets, with the separate output integrity check.
+[Shared steering equations and workflow](https://github.com/HyperGAN/particle-sliders/blob/b1f780decc516808cfd3019d5e5b674457161f86/docs/strength-schedules.md#cfp-and-clabs)
+
+The retained CRISP RAW256 schedule panels provide finished images, final
+latents and fixed-strength traces. The prepared teacher cache provides
+paired response fields at frozen input rows. Fitting and active calibration
+still need matching pre-edit two-frame trajectories. The native software
+fixture verifies the hook using the locked cached-reference consumer, actual
+Euler scheduler and a tiny attached LoRA. Adaptive finished-image gain is
+unmeasured. The retained constant qualification is unchanged.
