@@ -1,0 +1,225 @@
+{
+  "profile": "CRISP Layer 1 RAW256 ordered image decomposition",
+  "raw_sha256": "68cb79352d210917cce59bd57c4b80154dda0e22a88aad3e32ac09a8742849d7",
+  "geometry": {
+    "width": 512,
+    "height": 512,
+    "ordered_frames": 2,
+    "requested_layer": 1,
+    "steps": 12,
+    "native_CFG": 1
+  },
+  "actual_sigmas": [
+    1.0,
+    0.9836065769195557,
+    0.9642857313156128,
+    0.9411764740943909,
+    0.9130434989929199,
+    0.8780487775802612,
+    0.8333333134651184,
+    0.774193525314331,
+    0.692307710647583,
+    0.5714285969734192,
+    0.375,
+    0.0,
+    0.0
+  ],
+  "measure": "Equal-case CRISP Layer 1 intended-effect intensity ON minus matched OFF",
+  "nominal_strength": 0.5,
+  "matched_cases": 4,
+  "leaders": [
+    "constant",
+    "early"
+  ],
+  "active_profile": "constant",
+  "arms": {
+    "constant": {
+      "mean_effect_gain": 0.04166666666666666,
+      "integrity_passes": 4,
+      "native_timesteps": [
+        1000.0,
+        983.6065673828125,
+        964.2857055664062,
+        941.1764526367188,
+        913.0435180664062,
+        878.0487670898438,
+        833.3333129882812,
+        774.1935424804688,
+        692.3077392578125,
+        571.4285888671875,
+        375.0,
+        0.0
+      ],
+      "effective_strengths": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "cases": [
+        {
+          "case": "card-seed31",
+          "seed": 31,
+          "effect_gain": 0.16666666666666663,
+          "on_sha256": "8eaca368c3b4dd907e5d9c1ccdbea8c5058067bc3253df19be39f59a75b13f72",
+          "off_sha256": "61364d6813a38dcb967730aa0dd1ec7881f3ff386e2cec56c85ce19d91e1a897"
+        },
+        {
+          "case": "card-seed43",
+          "seed": 43,
+          "effect_gain": 0.0,
+          "on_sha256": "95a92a22ae74f887374a03b979c36f54c71d89a987136ebbc848c67bea6b85d9",
+          "off_sha256": "e82973ac5b5d9537b726d62553e7a131d495dbaa1e84e158b2bb8fd40e69f743"
+        },
+        {
+          "case": "card-seed101",
+          "seed": 101,
+          "effect_gain": 0.0,
+          "on_sha256": "2284988b9510e10abd44b220338e83178f197765708e1cea65dd75de46e12ac8",
+          "off_sha256": "e766e3f85f96eb5153182220d8d019e6ed58cc53bcbfa7d6ad2424fb61625bab"
+        },
+        {
+          "case": "card-seed103",
+          "seed": 103,
+          "effect_gain": 0.0,
+          "on_sha256": "9ec0a7e1e343ff4e112b6df72a669f54e538b910d1f2c8d5bc780af96f68e2fd",
+          "off_sha256": "ce4c718e644b0c2870a0aaa1ecda31d166de922bd7312daefea323d499db02b9"
+        }
+      ]
+    },
+    "early": {
+      "mean_effect_gain": 0.04166666666666666,
+      "integrity_passes": 4,
+      "native_timesteps": [
+        1000.0,
+        983.6065673828125,
+        964.2857055664062,
+        941.1764526367188,
+        913.0435180664062,
+        878.0487670898438,
+        833.3333129882812,
+        774.1935424804688,
+        692.3077392578125,
+        571.4285888671875,
+        375.0,
+        0.0
+      ],
+      "effective_strengths": [
+        0.75,
+        0.75,
+        0.75,
+        0.75,
+        0.75,
+        0.75,
+        0.75,
+        0.75,
+        0.75,
+        0.4318182231966075,
+        0.25,
+        0.5
+      ],
+      "cases": [
+        {
+          "case": "card-seed31",
+          "seed": 31,
+          "effect_gain": 0.16666666666666663,
+          "on_sha256": "e20dbdbb7b03cfd62da35ab64f117bd8f3efde4dd53a1d258b81c27de0e35f2d",
+          "off_sha256": "61364d6813a38dcb967730aa0dd1ec7881f3ff386e2cec56c85ce19d91e1a897"
+        },
+        {
+          "case": "card-seed43",
+          "seed": 43,
+          "effect_gain": 0.0,
+          "on_sha256": "9859506acf7798755ede61c7dd7e72efa0270b34bb2c21ec2de0615aa672fbdf",
+          "off_sha256": "e82973ac5b5d9537b726d62553e7a131d495dbaa1e84e158b2bb8fd40e69f743"
+        },
+        {
+          "case": "card-seed101",
+          "seed": 101,
+          "effect_gain": 0.0,
+          "on_sha256": "e01afaa16a5590dd916c714e32f724cdce904b4f6f689c21eca133ac2fa3b68f",
+          "off_sha256": "e766e3f85f96eb5153182220d8d019e6ed58cc53bcbfa7d6ad2424fb61625bab"
+        },
+        {
+          "case": "card-seed103",
+          "seed": 103,
+          "effect_gain": 0.0,
+          "on_sha256": "d370726e2928b0d4cd31f7b9ea7496975779a4af170b7dff2a825c0a7f4611d5",
+          "off_sha256": "ce4c718e644b0c2870a0aaa1ecda31d166de922bd7312daefea323d499db02b9"
+        }
+      ]
+    },
+    "late": {
+      "mean_effect_gain": 0.0,
+      "integrity_passes": 4,
+      "native_timesteps": [
+        1000.0,
+        983.6065673828125,
+        964.2857055664062,
+        941.1764526367188,
+        913.0435180664062,
+        878.0487670898438,
+        833.3333129882812,
+        774.1935424804688,
+        692.3077392578125,
+        571.4285888671875,
+        375.0,
+        0.0
+      ],
+      "effective_strengths": [
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.5681817768033925,
+        0.75,
+        0.5
+      ],
+      "cases": [
+        {
+          "case": "card-seed31",
+          "seed": 31,
+          "effect_gain": 0.0,
+          "on_sha256": "336c10d80808ed945cb584c4aad3ba7f8d338e16bf1d1f5e67f2c0d9eab31285",
+          "off_sha256": "61364d6813a38dcb967730aa0dd1ec7881f3ff386e2cec56c85ce19d91e1a897"
+        },
+        {
+          "case": "card-seed43",
+          "seed": 43,
+          "effect_gain": 0.0,
+          "on_sha256": "7b20efe5160516744942d9c12d8011a22abafa500f9961c8bce8cf68a988fbab",
+          "off_sha256": "e82973ac5b5d9537b726d62553e7a131d495dbaa1e84e158b2bb8fd40e69f743"
+        },
+        {
+          "case": "card-seed101",
+          "seed": 101,
+          "effect_gain": 0.0,
+          "on_sha256": "98a44d031046dce500514001a814b4b3850993ff6b781c74af4cd88ed1e0d5b5",
+          "off_sha256": "e766e3f85f96eb5153182220d8d019e6ed58cc53bcbfa7d6ad2424fb61625bab"
+        },
+        {
+          "case": "card-seed103",
+          "seed": 103,
+          "effect_gain": 0.0,
+          "on_sha256": "30698392530362b5af9d5b885232232c8089e31d4b1aecdde6cf14ba3665d020",
+          "off_sha256": "ce4c718e644b0c2870a0aaa1ecda31d166de922bd7312daefea323d499db02b9"
+        }
+      ]
+    }
+  },
+  "new_optimizer_updates": 0,
+  "ema_decay": null
+}
