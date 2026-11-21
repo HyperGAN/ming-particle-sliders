@@ -142,8 +142,14 @@ staged Ming pipeline and attached RAW adapter used for your constant
 comparison. One gain applies to each native denoiser call, including the
 batched guidance branches. The output retains the pipeline's ordered frames
 and the returned trace records native timesteps and actual strengths.
-Pretrained scheduled effects are pending. This API requires a caller-owned
+This API requires a caller-owned
 pipeline with native model admission and conditioning. The stable and native
 Ming distributions use separate environments. In an existing native runtime,
 load the standalone `ming/scheduled_render.py` from this checkout with
 `runpy.run_path` and use its `render` function with the existing native owner.
+
+The four-case native CRISP Layer 1 RAW256 study tied early-heavy and constant
+strength at +0.04167 mean intended effect at nominal 0.5. Late-heavy scored
+0. All twelve finished Layer 1 outputs passed independent integrity. Use
+constant strength for this tested profile.
+[Per-case evidence](evidence/crisp-layer1-raw256-scheduled-strength.json)
