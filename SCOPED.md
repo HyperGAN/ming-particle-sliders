@@ -2,11 +2,11 @@
 
 `ming_native_scoped` is a separate helper distribution, `ming-particle-sliders-explicit-scoped==0.1.0`, installed beside the exact isolated `ming-particle-sliders-native==0.2.0.dev3` namespace. It does not add a route to the default `ming` wheel, change `ming-train`, `ming-infer` or ComfyUI, or make the default scaffold execute a GAN. The default and isolated native product distributions must remain in separate environments, as the original guard requires.
 
-Four new installed-helper software cases passed locally, with one original tiny PG0.11.0 update, whole-state resume and RAW inference. The genuine owning RECORD, original core577/native7/PG68 Source and origin checks passed. This establishes that software scope only. For this NEW fresh profile, pretrained Ming, authentic native completed-cache availability, finished RGBA rendering, a stable CLI, CUDA execution and the public installation route remain unqualified. Existing native proofs and finished-output evidence keep their original scope. Publishing the unchanged Source does not repeat or expand those observations.
+The installed-helper suite covers a tiny update, whole-state resume and RAW inference. The genuine owning RECORD, original core577/native7/PG68 Source and origin checks passed. This establishes that software scope only. For this NEW fresh profile, pretrained Ming, authentic native completed-cache availability, finished RGBA rendering, a stable CLI, CUDA execution and the public installation route remain unqualified. Existing native proofs and finished-output evidence keep their original scope. Publishing the unchanged Source does not repeat or expand those observations.
 
 ## Original laws and saved results
 
-Fresh mode uses the original attached LoRA Modules and Parameter objects. Its down matrices receive the public PG0.11.0 deterministic QR initializer at the actual original Kaiming `a=1` scale (variance `1/fan_in`); UP stays exactly zero. The original ordered HNDL critic is constructor KEEP. This native adapter-only route has no particle bank or router. A receipt participates in the immutable game signature before optimizer creation. The original full ordered velocity fields, constant-one conditions, response scale1, public recipe/noise, optimizer formula and requested native geometry remain.
+Fresh mode uses the original attached LoRA Modules and Parameter objects. Its down matrices receive the public PG0.11.1 deterministic QR initializer at the actual original Kaiming `a=1` scale (variance `1/fan_in`); UP stays exactly zero. The original ordered HNDL critic is constructor KEEP. This native adapter-only route has no particle bank or router. A receipt participates in the immutable game signature before optimizer creation. The original full ordered velocity fields, constant-one conditions, response scale1, public recipe/noise, optimizer formula and requested native geometry remain.
 
 No model-weight EMA is permitted in training, saved states, exports or inference. Keep every completed search, RAW/FULL checkpoint, teacher response and first observation intact. Historical G0.012 and G0.036 remain tied at RAW32 with equal-case intended-effect gain0.04166666666666666 over four cases. G0.001 remains technical missing at28/32, not zero. This fresh-only opt-in does not retag or resume any old cohort and does not change rates, ties, defaults, eligibility or released weights. Use the original Source/profile for original saved packets; no migration is implied.
 
@@ -14,7 +14,7 @@ No model-weight EMA is permitted in training, saved states, exports or inference
 
 The repository's existing `scripts/build_native_candidate.py` constructs the isolated native owner from the original profile files and lock. In this Source revision, its four copied Python/profile bodies, lock and two generated native identity bodies match the exact seven native leaves used in the local software observation. No native body or lock is changed by this addition.
 
-Use a dedicated owned environment containing the exact original dependencies and metadata required by the unchanged native guard: core0.15.1 atc13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78 (or its exact admitted archive), PG0.11.0, HNDL0.10.0, and HyperGAN5f368a3770cf5bdae0448995c9f76e29af8049f7 with the original native runtime/dependency closure. Versions alone are insufficient: core origin, recursive Source/data, PG, HNDL/HyperGAN and original model-class checks remain active. The helper also verifies its own seven installed Python leaves against its genuine owning RECORD. An editable Source path or hand-written RECORD is not an installation substitute.
+Use a dedicated owned environment containing the exact original dependencies and metadata required by the unchanged native guard: core0.15.2 atec1161f5d74481be3540cb0dfa63d0e8f8b54e90 (or its exact admitted archive), PG0.11.1, HNDL0.10.0, and HyperGAN5f368a3770cf5bdae0448995c9f76e29af8049f7 with the original native runtime/dependency closure. Versions alone are insufficient: core origin, recursive Source/data, PG, HNDL/HyperGAN and original model-class checks remain active. The helper also verifies its own seven installed Python leaves against its genuine owning RECORD. An editable Source path or hand-written RECORD is not an installation substitute.
 
 With those exact prerequisites already present, the existing native builder and the separate helper can be installed into that owned environment:
 
@@ -44,7 +44,7 @@ from ming_native_scoped import open_training, open_inference, save_prepared_cach
 from ming_native_scoped.api import configuration
 
 config = configuration({
-    "pg_version": "0.11.0", "rank": rank, "alpha": alpha, "seed": seed,
+    "pg_version": "0.11.1", "rank": rank, "alpha": alpha, "seed": seed,
     "response_shape": full_response_shape, "batch_size": batch_size,
     "steps": horizon, "lr": chosen_lr, "d_lr_mult": chosen_d_mult,
     "critic_width": critic_width,

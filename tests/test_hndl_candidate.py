@@ -9,7 +9,7 @@ from tests.test_native import fixture, row, equal, NATIVE, COHORT, PROFILE
 MingHNDLCritic, build_hndl_game = NATIVE.MingHNDLCritic, NATIVE.build_hndl_game
 
 pytestmark = pytest.mark.skipif(COHORT.product_identity()['namespace'] != 'ming_native',
-                                reason='separate exact core0.12/PG0.11.0/HyperGAN/HNDL environment required')
+                                reason='separate exact core0.12/PG0.11.1/HyperGAN/HNDL environment required')
 
 
 def game():
@@ -162,8 +162,8 @@ def test_candidate_wheel_metadata_matches_its_runtime():
     requirements = {r.name: r for r in map(Requirement, product.requires) if r.marker is None}
     assert requirements['particle-sliders-core'].url == (
         'git+https://github.com/HyperGAN/particle-sliders.git@'
-        'c13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78#subdirectory=packages/particle-sliders-core')
-    assert str(requirements['particlegan'].specifier) == '==0.11.0'
+        'ec1161f5d74481be3540cb0dfa63d0e8f8b54e90#subdirectory=packages/particle-sliders-core')
+    assert str(requirements['particlegan'].specifier) == '==0.11.1'
     assert str(requirements['hndl'].specifier) == '==0.10.0'
     assert requirements['hypergan'].url.endswith('5f368a3770cf5bdae0448995c9f76e29af8049f7')
 
