@@ -133,3 +133,14 @@ Pretrained Ming, authentic native cache availability, finished RGBA rendering,
 stable CLI/default use and public packaging remain unqualified.
 See [the scoped API](SCOPED.md) for the actual API, exact dependency/ownership
 boundary and fresh-only initialization policy.
+
+## Scheduled strength on an owned ordered-image pipeline
+
+Call `ming.scheduled_render.render(pipeline, scale_adapter=network.scaled,
+step_gains=gains, num_inference_steps=len(gains), **inputs)` on the same
+staged Ming pipeline and attached RAW adapter used for your constant
+comparison. One gain applies to each native denoiser call, including the
+batched guidance branches. The output retains the pipeline's ordered frames
+and the returned trace records native timesteps and actual strengths.
+Pretrained scheduled effects are pending. This API requires a caller-owned
+pipeline with native model admission and conditioning.
