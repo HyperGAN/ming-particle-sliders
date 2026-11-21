@@ -9,7 +9,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 OLD = '4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231'
-NEW = 'c13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78'
+NEW = 'ec1161f5d74481be3540cb0dfa63d0e8f8b54e90'
 
 
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()

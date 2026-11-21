@@ -12,7 +12,7 @@ import tomllib
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMIT = 'c13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78'
+COMMIT = 'ec1161f5d74481be3540cb0dfa63d0e8f8b54e90'
 PREFIX = 'packages/particle-sliders-core/'
 
 

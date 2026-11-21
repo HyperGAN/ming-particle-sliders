@@ -48,7 +48,7 @@ def guard():
     # All original installed product, core origin/recursive closure, PG, HNDL,
     # HyperGAN and dependency checks execute. No admission monkeypatch/overlay.
     identity=require('native-current-engine')
-    if metadata.version('particlegan')!='0.11.0' or source_record(pg_init.__file__)['sha256']!=INIT_SHA:
+    if metadata.version('particlegan')!='0.11.1' or source_record(pg_init.__file__)['sha256']!=INIT_SHA:
         raise RuntimeError('exact public ParticleGAN initializer Source required')
     return identity
 

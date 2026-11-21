@@ -97,7 +97,7 @@ class OrderedFrameCritic(torch.nn.Module):
 def build_hndl_game(adapter, prepared_rows, conditions, *, feature_profile=None,
                     total_steps, seed=7, batch_size=2, critic_width=32,
                     lr=None, d_lr_mult=None, prior_lr_mult=None):
-    """Opt-in native 5D field game with the unchanged official PG0.11.0 recipe."""
+    """Opt-in native 5D field game with the unchanged official PG0.11.1 recipe."""
     rates = learning_rate_overrides(lr=lr, d_lr_mult=d_lr_mult, prior_lr_mult=prior_lr_mult)
     _require_profile(feature_profile)
     require_cohort('native-current-engine')

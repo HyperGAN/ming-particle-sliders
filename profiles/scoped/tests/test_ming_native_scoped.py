@@ -50,7 +50,7 @@ def staged(tmp_path,monkeypatch):
     def forbidden(*args,**kwargs):raise AssertionError('no preparation/teacher/pretrained renderer in NEW software cases')
     monkeypatch.setattr(FrozenResponseAdapter,'prepare',forbidden)
     monkeypatch.setattr(original_native.MingResponseAdapter,'prepare',forbidden)
-    config=dict(pg_version='0.11.0',rank=2,alpha=2.,seed=7,response_shape=[1,2,2,4,4],
+    config=dict(pg_version='0.11.1',rank=2,alpha=2.,seed=7,response_shape=[1,2,2,4,4],
         batch_size=2,steps=3,lr=.001,d_lr_mult=18.,critic_width=4)
     base=component_factory(dict(operation='fresh',particle_bank=None,new_teacher_or_trajectory_calls=0))
     base_state=deepcopy(base.state_dict());base_path=tmp_path/'synthetic-original-base.pt'

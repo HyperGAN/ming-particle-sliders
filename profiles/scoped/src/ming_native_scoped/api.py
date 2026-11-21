@@ -18,7 +18,7 @@ ORIGINAL_PROFILE='native-current-engine'
 def configuration(value):
     if not isinstance(value,dict):raise ValueError('explicit original ordered-native configuration required')
     required={'pg_version','rank','alpha','seed','response_shape','batch_size','steps','lr','d_lr_mult','critic_width'}
-    if set(value)!=required or value['pg_version']!='0.11.0':raise ValueError('exact native ParticleGAN adapter-only recipe required')
+    if set(value)!=required or value['pg_version']!='0.11.1':raise ValueError('exact native ParticleGAN adapter-only recipe required')
     for key,low,high in(('rank',1,128),('seed',0,2**63-101),('batch_size',2,512),('steps',1,10000),('critic_width',1,4096)):
         if type(value[key])is not int or not low<=value[key]<=high:raise ValueError('invalid recipe: '+key)
     if type(value['alpha'])not in(int,float)or not math.isfinite(value['alpha'])or value['alpha']<=0:

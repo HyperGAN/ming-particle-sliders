@@ -11,7 +11,7 @@ from ming import cohort
 
 def test_packaged_public_lock_is_exact_root_lock():
     assert files('ming').joinpath('core.lock.json').read_bytes() == (Path(__file__).resolve().parents[1] / 'core.lock.json').read_bytes()
-    assert cohort.require_cohort()['commit'] == 'c13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78'
+    assert cohort.require_cohort()['commit'] == 'ec1161f5d74481be3540cb0dfa63d0e8f8b54e90'
 
 
 @pytest.mark.parametrize('damage', ['version', 'origin', 'source'])

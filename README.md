@@ -1,6 +1,6 @@
 > **Calculated memory planning:** training **132 GiB VRAM / 64 GiB host RAM** (512×512, B=2, BF16 staged DiT; FP32 LoRA/critic); single RAW response **20 GiB VRAM / 64 GiB host RAM** (512×512). See [MEMORY.md](MEMORY.md) for checkpointed/phase variants, attention fallback and exact limits. These are conservative calculated budgets, not measured peaks.
 
-> **Current source: core 0.15.1 / ParticleGAN 0.11.0.** This is a fresh cohort; older versioned evidence below remains historical. The [earlier adoption record](docs/pg095-adoption.md) documents previous runtime evidence.
+> **Current source: core 0.15.2 / ParticleGAN 0.11.1.** This is a fresh cohort; older versioned evidence below remains historical. The [earlier adoption record](https://github.com/HyperGAN/ming-particle-sliders/blob/0405b08e33c988508bc93fb8cada1caec1fd766a/docs/pg095-adoption.md) documents the captured runtime.
 
 # Ming-Image Design-Layer particle sliders
 
@@ -19,7 +19,7 @@ Product repository for particle sliders on
 The layout follows [anima-particle-sliders](https://github.com/HyperGAN/anima-particle-sliders)
 and [krea2-particle-sliders](https://github.com/HyperGAN/krea2-particle-sliders):
 this repo owns the Hub id, the ComfyUI node, and the train/infer entrypoints.
-[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/c13890f8e2a1ecf1dc8eb9f2a37f9187cb9fea78/packages/particle-sliders-core)
+[particle-sliders-core](https://github.com/HyperGAN/particle-sliders/tree/ec1161f5d74481be3540cb0dfa63d0e8f8b54e90/packages/particle-sliders-core)
 owns gmix and `winning_formulation()`.
 
 The installed CLI and ComfyUI surfaces remain a product scaffold. An
@@ -68,7 +68,7 @@ immutable origin and locked source hashes. The wheel includes its lock records.
 The formulation note is [FORMULATION.md](FORMULATION.md). The pin record is
 [core.lock.json](core.lock.json).
 
-This package uses shared core 0.15.1 with ParticleGAN 0.11.0. The historical core 0.3.0 scaffold pin is preserved separately in
+This package uses shared core 0.15.2 with ParticleGAN 0.11.1. The historical core 0.3.0 scaffold pin is preserved separately in
 the lock record. This updates metadata compatibility; it does not enable
 native Ming execution or retarget any training run or checkpoint.
 
@@ -126,8 +126,8 @@ weights.
 
 Install the default CLI and ComfyUI scaffold from the project root. Build the
 isolated native candidate with `scripts/build_native_candidate.py` and install
-the resulting wheel in a separate environment. Both packages pin core 0.15.1
-and ParticleGAN 0.11.0. The [prior installation record](docs/pg094-current.md)
+the resulting wheel in a separate environment. Both packages pin core 0.15.2
+and ParticleGAN 0.11.1. The [prior installation record](https://github.com/HyperGAN/ming-particle-sliders/blob/0405b08e33c988508bc93fb8cada1caec1fd766a/docs/pg094-current.md)
 retains the earlier source and checkpoint boundaries.
 
 ## Scoped cached initialization
