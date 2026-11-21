@@ -46,21 +46,13 @@ repository does not redistribute its weights.
 
 ## Shared core
 
-Pin this commit. Do not pin `mikkel/sliders-conceptmod`, and do not vendor a
-ParticleGAN checkout next to the product.
-
 ```bash
 python -m pip install .
 ```
 
-This installs the stable product identity and the exact core dependency recorded
-in `requirements.txt`:
-
-```text
-particle-sliders-core @ git+https://github.com/HyperGAN/particle-sliders.git@ddb41423bcefc1fe76cd94d0f9b367353b3ea137#subdirectory=packages/particle-sliders-core
-```
-
-`particlegan` comes in transitively from that package. Train, infer, and
+This installs the stable product and the exact core dependency recorded in
+[`requirements.txt`](requirements.txt). The core installs `particlegan`
+0.11.1. Train, infer, and
 Comfy call `particle_sliders.winning_formulation` and then `stamp.require()`
 to check metadata. They do not construct or execute a GAN, routed adapter,
 critic, or regularizer. Every check also verifies the installed core version,
