@@ -152,4 +152,10 @@ The four-case native CRISP Layer 1 RAW256 study tied early-heavy and constant
 strength at +0.04167 mean intended effect at nominal 0.5. Late-heavy scored
 0. All twelve finished Layer 1 outputs passed independent integrity. Use
 constant strength for this tested profile.
+
+A separate four-seed panel compared constant, first-quarter emphasis and
+middle-half emphasis at equal integrated strength 0.5. All three tied at
+zero on each seed. All 16 Layer 1 images passed integrity, and three of
+the four neutral images reached the scorer's ceiling. Constant remains
+the best tested choice alongside the tied schedules.
 [Per-case evidence](evidence/crisp-layer1-raw256-scheduled-strength.json)
