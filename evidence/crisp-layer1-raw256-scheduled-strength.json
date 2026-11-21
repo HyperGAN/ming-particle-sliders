@@ -221,5 +221,222 @@
     }
   },
   "new_optimizer_updates": 0,
-  "ema_decay": null
+  "ema_decay": null,
+  "four_seed_holdout": {
+    "scope": "Four new noise seeds with original CRISP Layer 1 conditioning and equal native integrated strength.",
+    "matched_cases": 4,
+    "nominal_strength": 0.5,
+    "new_finished_layer1_images": 16,
+    "separate_reconstructions": 16,
+    "integrity_passes": 16,
+    "unresolved_prior_neutral_seed": 421,
+    "neutral_cases_at_scoring_ceiling": 3,
+    "new_optimizer_updates": 0,
+    "retained_profile": "constant",
+    "comparison_sha256": "d2e2dae63cc82c676fbe7a1fe99c84b21e3f89cfd89cdccd195ed06d04cb5e30",
+    "render_sha256": "1602cb59133c421f3ea3924b800abc7da9fa3e41c71a6b55711ef8469b906d33",
+    "integrity_sha256": "08d19cf6199a8976cbdb287d023f85e1ecbcadfee3fea1a5d85ac0c760ed5fe6",
+    "sample_guard_sha256": "7ca75ac5958981a0f375465c096e4ba6b6a176597e51602019f1aebf7d40fd0d",
+    "decode_guard_sha256": "bef482adfaec734f59444324419403bfdcfd7eb01e60783d5004babc07aba2a4",
+    "arms": {
+      "constant": {
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ],
+        "actual_sigmas": [
+          1.0,
+          0.9836065769195557,
+          0.9642857313156128,
+          0.9411764740943909,
+          0.9130434989929199,
+          0.8780487775802612,
+          0.8333333134651184,
+          0.774193525314331,
+          0.692307710647583,
+          0.5714285969734192,
+          0.375,
+          0.0,
+          0.0
+        ],
+        "mean_effect_gain": 0,
+        "cases": [
+          {
+            "seed": 439,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "2471e91289ea6694248f30eec1b5d4bd689aa94398caeae2d9419399ae9b0ac3",
+            "on_layer1_sha256": "d938533a5c8db01f13f70753777576c406ca8921a91e7e7c6f8d0c6170f0fd42"
+          },
+          {
+            "seed": 457,
+            "OFF_intensity": 0.8333333333333334,
+            "ON_intensity": 0.8333333333333334,
+            "gain": 0,
+            "off_layer1_sha256": "81cdd56ff2ef52d8ec66d64da712e28ef34b6301e17a7222db26e2d799e0376a",
+            "on_layer1_sha256": "c0e56e2c5d0e53859c43ea4af415c80db5f98de7cb66bc3899be03a942d5021e"
+          },
+          {
+            "seed": 479,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "e0d0676c8d01951d2fef4fe4921732415f82f839fcf0d9764bd1f43943d7fce3",
+            "on_layer1_sha256": "951858af0ab7608e097221b22fe364bb577a019cf5d0fb89ca8091c10d559fa4"
+          },
+          {
+            "seed": 503,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "5fd4fc2a16817af2ff125de1e02827e9ba6b660792a7a16ab01886f9f047190d",
+            "on_layer1_sha256": "94805ea32754aef7e71982b6ec1a6a0a5426216c435d277a42c1fcff672a9d1f"
+          }
+        ]
+      },
+      "first-quarter": {
+        "effective_strengths": [
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.515151471036393,
+          0.4166666666666667,
+          0.4166666666666667,
+          0.4166666666666667,
+          0.5
+        ],
+        "actual_sigmas": [
+          1.0,
+          0.9836065769195557,
+          0.9642857313156128,
+          0.9411764740943909,
+          0.9130434989929199,
+          0.8780487775802612,
+          0.8333333134651184,
+          0.774193525314331,
+          0.692307710647583,
+          0.5714285969734192,
+          0.375,
+          0.0,
+          0.0
+        ],
+        "mean_effect_gain": 0,
+        "cases": [
+          {
+            "seed": 439,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "2471e91289ea6694248f30eec1b5d4bd689aa94398caeae2d9419399ae9b0ac3",
+            "on_layer1_sha256": "14241ab34afc317d1ebd4865f85ac9875c8bb0ce141ba423bd799a2c2d2a0c4e"
+          },
+          {
+            "seed": 457,
+            "OFF_intensity": 0.8333333333333334,
+            "ON_intensity": 0.8333333333333334,
+            "gain": 0,
+            "off_layer1_sha256": "81cdd56ff2ef52d8ec66d64da712e28ef34b6301e17a7222db26e2d799e0376a",
+            "on_layer1_sha256": "59771c414cd2876627246af559de740ecc523cefce516673dcb30baa7bf6b37c"
+          },
+          {
+            "seed": 479,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "e0d0676c8d01951d2fef4fe4921732415f82f839fcf0d9764bd1f43943d7fce3",
+            "on_layer1_sha256": "58811dfafaaebb5910d44abfba9c992a9e6b3b465dd5609a51766ec58c79228f"
+          },
+          {
+            "seed": 503,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "5fd4fc2a16817af2ff125de1e02827e9ba6b660792a7a16ab01886f9f047190d",
+            "on_layer1_sha256": "ce675f783f816a6b9614f185c4cfcb3358433ca2c6d6899f8eb89c78a58fa7b6"
+          }
+        ]
+      },
+      "middle-half": {
+        "effective_strengths": [
+          0.25,
+          0.25,
+          0.25,
+          0.25,
+          0.25,
+          0.25,
+          0.25,
+          0.6022727934454104,
+          0.75,
+          0.75,
+          0.41666666666666663,
+          0.5
+        ],
+        "actual_sigmas": [
+          1.0,
+          0.9836065769195557,
+          0.9642857313156128,
+          0.9411764740943909,
+          0.9130434989929199,
+          0.8780487775802612,
+          0.8333333134651184,
+          0.774193525314331,
+          0.692307710647583,
+          0.5714285969734192,
+          0.375,
+          0.0,
+          0.0
+        ],
+        "mean_effect_gain": 0,
+        "cases": [
+          {
+            "seed": 439,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "2471e91289ea6694248f30eec1b5d4bd689aa94398caeae2d9419399ae9b0ac3",
+            "on_layer1_sha256": "a50f6423b3efe774b59951f345506c5ca9e1c503b404a3de8ec98162fa560e46"
+          },
+          {
+            "seed": 457,
+            "OFF_intensity": 0.8333333333333334,
+            "ON_intensity": 0.8333333333333334,
+            "gain": 0,
+            "off_layer1_sha256": "81cdd56ff2ef52d8ec66d64da712e28ef34b6301e17a7222db26e2d799e0376a",
+            "on_layer1_sha256": "41aa79df164f1e7d538bfbf6711088776659910d3a145f89602ecefa87b0fb24"
+          },
+          {
+            "seed": 479,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "e0d0676c8d01951d2fef4fe4921732415f82f839fcf0d9764bd1f43943d7fce3",
+            "on_layer1_sha256": "5a8af2a319bc7c5d60c35127668e9d229fcd3803cd29b8ba9520ce25b9b8c27d"
+          },
+          {
+            "seed": 503,
+            "OFF_intensity": 1.0,
+            "ON_intensity": 1.0,
+            "gain": 0,
+            "off_layer1_sha256": "5fd4fc2a16817af2ff125de1e02827e9ba6b660792a7a16ab01886f9f047190d",
+            "on_layer1_sha256": "c86614ce688f6bd2553851de3ad7c13f6875ee078a5a96cd01f1b04721ed774c"
+          }
+        ]
+      }
+    }
+  }
 }
