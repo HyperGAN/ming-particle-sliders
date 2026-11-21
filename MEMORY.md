@@ -41,7 +41,7 @@ Cache bound for the training profile: **32 rows**, each with three FP32 native f
 
 ## Activation, cache and host calculation
 
-The auditable inputs and per-profile subtotals are in [source-facts.json](docs/memory/source-facts.json). For a transformer envelope, let `N=image tokens+bounded text tokens`, `D=hidden width`, `I=FFN width`, `H=attention heads`, `L=covered blocks`, and `B=simultaneously retained native graphs`:
+The [archived calculation report][source-facts] retains the original inputs and per-profile subtotals. For a transformer envelope, let `N=image tokens+bounded text tokens`, `D=hidden width`, `I=FFN width`, `H=attention heads`, `L=covered blocks`, and `B=simultaneously retained native graphs`:
 
 - One-block inference allowance: `4B(16ND+6NI)` bytes. The4-byte coefficient deliberately covers FP32 intermediates even for BF16 weights;16 and6 allow Q/K/V/output, normalization/residual, gated FFN and adapter intermediates.
 - Uncheckpointed training allowance: `4LB(16ND+6NI)`; checkpointed allowance: `4(4LBND+2B(16ND+6NI))`. Checkpointing saves layer inputs and recomputes block internals; it does not remove the frozen model, adapter or critic.
@@ -58,7 +58,9 @@ This profile's text-state allowance is **41,943,040 bytes** (0.039 GiB): no enco
 - [ming/native.py](ming/native.py)
 - [ming/constants.py](ming/constants.py)
 - [docs/native-binding.md](docs/native-binding.md)
-- [Captured architecture, published file/index sizes and arithmetic](docs/memory/source-facts.json) retains exact model revisions, metadata SHA256s and direct Hugging Face config URLs. No weights were downloaded or opened for this calculation.
-- Optimizer facts: the pinned ParticleGAN0.11.1 `recipes.py` (`bispf_optimized`), `optim/dualnorm.py` momentum/state branch, and `optim/direction_blend.py` FP64 normals. These are part of the dependency selected by the repository's existing core lock; their source facts are recorded in the combined calculation report.
+- The [archived calculation report][source-facts] retains exact model revisions, metadata SHA256s, direct Hugging Face config URLs and the optimizer source metadata used for the calculation. No weights were downloaded or opened for this calculation.
+- The [current core lock](core.lock.json) selects ParticleGAN 0.11.1.
 
 Documentation was calculated from source and published metadata on 2026-11-14. No model construction, import of Torch/Diffusers, forward pass, benchmark, sampling, training or new GPU work was performed.
+
+[source-facts]: https://github.com/HyperGAN/ming-particle-sliders/blob/99f10bc411f3999937f75e9755b7398b17095674/docs/memory/source-facts.json
