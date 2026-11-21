@@ -15,7 +15,7 @@ from zipfile import ZipFile
 CORE_REVISION = "b1f780decc516808cfd3019d5e5b674457161f86"
 CORE_MODULE = "particle_sliders/adaptive_steering.py"
 CORE_MODULE_SHA256 = "5fc2a5256a935eca9cecc365d9ac62e5e94cdc375d2ab33c5dc26eb344241814"
-_MODULE_NAME = f"_ming_shared_steering_{CORE_REVISION}"
+_MODULE_NAME = f"_ming_shared_steering_{CORE_REVISION}_ready"
 _LOAD_LOCK = Lock()
 _FIXED_DEFAULT = object()
 
@@ -30,15 +30,24 @@ def _shared_steering(core_wheel):
     if sha256(source).hexdigest() != CORE_MODULE_SHA256:
         raise ValueError("Ming requires the exact shared steering module from core PR #269")
     with _LOAD_LOCK:
-        if _MODULE_NAME not in sys.modules:
-            module = ModuleType(_MODULE_NAME)
-            sys.modules[_MODULE_NAME] = module
-            try:
-                exec(compile(source, f"{core_wheel}/{CORE_MODULE}", "exec"), module.__dict__)
-            except BaseException:
-                del sys.modules[_MODULE_NAME]
-                raise
-        return sys.modules[_MODULE_NAME]
+        ready = sys.modules.get(_MODULE_NAME)
+        if ready is not None:
+            return ready
+        module = ModuleType(_MODULE_NAME)
+        loading_name = f"{_MODULE_NAME}_{id(module):x}"
+        module.__name__ = loading_name
+        # Dataclasses need their defining module during execution. Standalone
+        # loads have independent locks, so publish only the completed module.
+        sys.modules[loading_name] = module
+        try:
+            exec(compile(source, f"{core_wheel}/{CORE_MODULE}", "exec"), module.__dict__)
+        except BaseException:
+            del sys.modules[loading_name]
+            raise
+        ready = sys.modules.setdefault(_MODULE_NAME, module)
+        if ready is not module:
+            del sys.modules[loading_name]
+        return ready
 
 
 class LatentGatePlan:

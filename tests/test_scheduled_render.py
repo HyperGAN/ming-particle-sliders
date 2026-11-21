@@ -1,11 +1,13 @@
 """Exercise the installed gate against Ming's locked cached-reference pipeline."""
 
+from concurrent.futures import ThreadPoolExecutor
 from hashlib import sha256
 import importlib.util
 import os
 from pathlib import Path
 from runpy import run_path
 import sys
+from threading import Event
 from types import SimpleNamespace
 from zipfile import ZipFile
 
@@ -117,6 +119,31 @@ def test_ming_rejects_non_core_gate_source(tmp_path):
         archive.writestr(scheduled_render.CORE_MODULE, "raise AssertionError('must not execute')")
     with pytest.raises(ValueError, match="exact shared steering module"):
         make_plan(scheduled_render, path)
+
+
+def test_independently_loaded_native_helpers_only_see_initialized_core(core_wheel, monkeypatch):
+    first = run_path(scheduled_render.__file__)["LatentGatePlan"]
+    second = run_path(scheduled_render.__file__)["LatentGatePlan"]
+    monkeypatch.delitem(sys.modules, scheduled_render._MODULE_NAME, raising=False)
+    started, release = Event(), Event()
+
+    def pause_compile(*args):
+        started.set()
+        assert release.wait(10)
+        return compile(*args)
+
+    monkeypatch.setitem(first.__init__.__globals__, "compile", pause_compile)
+    settings = dict(core_wheel=core_wheel, method="random", parameter=0.0,
+                    seed=7, calibration_sha256="1" * 64)
+    with ThreadPoolExecutor(max_workers=2) as workers:
+        initiating = workers.submit(first, **settings)
+        try:
+            assert started.wait(10)
+            concurrent = workers.submit(second, **settings).result(timeout=10)
+        finally:
+            release.set()
+        original = initiating.result(timeout=10)
+    assert original._steering is concurrent._steering
 
 
 @pytest.mark.parametrize("probability", [0.0, 1.0])
