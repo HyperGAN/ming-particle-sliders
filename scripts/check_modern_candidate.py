@@ -48,7 +48,7 @@ def main(argv=None):
             receipt.update(packet_sha256=sha(args.packet), packet_pg_version=packet['config']['pg_version'], completed_steps=packet['completed_steps'])
         else:
             if lock['commit'] != NEW or identity['version'] != '0.2.0.dev3' or args.producer_receipt is None:
-                raise RuntimeError('consumption requires the current 3dd672a7 candidate and producer receipt')
+                raise RuntimeError('consumption requires the current native candidate and producer receipt')
             producer = json.loads(args.producer_receipt.read_text())
             if producer['core_commit'] not in (OLD, '3c25f785d14073e6f627c0fa9d2297a041c79913'):
                 raise RuntimeError('unrecognized historical producer cohort')

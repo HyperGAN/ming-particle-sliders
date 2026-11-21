@@ -87,12 +87,12 @@
     "product_version": "0.1.1.dev12",
     "core_commit": "4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231",
     "lock_sha256": "4845c2a1b0d4154e6110cb1b050c67c1910eab8658bfe4ef20d93633fc558c9b",
-    "lock_path": "profiles/history/native-dev12-core4abc.lock.json"
+    "lock_url": "https://github.com/HyperGAN/ming-particle-sliders/blob/0405b08e33c988508bc93fb8cada1caec1fd766a/profiles/history/native-dev12-core4abc.lock.json"
   },
   "previous_modern": {
     "product_version": "0.1.1.dev13",
     "core_commit": "a794e3b4a8813b012f2c4faa3da82b78d4a90214",
-    "lock_path": "profiles/history/native-dev13-corea794.lock.json"
+    "lock_url": "https://github.com/HyperGAN/ming-particle-sliders/blob/0405b08e33c988508bc93fb8cada1caec1fd766a/profiles/history/native-dev13-corea794.lock.json"
   },
   "note": "Current installed core and ParticleGAN; archived results keep their original runtime."
 }

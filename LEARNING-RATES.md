@@ -10,7 +10,7 @@ descriptions below retain their own source-cohort scope.
 
 The isolated native `ming_native.native.build_hndl_game` accepts `lr`,
 `d_lr_mult`, and `prior_lr_mult` keyword arguments. Omitted overrides preserve
-ParticleGAN 0.9.4 defaults (base 0.012, critic multiplier 1.5). Explicit base
+the explicitly selected ParticleGAN BISPF defaults (base 0.012, critic multiplier 1.5). Explicit base
 and critic values must be finite and positive. Any non-null prior multiplier
 is refused because this adapter-only game has no trainable particle bank.
 

@@ -40,7 +40,7 @@ def product_identity():
         identity = _json(files(__package__).joinpath('identity.json').read_text(), 'product identity')
         expected = {
             'ming_native': ('ming-particle-sliders-native', '0.2.0.dev3', 'native-current-engine', 'ming-particle-sliders',
-                            '1b1c292c7ec0dae2592bdd82de16fc65f1f043d8a686f47606264a84a1f40059'),
+                            '332422e52e951b8b9d395e340bcbb1989252471b159ee95a3658181f6f91a682'),
         }
         namespace = __package__.rsplit('.', 1)[-1]
         if namespace not in expected or tuple(identity.get(k) for k in ('distribution', 'version', 'profile', 'incompatible_distribution', 'lock_sha256')) != expected[namespace]:
