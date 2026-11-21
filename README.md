@@ -214,10 +214,10 @@ held-out Layer 1 results against matched OFF, constant and random arms at their
 realized budgets, with the separate output integrity check.
 [Shared steering equations and workflow](https://github.com/HyperGAN/particle-sliders/blob/b1f780decc516808cfd3019d5e5b674457161f86/docs/strength-schedules.md#cfp-and-clabs)
 
-The retained CRISP RAW256 schedule panels provide finished images, final
-latents and fixed-strength traces. The prepared teacher cache provides
-paired response fields at frozen input rows. Fitting and active calibration
-still need matching pre-edit two-frame trajectories. The native software
-fixture verifies the hook using the locked cached-reference consumer, actual
-Euler scheduler and a tiny attached LoRA. Adaptive finished-image gain is
-unmeasured. The retained constant qualification is unchanged.
+The CRISP Layer 1 RAW256 study calibrated CFP at 21 and CLABS at 23 firings
+out of 44 eligible intervals against a 50% target. Each gate tied its own
+sigma-weighted equal-strength constant on all four held-out seeds. Both
+gates and both constants averaged zero intended-effect gain over OFF.
+All finished images passed the independent integrity check. Three of the
+four OFF images reached the score ceiling.
+[Per-case evidence and replay strengths](evidence/crisp-layer1-raw256-activation-gates.json)

@@ -1,0 +1,570 @@
+{
+  "profile": "CRISP Layer 1 RAW256",
+  "scope": "Four held-out seeds of the same Card Making reference at 512 by 512, using the cached-reference two-frame sampler. Scores use the requested Layer 1 image.",
+  "raw": {
+    "sha256": "68cb79352d210917cce59bd57c4b80154dda0e22a88aad3e32ac09a8742849d7",
+    "bytes": 33635295
+  },
+  "weights": "raw",
+  "ema_decay": null,
+  "new_optimizer_updates": 0,
+  "sampler": {
+    "steps": 12,
+    "guidance_scale": 1,
+    "requested_layer_index": 1,
+    "nominal_strength": 0.5,
+    "sigma_grid": [
+      1.0,
+      0.9836065769195557,
+      0.9642857313156128,
+      0.9411764740943909,
+      0.9130434989929199,
+      0.8780487775802612,
+      0.8333333134651184,
+      0.774193525314331,
+      0.692307710647583,
+      0.5714285969734192,
+      0.375,
+      0.0,
+      0.0
+    ],
+    "replay": "Divide effective_strengths by nominal_strength for step_gains."
+  },
+  "calibration": {
+    "shared_core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+    "target_firing_rate": 0.5,
+    "signal": "FP32 spatial mean of the pre-edit latent in channel and frame order",
+    "direction": [
+      [
+        -0.03828423054603945,
+        0.3376182434567426
+      ],
+      [
+        0.4276125153857498,
+        0.4903062270386991
+      ],
+      [
+        -0.03204250061739481,
+        0.1146556184368268
+      ],
+      [
+        -0.07053738292658532,
+        0.04462809000096144
+      ],
+      [
+        0.06584818928387029,
+        0.10589964382430682
+      ],
+      [
+        0.05593829961740544,
+        0.24672769334725136
+      ],
+      [
+        0.08957227876726159,
+        0.04713981593244502
+      ],
+      [
+        -0.07344486576566833,
+        -0.21069446315365917
+      ],
+      [
+        0.07453511776484477,
+        0.09657168681005934
+      ],
+      [
+        -0.0387586092347068,
+        -0.2025461857188112
+      ],
+      [
+        -0.01771125777576653,
+        -0.17625064596853174
+      ],
+      [
+        0.020802638852250983,
+        -0.1970727617962918
+      ],
+      [
+        -0.12437504304854982,
+        -0.3376565342953194
+      ],
+      [
+        0.06144737265067062,
+        0.13779266439983984
+      ],
+      [
+        0.05290317343830044,
+        0.12963783998483847
+      ],
+      [
+        -0.023616143418971672,
+        0.010317242852753558
+      ]
+    ],
+    "methods": {
+      "cfp": {
+        "parameter": 0.16074488556478175,
+        "calibration_usage": {
+          "fired": 21,
+          "eligible": 44
+        }
+      },
+      "clabs": {
+        "parameter": -0.6517022205181385,
+        "calibration_usage": {
+          "fired": 23,
+          "eligible": 44
+        },
+        "feedback": {
+          "mean": 0.23797178819288753,
+          "std": 0.2557715298175662,
+          "epsilon": 1e-06,
+          "setpoint": 0.75,
+          "proportional_gain": 1.0,
+          "integral_gain": 0.2,
+          "beta": 0.2
+        }
+      }
+    }
+  },
+  "measure": {
+    "observer": "Qwen/Qwen3-VL-8B-Instruct",
+    "intended_effect": "Mean of six groups for the requested card motif and text. Report each arm as equal-case ON intensity minus matched OFF intensity.",
+    "integrity": "Separate categorical failure check on each finished image.",
+    "reused_first_effect_observations": 17,
+    "new_first_effect_observations": 1,
+    "final_observation_image_sha256": "d9e89974d7bbd995ea1dfb8c05f52a48c072f66a01d49cc074c5af8a61ef7004"
+  },
+  "cases": [
+    {
+      "case": "card-seed439",
+      "seed": 439,
+      "source_image_sha256": "a52347559312b7ddbf435d042bdc32c83efe8750d3071580e6a8eceee2412112",
+      "OFF": {
+        "image_sha256": "2471e91289ea6694248f30eec1b5d4bd689aa94398caeae2d9419399ae9b0ac3",
+        "intensity": 1.0,
+        "integrity": "pass"
+      },
+      "cfp": {
+        "image_sha256": "73404b7d182550b377fed4b0d38405f10dc2454b64896705885f1efd81ebaa49",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.060975611209869385,
+        "fired": 5,
+        "eligible": 11,
+        "gain_vs_equal_dose_constant": 0.0
+      },
+      "cfp-constant": {
+        "image_sha256": "628d9bdc02b99bf18fe58d650bae1b1326b26b926c6999b1314f61b002a0fe37",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.060975611209869385
+      },
+      "clabs": {
+        "image_sha256": "ea4a1339e7bd324ed1d7ef26de37d6852c1bfe838356bae53936d2cf46fa3e07",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.029411762952804565,
+        "fired": 3,
+        "eligible": 11,
+        "gate_seed": 439,
+        "gain_vs_equal_dose_constant": 0.0
+      },
+      "clabs-constant": {
+        "image_sha256": "d9e89974d7bbd995ea1dfb8c05f52a48c072f66a01d49cc074c5af8a61ef7004",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.029411762952804565,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.029411762952804565
+      }
+    },
+    {
+      "case": "card-seed457",
+      "seed": 457,
+      "source_image_sha256": "a52347559312b7ddbf435d042bdc32c83efe8750d3071580e6a8eceee2412112",
+      "OFF": {
+        "image_sha256": "81cdd56ff2ef52d8ec66d64da712e28ef34b6301e17a7222db26e2d799e0376a",
+        "intensity": 0.8333333333333334,
+        "integrity": "pass"
+      },
+      "cfp": {
+        "image_sha256": "804a69db2ef9bd6b9d54bac09b87e307523a20e30b9b68780bfb49606c7131e7",
+        "intensity": 0.8333333333333334,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.11290323734283447,
+        "fired": 7,
+        "eligible": 11,
+        "gain_vs_equal_dose_constant": 0.0
+      },
+      "cfp-constant": {
+        "image_sha256": "a290c27a89d3b31baf01132c0aea20ffecb2c857ac0fd64c0b087bf62936847e",
+        "intensity": 0.8333333333333334,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.11290323734283447,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.11290323734283447
+      },
+      "clabs": {
+        "image_sha256": "7d6c2e51b115ff443beee0869e25ef603a962a179fc7917b0e6a807d0802638f",
+        "intensity": 0.8333333333333334,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.1538461446762085,
+        "fired": 8,
+        "eligible": 11,
+        "gate_seed": 457,
+        "gain_vs_equal_dose_constant": 0.0
+      },
+      "clabs-constant": {
+        "image_sha256": "de32ab6c091730fe15dbcb0e93be961bf3d6461ef57c825d9b8aeec92d4ff836",
+        "intensity": 0.8333333333333334,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.1538461446762085,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.1538461446762085
+      }
+    },
+    {
+      "case": "card-seed479",
+      "seed": 479,
+      "source_image_sha256": "a52347559312b7ddbf435d042bdc32c83efe8750d3071580e6a8eceee2412112",
+      "OFF": {
+        "image_sha256": "e0d0676c8d01951d2fef4fe4921732415f82f839fcf0d9764bd1f43943d7fce3",
+        "intensity": 1.0,
+        "integrity": "pass"
+      },
+      "cfp": {
+        "image_sha256": "a43b31681d3cdf3846848eacba93ef1803cc55b8231f1d796160d1e5b3f1add2",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.060975611209869385,
+        "fired": 5,
+        "eligible": 11,
+        "gain_vs_equal_dose_constant": 0.0
+      },
+      "cfp-constant": {
+        "image_sha256": "70565d568e1cb3182c98c76167e0bd4e90f558ec923a31654d388e54c6176faa",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.060975611209869385
+      },
+      "clabs": {
+        "image_sha256": "a43b31681d3cdf3846848eacba93ef1803cc55b8231f1d796160d1e5b3f1add2",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.060975611209869385,
+        "fired": 5,
+        "eligible": 11,
+        "gate_seed": 479,
+        "gain_vs_equal_dose_constant": 0.0
+      },
+      "clabs-constant": {
+        "image_sha256": "70565d568e1cb3182c98c76167e0bd4e90f558ec923a31654d388e54c6176faa",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.060975611209869385
+      }
+    },
+    {
+      "case": "card-seed503",
+      "seed": 503,
+      "source_image_sha256": "a52347559312b7ddbf435d042bdc32c83efe8750d3071580e6a8eceee2412112",
+      "OFF": {
+        "image_sha256": "5fd4fc2a16817af2ff125de1e02827e9ba6b660792a7a16ab01886f9f047190d",
+        "intensity": 1.0,
+        "integrity": "pass"
+      },
+      "cfp": {
+        "image_sha256": "c60001fd72efe91ff2b7c5df902528b6a66ce9f1b1a2a7421131400eea87707c",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.060975611209869385,
+        "fired": 5,
+        "eligible": 11,
+        "gain_vs_equal_dose_constant": 0.0
+      },
+      "cfp-constant": {
+        "image_sha256": "6fb9970e66177ed295544e2a0d6eaa077a944ddede52023c1bac1153d6cb6384",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.060975611209869385,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.060975611209869385
+      },
+      "clabs": {
+        "image_sha256": "444b2f0e51db37d00137c88bf39d81ae960ac86cd6090fd5558792d37b80b8ab",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.06583598256111145,
+        "fired": 5,
+        "eligible": 11,
+        "gate_seed": 503,
+        "gain_vs_equal_dose_constant": 0.0
+      },
+      "clabs-constant": {
+        "image_sha256": "fdf627949efbc70c0139feebae6c86191ea278dd7aebbc232836f545ed123022",
+        "intensity": 1.0,
+        "integrity": "pass",
+        "ON_minus_OFF": 0.0,
+        "effective_strengths": [
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.06583598256111145,
+          0.0
+        ],
+        "sigma_weighted_strength": 0.06583598256111145
+      }
+    }
+  ],
+  "comparison": {
+    "cfp": {
+      "gate_mean_ON_minus_OFF": 0,
+      "constant_mean_ON_minus_OFF": 0,
+      "gate_minus_equal_dose_constant": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 4
+    },
+    "clabs": {
+      "gate_mean_ON_minus_OFF": 0,
+      "constant_mean_ON_minus_OFF": 0,
+      "gate_minus_equal_dose_constant": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 4
+    }
+  },
+  "interpretation": "Both gates tied their own equal-dose controls on all four cases. Three OFF images reached the score ceiling. This result covers only the four tested seeds.",
+  "evidence_sha256": {
+    "terminal": "15961eea3d4d951dc1da54b691470ef28b46a9a99250b247392689a8b934e65c",
+    "native_render": "70a0c175212a1a4ee0583f9bc5938b2e67bdee5ea668abe68ece74171e24c433",
+    "integrity": "0de6d29bbb47eaaeeec9b17fe55f2a278853ecd58ced1842e11ad7c477539ec0",
+    "final_observer": "699b41e9d6fa6fb08cd8c0ea7b6556e3819e04bf24d56edbb3ab7793ccf5536c",
+    "calibration": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+    "instrument": "0008456ab3ea8ae3eb138a6723a69a986ac646c42a3ed68dcdca12f97074ed8a"
+  }
+}
