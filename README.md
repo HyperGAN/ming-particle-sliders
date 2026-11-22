@@ -221,3 +221,13 @@ gates and both constants averaged zero intended-effect gain over OFF.
 All finished images passed the independent integrity check. Three of the
 four OFF images reached the score ceiling.
 [Per-case evidence and replay strengths](evidence/crisp-layer1-raw256-activation-gates.json)
+
+### Scoped comparison after a preregistered OFF screen
+
+Four new OFF cases passed integrity. Three had full intended effect
+before steering. On the one eligible case, CFP and CLABS both fired on
+6 of 11 intervals at nominal strength 0.5 and produced the same image.
+The original independent observer scored it 6/6, versus 5/6 for both OFF
+and the dose-matched constant. All timed arms passed image integrity.
+The +1/6 gain applies to the one eligible case.
+[Per-arm doses and evidence](evidence/crisp-layer1-raw256-selected-activation-gates.json)
