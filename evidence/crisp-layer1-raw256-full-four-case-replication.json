@@ -1,0 +1,406 @@
+{
+  "schema": "ming-crisp-layer1-raw256-all-case-replication-v1",
+  "scope": "A preregistered four-seed replication for the original neutral CRISP reference and requested Layer 1. All four cases contribute equally.",
+  "weights": "raw",
+  "ema_decay": null,
+  "RAW_sha256": "68cb79352d210917cce59bd57c4b80154dda0e22a88aad3e32ac09a8742849d7",
+  "native_source_image_sha256": "a52347559312b7ddbf435d042bdc32c83efe8750d3071580e6a8eceee2412112",
+  "nominal_strength": 0.5,
+  "sigma_grid": [
+    1.0,
+    0.9836065769195557,
+    0.9642857313156128,
+    0.9411764740943909,
+    0.9130434989929199,
+    0.8780487775802612,
+    0.8333333134651184,
+    0.774193525314331,
+    0.692307710647583,
+    0.5714285969734192,
+    0.375,
+    0.0,
+    0.0
+  ],
+  "calibration_target_firing_rate": 0.5,
+  "original_calibration_firings": {
+    "cfp": 21,
+    "clabs": 23,
+    "eligible_per_method": 44
+  },
+  "realized_replication_firings": {
+    "cfp": 22,
+    "clabs": 26,
+    "eligible_per_method": 44
+  },
+  "logical_arms": 20,
+  "distinct_qualified_images": 18,
+  "same_dose_rule": "Match each gate’s integrated absolute strength on the positive native sigma intervals, using the original binary32 tolerance.",
+  "cases": [
+    {
+      "seed": 510119524,
+      "off": {
+        "sha256": "5915d53d7e1eca1db9b0bbd1f7b338980469bfe85038937a9530c07347af2bd7",
+        "integrity": "pass",
+        "intensity": 1.0
+      },
+      "methods": {
+        "cfp": {
+          "fired": 5,
+          "eligible": 11,
+          "effective_strengths": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "integrated_absolute_strength": 0.060975611209869385,
+          "constant_strength": 0.060975611209869385,
+          "constant_integrated_absolute_strength": 0.060975611209869385,
+          "adaptive": {
+            "sha256": "7f5490e1746d26dd8841c7d60ce96c70669cb3970cd3e4e4b6a7ebd5854bb86d",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "same_dose_constant": {
+            "sha256": "81fa8721185e51dff97058c655bba115d65bfc31ce4a107779293209146d05a6",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "adaptive_minus_off": 0.0,
+          "adaptive_minus_constant": 0.0,
+          "frozen_gate": {
+            "core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+            "calibration_sha256": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+            "parameter": 0.16074488556478175,
+            "seed": 510119524
+          }
+        },
+        "clabs": {
+          "fired": 6,
+          "eligible": 11,
+          "effective_strengths": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "integrated_absolute_strength": 0.0833333432674408,
+          "constant_strength": 0.0833333432674408,
+          "constant_integrated_absolute_strength": 0.0833333432674408,
+          "adaptive": {
+            "sha256": "925808a06eaa602fb2f7230a6da7ecbcc828f79801867f2181814811cf66df51",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "same_dose_constant": {
+            "sha256": "74ce9c1f64ecda213b5e8cc79ea59fc2d73ed43cd1e514c803e9426e10b01c0f",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "adaptive_minus_off": 0.0,
+          "adaptive_minus_constant": 0.0,
+          "frozen_gate": {
+            "core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+            "calibration_sha256": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+            "parameter": -0.6517022205181385,
+            "seed": 510119524
+          }
+        }
+      }
+    },
+    {
+      "seed": 591396811,
+      "off": {
+        "sha256": "cc555a2483fa3c50f32170ae02e40b415c2a2d88ea3eb6004c5ae01cdb61565f",
+        "integrity": "pass",
+        "intensity": 1.0
+      },
+      "methods": {
+        "cfp": {
+          "fired": 5,
+          "eligible": 11,
+          "effective_strengths": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "integrated_absolute_strength": 0.060975611209869385,
+          "constant_strength": 0.060975611209869385,
+          "constant_integrated_absolute_strength": 0.060975611209869385,
+          "adaptive": {
+            "sha256": "a63e23efa46f24270ca337375990ca0a3a93514df42826032822f052ed0eba1f",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "same_dose_constant": {
+            "sha256": "8bebc0d118ffacddef115a1402ffb7cdfe2463697857953a24555419be24f953",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "adaptive_minus_off": 0.0,
+          "adaptive_minus_constant": 0.0,
+          "frozen_gate": {
+            "core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+            "calibration_sha256": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+            "parameter": 0.16074488556478175,
+            "seed": 591396811
+          }
+        },
+        "clabs": {
+          "fired": 7,
+          "eligible": 11,
+          "effective_strengths": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "integrated_absolute_strength": 0.11290323734283447,
+          "constant_strength": 0.11290323734283447,
+          "constant_integrated_absolute_strength": 0.11290323734283447,
+          "adaptive": {
+            "sha256": "88f0a1bbd511cedfec1a802f036ee140d09806792113d94661affe9647353ce8",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "same_dose_constant": {
+            "sha256": "069835ea62340ff150eb0133841b8538e7c1c5caa04ec1007c8feda59af72dc7",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "adaptive_minus_off": 0.0,
+          "adaptive_minus_constant": 0.0,
+          "frozen_gate": {
+            "core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+            "calibration_sha256": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+            "parameter": -0.6517022205181385,
+            "seed": 591396811
+          }
+        }
+      }
+    },
+    {
+      "seed": 2142398446,
+      "off": {
+        "sha256": "63c07a831196b720760a0cccfbedf7a21d62586bd48068e56729ad031ec05daa",
+        "integrity": "pass",
+        "intensity": 1.0
+      },
+      "methods": {
+        "cfp": {
+          "fired": 5,
+          "eligible": 11,
+          "effective_strengths": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "integrated_absolute_strength": 0.060975611209869385,
+          "constant_strength": 0.060975611209869385,
+          "constant_integrated_absolute_strength": 0.060975611209869385,
+          "adaptive": {
+            "sha256": "07ce6c32c3832e2a0025ef20457ab66bd879740d7372033f8f85ea280dd9f03b",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "same_dose_constant": {
+            "sha256": "a72321f0b0f5620a04674b89ea6e40af201e5f8679998bb7a07cdda9f9aa3ca9",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "adaptive_minus_off": 0.0,
+          "adaptive_minus_constant": 0.0,
+          "frozen_gate": {
+            "core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+            "calibration_sha256": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+            "parameter": 0.16074488556478175,
+            "seed": 2142398446
+          }
+        },
+        "clabs": {
+          "fired": 6,
+          "eligible": 11,
+          "effective_strengths": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "integrated_absolute_strength": 0.0833333432674408,
+          "constant_strength": 0.0833333432674408,
+          "constant_integrated_absolute_strength": 0.0833333432674408,
+          "adaptive": {
+            "sha256": "f0e1d194eb41941a117fd1e6f03c9967a3a7bf79a788c6bad4c1fd01f1f7b3be",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "same_dose_constant": {
+            "sha256": "a51e19852394c83e5b129cc820c736103c0c0860f65399266cf642423c94f4d1",
+            "integrity": "pass",
+            "intensity": 1.0
+          },
+          "adaptive_minus_off": 0.0,
+          "adaptive_minus_constant": 0.0,
+          "frozen_gate": {
+            "core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+            "calibration_sha256": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+            "parameter": -0.6517022205181385,
+            "seed": 2142398446
+          }
+        }
+      }
+    },
+    {
+      "seed": 248071585,
+      "off": {
+        "sha256": "8916d65a25763b806ae3b7648bf600688fc1dacd364f0bd7c6c7249615f733b7",
+        "integrity": "pass",
+        "intensity": 0.8333333333333334
+      },
+      "methods": {
+        "cfp": {
+          "fired": 7,
+          "eligible": 11,
+          "effective_strengths": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "integrated_absolute_strength": 0.11290323734283447,
+          "constant_strength": 0.11290323734283447,
+          "constant_integrated_absolute_strength": 0.11290323734283447,
+          "adaptive": {
+            "sha256": "5e8d48263dd42bbc289800d15e75bff71d5ad093c24bb5b0a6a8db058887b129",
+            "integrity": "pass",
+            "intensity": 0.8333333333333334
+          },
+          "same_dose_constant": {
+            "sha256": "2ff681657fdbee6a13ae2cc07775343a4925fff11e44320fde044703ed855510",
+            "integrity": "pass",
+            "intensity": 0.8333333333333334
+          },
+          "adaptive_minus_off": 0.0,
+          "adaptive_minus_constant": 0.0,
+          "frozen_gate": {
+            "core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+            "calibration_sha256": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+            "parameter": 0.16074488556478175,
+            "seed": 248071585
+          }
+        },
+        "clabs": {
+          "fired": 7,
+          "eligible": 11,
+          "effective_strengths": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "integrated_absolute_strength": 0.11290323734283447,
+          "constant_strength": 0.11290323734283447,
+          "constant_integrated_absolute_strength": 0.11290323734283447,
+          "adaptive": {
+            "sha256": "5e8d48263dd42bbc289800d15e75bff71d5ad093c24bb5b0a6a8db058887b129",
+            "integrity": "pass",
+            "intensity": 0.8333333333333334
+          },
+          "same_dose_constant": {
+            "sha256": "2ff681657fdbee6a13ae2cc07775343a4925fff11e44320fde044703ed855510",
+            "integrity": "pass",
+            "intensity": 0.8333333333333334
+          },
+          "adaptive_minus_off": 0.0,
+          "adaptive_minus_constant": 0.0,
+          "frozen_gate": {
+            "core_revision": "b1f780decc516808cfd3019d5e5b674457161f86",
+            "calibration_sha256": "658e7ae275d71b38708ebb7379bf9160952f614201ccd105f9f0893e61e20c52",
+            "parameter": -0.6517022205181385,
+            "seed": 248071585
+          }
+        }
+      }
+    }
+  ],
+  "mean_intended_effect_gain": {
+    "cfp": {
+      "adaptive_minus_off": 0.0,
+      "adaptive_minus_constant": 0.0
+    },
+    "clabs": {
+      "adaptive_minus_off": 0.0,
+      "adaptive_minus_constant": 0.0
+    }
+  },
+  "preregistration_sha256": "281cdb970590e4b268d03ae7d786d5be7dcb3342f459a3d74ad2dcdc8d9baafc",
+  "native_timing_summary_sha256": "d935f030ed36467e3d7e54f5a49ce534030c65c834766d80897deb21492e3683",
+  "per_image_observation_verification_sha256": "476dc5a5511cb54b4e181468695a05ceeab2a6ef2a85ea6492786fa47fcb4eab",
+  "independent_integrity_sha256": "88d0b3290d81b3ec0eee43b8969b3b3db887c2544c9b9d09511187770b878fc6"
+}
