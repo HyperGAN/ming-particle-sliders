@@ -142,6 +142,9 @@ staged Ming pipeline and attached RAW adapter used for your constant
 comparison. One gain applies to each native denoiser call, including the
 batched guidance branches. The output retains the pipeline's ordered frames
 and the returned trace records native timesteps and actual strengths.
+Pass `record_native_grid=True` to also capture the live sigma endpoints on a
+fixed run. The fixed run then uses the native scheduler validation from the
+gated path, including support for an optional final zero-width interval.
 This API requires a caller-owned
 pipeline with native model admission and conditioning. The stable and native
 Ming distributions use separate environments. In an existing native runtime,
@@ -213,6 +216,60 @@ calibration protocol. A calibration rollout can return the shared
 held-out Layer 1 results against matched OFF, constant and random arms at their
 realized budgets, with the separate output integrity check.
 [Shared steering equations and workflow](https://github.com/HyperGAN/particle-sliders/blob/b1f780decc516808cfd3019d5e5b674457161f86/docs/strength-schedules.md#cfp-and-clabs)
+
+#### Verify equal dose on the native grid
+
+For the frozen CRISP Layer 1 RAW256 sampler, the pinned Ming and CUDA sources
+show that the LoRA coefficient is applied in FP32. The multiply result is
+then rounded to the BF16 tensor dtype. This precision is inferred from those
+sources for that sampler. Corresponding coefficients in other Ming runtimes
+need their own precision check. This verifies scalar dose independently of
+the tensor values or finished-image scores.
+[Pinned CUDA multiplication source](https://github.com/pytorch/pytorch/blob/5811a8d7da873dd699ff6687092c225caffcf1bb/aten/src/ATen/native/cuda/BinaryMulKernel.cu#L33-L39)
+
+Use the shared exact-dose helpers from core
+[`07dbd331`](https://github.com/HyperGAN/particle-sliders/commit/07dbd331c3a548709949032c01ce19e7c64a2520)
+in an offline analysis environment. Export the gated trace from the frozen
+native environment. The gated trace already includes `sigmas`.
+
+```python
+from itertools import pairwise
+from struct import pack, unpack
+
+from particle_sliders.strength_schedule import interval_dose, match_binary32_interval_dose
+
+def resolved_coefficients(trace):
+    return [unpack(">f", pack(">f", value))[0] for value in trace["effective_strengths"]]
+
+sigmas = gated_trace["sigmas"]
+gated_coefficients = resolved_coefficients(gated_trace)
+control = match_binary32_interval_dose(gated_coefficients, sigmas)
+if control.adaptive_dose != control.constant_dose:
+    raise ValueError("The nearest constant does not match the exact native dose")
+
+fixed_options = {
+    "strength": control.constant_strength,
+    "step_gains": [1.0 if start != end else 0.0 for start, end in pairwise(sigmas)],
+    "record_native_grid": True,
+}
+```
+
+Run `render` with `fixed_options` and the same native inputs, RAW adapter and
+initial noise. Pass the actual fixed trace back to the analysis environment.
+Verify that the native timesteps and sigma endpoints agree before comparing
+the actual applied coefficients.
+
+```python
+if any(fixed_trace[key] != gated_trace[key] for key in ("native_timesteps", "sigmas")):
+    raise ValueError("The fixed and gated runs used different native grids")
+
+gated_dose = interval_dose(gated_coefficients, sigmas, coefficient_format="binary32")
+fixed_dose = interval_dose(resolved_coefficients(fixed_trace), sigmas, coefficient_format="binary32")
+if fixed_dose != gated_dose:
+    raise ValueError("The fixed run did not apply the exact matched dose")
+```
+
+### CRISP Layer 1 RAW256 results
 
 The CRISP Layer 1 RAW256 study calibrated CFP at 21 and CLABS at 23 firings
 out of 44 eligible intervals against a 50% target. Each gate tied its own
