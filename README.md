@@ -231,3 +231,12 @@ The original independent observer scored it 6/6, versus 5/6 for both OFF
 and the dose-matched constant. All timed arms passed image integrity.
 The +1/6 gain applies to the one eligible case.
 [Per-arm doses and evidence](evidence/crisp-layer1-raw256-selected-activation-gates.json)
+
+### Four-case replication
+
+All four preregistered seeds contributed equally regardless of their OFF
+score. The existing CFP and CLABS settings fired on 22 and 26 of 44 eligible
+intervals, respectively. Both gates tied OFF and their own realized-dose
+constants on all four cases. Three cases scored 1.0 in every arm and the
+fourth scored 5/6. All 18 distinct images passed independent integrity.
+[Full-panel scores and exact replay strengths](evidence/crisp-layer1-raw256-full-four-case-replication.json)
