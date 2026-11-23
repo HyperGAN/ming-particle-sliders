@@ -171,7 +171,8 @@ def test_native_off_and_constant_replay_keeps_order_and_terminal_budget(owner, c
     assert raw.scale == 1.0
 
 
-def test_cfp_uses_live_ordered_readout_and_replays_through_batched_cfg(owner, core_wheel):
+@pytest.mark.parametrize("record_native_grid", [False, True])
+def test_cfp_uses_live_ordered_readout_and_replays_through_batched_cfg(owner, core_wheel, record_native_grid):
     pipe, model, raw, inputs = owner
     inputs["guidance_scale"] = 2.0
     # This test exercises the documented standalone route in the same installed wheel.
@@ -189,11 +190,31 @@ def test_cfp_uses_live_ordered_readout_and_replays_through_batched_cfg(owner, co
     assert {row["fired"] for row in decisions} == {False, True}
     replay, replay_receipt = exports["render"](
         pipe, scale_adapter=raw.scaled, strength=strength,
-        step_gains=[value / strength for value in receipt["effective_strengths"]], **inputs,
+        step_gains=[value / strength for value in receipt["effective_strengths"]],
+        record_native_grid=record_native_grid, **inputs,
     )
     assert torch.equal(gated.images, replay.images)
-    assert replay_receipt == {name: receipt[name] for name in ("native_timesteps", "effective_strengths")}
+    fields = ("native_timesteps", "effective_strengths", "sigmas") if record_native_grid else (
+        "native_timesteps", "effective_strengths",
+    )
+    assert replay_receipt == {name: receipt[name] for name in fields}
     assert raw.scale == 1.0
+
+
+def test_fixed_native_grid_refuses_a_changed_solver_interval(owner):
+    pipe, model, raw, inputs = owner
+
+    def change_next_sigma(owner, index, timestep, values):
+        if index == 0:
+            owner.scheduler.sigmas[2] = (owner.scheduler.sigmas[1] + owner.scheduler.sigmas[2]) / 2
+        return values
+
+    with pytest.raises(RuntimeError, match="sigma grid changed"):
+        scheduled_render.render(
+            pipe, scale_adapter=raw.scaled, step_gains=[1.0, 1.0, 1.0, 0.0],
+            record_native_grid=True, callback_on_step_end=change_next_sigma, **inputs,
+        )
+    assert raw.scale == 1.0 and not model._forward_pre_hooks and not model._forward_hooks
 
 
 def test_clabs_restarts_each_request_and_closed_scope_survives_error(owner, core_wheel):

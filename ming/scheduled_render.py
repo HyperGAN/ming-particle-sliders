@@ -110,8 +110,12 @@ class LatentGatePlan:
 
 
 def render(pipeline, *, scale_adapter, step_gains=None, gate_plan=None, strength=_FIXED_DEFAULT,
-           callback_on_step_end=None, **inputs):
-    """Sample with an attached RAW adapter and return the output and step trace."""
+           callback_on_step_end=None, record_native_grid=False, **inputs):
+    """Sample with an attached RAW adapter and return the output and step trace.
+
+    Set record_native_grid to include the validated live sigma grid on fixed runs.
+    Gated runs include their sigma grid by default.
+    """
     if strength is _FIXED_DEFAULT:
         if gate_plan is not None:
             raise ValueError("Gated Ming requires the explicit nominal strength used in calibration")
@@ -143,6 +147,7 @@ def render(pipeline, *, scale_adapter, step_gains=None, gate_plan=None, strength
         strengths = []
 
     active = ExitStack()
+    capture_grid = gate_plan is not None or record_native_grid
     native_timesteps = []
     evaluations = 0
     scheduler = None
@@ -150,21 +155,23 @@ def render(pipeline, *, scale_adapter, step_gains=None, gate_plan=None, strength
     widths = None
     decisions = []
 
-    def native_gate(args, index):
+    def check_native_interval(index):
         nonlocal scheduler, sigmas, widths
         if scheduler is None:
             scheduler = pipeline.scheduler
             if scheduler.order != 1 or scheduler.config.get("stochastic_sampling", False):
-                raise RuntimeError("Gated Ming requires its deterministic order-one native scheduler")
+                raise RuntimeError("Ming grid capture requires its deterministic order-one native scheduler")
             sigmas = scheduler.sigmas.detach().cpu().tolist()
             widths = [start - end for start, end in pairwise(sigmas)]
             if (len(widths) != steps or len(scheduler.timesteps) != steps
                     or any(not isfinite(sigma) or sigma < 0 for sigma in sigmas)
                     or any(width <= 0 for width in widths[:-1]) or widths[-1] < 0 or not any(widths)):
-                raise RuntimeError("Gated Ming needs a descending sigma grid with an optional terminal repeat")
+                raise RuntimeError("Ming grid capture needs a descending sigma grid with an optional terminal repeat")
         if (pipeline.scheduler is not scheduler or scheduler.begin_index not in (None, 0)
                 or scheduler.step_index != (index if index else None)):
-            raise RuntimeError("Ming gate must run before each original native solver interval")
+            raise RuntimeError("Ming schedule must run before each original native solver interval")
+
+    def native_gate(args, index):
         if len(args) < 2:
             raise RuntimeError("Expected Ming's positional pre-edit latents and native timestep")
         latents, timestep = args[:2]
@@ -194,6 +201,8 @@ def render(pipeline, *, scale_adapter, step_gains=None, gate_plan=None, strength
         nonlocal evaluations
         if evaluations != len(native_timesteps) or evaluations >= steps:
             raise RuntimeError("native denoiser order differs from the requested schedule")
+        if capture_grid:
+            check_native_interval(evaluations)
         if gate_plan is not None:
             native_gate(args, evaluations)
         active.enter_context(scale_adapter(strengths[evaluations]))
@@ -205,10 +214,13 @@ def render(pipeline, *, scale_adapter, step_gains=None, gate_plan=None, strength
     def step_end(owner, index, timestep, values):
         if owner is not pipeline or index != len(native_timesteps) or evaluations != index + 1:
             raise RuntimeError("native solver order differs from the requested schedule")
-        if gate_plan is not None and (scheduler.step_index != index + 1
-                                      or float(timestep) != float(scheduler.timesteps[index])):
-            raise RuntimeError("Ming scheduler did not complete the gated interval")
-        native_timesteps.append(float(timestep))
+        native_timestep = float(timestep)
+        if capture_grid and (pipeline.scheduler is not scheduler or scheduler.step_index != index + 1
+                             or not isfinite(native_timestep) or native_timestep != float(scheduler.timesteps[index])):
+            raise RuntimeError("Ming scheduler did not complete the original native interval")
+        if record_native_grid and scheduler.sigmas[index:index + 2].detach().cpu().tolist() != sigmas[index:index + 2]:
+            raise RuntimeError("Ming sigma grid changed during the native schedule")
+        native_timesteps.append(native_timestep)
         if callback_on_step_end is not None:
             return callback_on_step_end(owner, index, timestep, values)
         return values
@@ -227,4 +239,6 @@ def render(pipeline, *, scale_adapter, step_gains=None, gate_plan=None, strength
                      nominal_strength=float(strength), sigmas=sigmas, fired=usage.fired,
                      eligible=usage.eligible, gate_rate=usage.rate,
                      sigma_weighted_strength=sum(abs(value) * width for value, width in zip(strengths, widths, strict=True)))
+    elif record_native_grid:
+        trace["sigmas"] = sigmas
     return result, trace
